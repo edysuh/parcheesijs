@@ -1,4 +1,4 @@
-var PAWN_DISTANCE = 75;
+import { PAWN_DISTANCE } from "./def";
 
 export class Pawn {
     constructor(id, color) {

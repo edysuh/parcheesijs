@@ -1,8 +1,8 @@
 export class Space {
-	constructor(i, type) {
+	constructor(i) {
 		this._position = i;
-		this._type = type;
 		this._pawnsOnSpace = [];
+		this._isSafety = false;
 		this.isBlockade = false;
 	}
 	
@@ -19,7 +19,7 @@ export class Space {
 		}
 	}
 	
-	removePawnOnSpace(pawn) {
+	removePawnOnSpace() {
 		this._pawnsOnSpace.pop();
 	}
 	

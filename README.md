@@ -1,7 +1,7 @@
 # Implementation of Parcheesi Game in Javascript
 
-Ethan Suh (edys@u.northwestern.edu)
-Yunil Seo (yunilseo2016@u.northwestern.edu)
+- Ethan Suh (edys@u.northwestern.edu)
+- Yunil Seo (yunilseo2016@u.northwestern.edu)
 
 ## Rules
 

@@ -1,6 +1,39 @@
 import { Board } from "./board";
 
 export class Move {
+    // general can move bool function:
+    //      - if dest is a safety with a opposing piece on it
+    canMove(board, pawn, dest) {
+		// if (dest.isSafety) {
+		// 	if (!dest.getPawnOnSpace()) {
+		// 		return true;
+		// 	} else if (pawn.getColor() != dest.getPownOnSpace().getColor()) {
+		// 		return false; 
+		// 	}
+		// } else {
+		// 	return true;
+		// }
+		
+		if (dest.isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
+			return false;
+		}
+		
+		return true;
+	}
+
+    isBlocked(board, pawn, start, distance) {
+		var curr = start;
+		
+        for (var i = 0; i < distance; i++) {
+            if (board.getNextSpace(curr).isBlockade) {
+                return true;
+            } else {
+                curr = board.getNextSpace(curr);
+            }
+        }
+        return false;
+    }
+
     // takes a board and move, returns a board (and die roll?)
     // 
     // old board -> make a new board;
@@ -16,17 +49,4 @@ export class Move {
         // }
         // return newBoard;
     // }
-
-    isBlocked(board, pawn, distance) {
-        var currLoc = board.findPawnLocation(pawn);
-        
-        for (var i = 0; i < distance; i++) {
-            if (board.getNextSpace(currLoc).isBlockade) {
-                return true;
-            } else {
-                currLoc = board.getNextSpace(currLoc);
-            }
-        }
-        return false;
-    }
 }
