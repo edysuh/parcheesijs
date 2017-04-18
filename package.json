@@ -1,0 +1,15 @@
+{
+  "name": "parcheesijs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "babel-node main.js --presets es2015",
+    "test": "babel-node test.js --presets es2015"
+  },
+  "author": "edys",
+  "license": "ISC"
+}
