@@ -7,9 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "babel-node main.js --presets es2015",
-    "test": "babel-node test.js --presets es2015"
+    "start": "babel-node main.js",
+    "test": "babel-node test.js"
   },
   "author": "edys",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1"
+  }
 }

@@ -15,7 +15,7 @@ export class Space {
 		if (this._pawnsOnSpace.length < 2) {
 			this._pawnsOnSpace.push(pawn);
 		} else {
-			console.log("too many pawns on space");
+			// console.error("too many pawns on space");
 		}
 	}
 	

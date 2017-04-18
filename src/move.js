@@ -1,19 +1,11 @@
 import { Board } from "./board";
 
 export class Move {
-    // general can move bool function:
+    // general can move bool function that returns false these situations:
     //      - if dest is a safety with a opposing piece on it
+	//      - if no pawn on board
+	//      - if blockade on starting space
     canMove(board, pawn, dest) {
-		// if (dest.isSafety) {
-		// 	if (!dest.getPawnOnSpace()) {
-		// 		return true;
-		// 	} else if (pawn.getColor() != dest.getPownOnSpace().getColor()) {
-		// 		return false; 
-		// 	}
-		// } else {
-		// 	return true;
-		// }
-		
 		if (dest.isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
 			return false;
 		}

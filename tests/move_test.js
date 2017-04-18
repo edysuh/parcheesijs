@@ -12,14 +12,12 @@ export function move_test() {
     var m = new Move();
     // console.log('b', b);
 
-    assert(!(m.isBlocked(b, p, 5)), "MOVE: there is no blockade");
+    assert(!(m.isBlocked(b, p, pawnLoc, 5)), "MOVE: there is no blockade");
     
     var blockLoc = b.getSpaceAt(8);
     blockLoc.isBlockade = true;
     
-    // console.log('b', b);
-    
-    assert(!(m.isBlocked(b, p, 2)), "MOVE: there is a blockade but we can still move");
-    assert(m.isBlocked(b, p, 3), "MOVE: we land on a blockade");
-    assert(m.isBlocked(b, p, 6), "MOVE: there is a blockade");
+    assert(!(m.isBlocked(b, p, pawnLoc, 2)), "MOVE: there is a blockade but we can still move");
+    assert(m.isBlocked(b, p, pawnLoc, 3), "MOVE: we land on a blockade");
+    assert(m.isBlocked(b, p, pawnLoc, 6), "MOVE: there is a blockade");
 } 
