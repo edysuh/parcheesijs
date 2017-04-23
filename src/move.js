@@ -12,10 +12,10 @@ export class Move {
 		var curr = start;
 		
         for (var i = 0; i < distance; i++) {
-            if (board.getNextSpace(curr).isBlockade) {
+            if (board.getNextSpace(curr, pawn.getColor()).isBlockade) {
                 return true;
             } else {
-                curr = board.getNextSpace(curr);
+                curr = board.getNextSpace(curr, pawn.getColor());
             }
         }
         return false;

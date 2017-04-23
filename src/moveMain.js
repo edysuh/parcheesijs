@@ -11,7 +11,7 @@ export class MoveMain extends Move {
         var destSpace = startSpace;
         
         for (var i = 0; i < dist; i++) {
-            destSpace = board.getNextSpace(destSpace);
+            destSpace = board.getNextSpace(destSpace, pawn.getColor());
         }
 		
 		if (!super.canMoveIfSafety(board, pawn, destSpace)) {

@@ -1,5 +1,5 @@
 import { Space } from "./space";
-import { NSPACES, SAFETIES } from "./def";
+import { NSPACES, SAFETIES, homeRowLocations } from "./def";
 
 export class Board {
 	constructor() {
@@ -19,17 +19,23 @@ export class Board {
 		return this._spaces[i];
 	}
 	
-	getNextSpace(curr) {
+	getNextSpace(curr, color) {
 		if (!curr) {
 		 	// console.error("current space is not defined");
 		}
 		
-		// add cases for situations when entering into home row (and others?)
+		if (curr === this.getSpaceAt(homeRowLocations[color]["enter"])) {
+			return this.getSpaceAt(homeRowLocations[color]["home"]);
+		}
 		
+		if (curr === this.getSpaceAt(67)) {
+			return this.getSpaceAt(0);
+		}
 		
-		return this._spaces[curr.getPosition() + 1];
+		return this.getSpaceAt(curr.getPosition() + 1);
 	}
 	
+	// TODO: this function breaks if there are 2 pawns on a space
 	findPawnLocation(pawn) {
 		for (var i = 0; i < this._spaces.length; i++) {
 			var tpawn = this._spaces[i].getPawnOnSpace();
