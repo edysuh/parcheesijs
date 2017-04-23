@@ -20,10 +20,12 @@ export class Board {
 	}
 	
 	getNextSpace(curr) {
-		// add cases for situations when entering into home row (and others?)
 		if (!curr) {
-			console.error("current space is not defined");
+		 	// console.error("current space is not defined");
 		}
+		
+		// add cases for situations when entering into home row (and others?)
+		
 		
 		return this._spaces[curr.getPosition() + 1];
 	}

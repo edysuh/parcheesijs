@@ -31,5 +31,5 @@ export function enterPiece_test() {
 	m.enterPiece(bd, y3);
 	assert(bd.getSpaceAt(startingLocations["yellow"])._pawnsOnSpace.length === 2,
 			"ENTERPIECE: blockade at starting space");
-	// check exact pawns as well
+	// more robust test should check exact pawns as well
 }

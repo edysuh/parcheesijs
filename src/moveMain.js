@@ -8,21 +8,21 @@ export class MoveMain extends Move {
             return board;
         }
         
-        var landSpace = startSpace;
+        var destSpace = startSpace;
         
         for (var i = 0; i < dist; i++) {
-            landSpace = board.getNextSpace(landSpace);
+            destSpace = board.getNextSpace(destSpace);
         }
 		
-		// if (super.canMove(board, pawn, landSpace)) {
-		// 	return board;
-		// }
+		if (!super.canMoveIfSafety(board, pawn, destSpace)) {
+			return board;
+		}
         
-        var existingPawn = landSpace.getPawnOnSpace();
+        var existingPawn = destSpace.getPawnOnSpace();
         
         if (existingPawn) {
             if (existingPawn.getColor() === pawn.getColor()) {
-                landSpace.isBlockade = true;
+                destSpace.isBlockade = true;
             } else {
                 // bop
             }
@@ -31,8 +31,9 @@ export class MoveMain extends Move {
         if (startSpace.isBlockade) {
             startSpace.isBlockade = false;
         }
+		
         startSpace.removePawnOnSpace();
-        landSpace.setPawnOnSpace(pawn);
+        destSpace.setPawnOnSpace(pawn);
         
         return board;
     }

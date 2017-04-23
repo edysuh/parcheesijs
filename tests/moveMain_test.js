@@ -16,7 +16,7 @@ export function moveMain_test() {
     mm.moveMain(b, p, 5);
     var s10 = b.getSpaceAt(10);
     var lp = s10.getPawnOnSpace();
-    // actual test case should just test that the starting space doesnt have the pawn that was moved
+    // more robust test should just test that the starting space doesnt have the pawn that was moved
     // could have been another pawn
     assert(!s5.getPawnOnSpace(), "MOVEMAIN: No Pawn on Start");
     assert(lp == p, "MOVEMAIN: Pawn Has Been Moved to Landing");
