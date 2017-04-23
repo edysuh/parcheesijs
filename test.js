@@ -6,9 +6,9 @@ import { enterPiece_test } from "./tests/enterPiece_test";
 
 function test() {
 	die_test();
-    board_test();
-    move_test();
-    moveMain_test();
+  board_test();
+  move_test();
+  moveMain_test();
 	enterPiece_test();
 }
 

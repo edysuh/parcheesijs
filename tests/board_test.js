@@ -5,12 +5,12 @@ import { Pawn } from "../src/pawn";
 
 export function board_test() {
 	var b = new Board();
-    var p = new Pawn(3, "blue");
-    
-    var s45 = b.getSpaceAt(45);
-    s45.setPawnOnSpace(p);
-    
-    assert(b.findPawnLocation(p) == s45, "BOARD: find pawn location");
+	var p = new Pawn(3, "blue");
+	
+	var s45 = b.getSpaceAt(45);
+	s45.setPawnOnSpace(p);
+	
+	assert(b.findPawnLocation(p) == s45, "BOARD: find pawn location");
 
 	var curr = b.getSpaceAt(65);
 	var curr2 = b.getSpaceAt(65);
