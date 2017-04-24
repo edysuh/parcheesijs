@@ -1,6 +1,8 @@
 import { Board } from "./board";
 
 export class Move {
+	move() { }
+	
   canMoveIfSafety(board, pawn, dest) {
 		if (dest._isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
 			return false;

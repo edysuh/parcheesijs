@@ -1,10 +1,14 @@
 import { Move } from "./move";
 
 export class MoveMain extends Move {
+	// change this function to a virtual implementation of move.move()
   moveMain(board, pawn, dist) {
+  // move(board, pawn, dist) {
     var startSpace = board.findPawnLocation(pawn);
     
     if (super.isBlocked(board, pawn, startSpace, dist)) {
+			// to tell caller function that this move is invalid:
+			// return false
       return board;
     }
     
@@ -15,6 +19,8 @@ export class MoveMain extends Move {
     }
 
     if (!super.canMoveIfSafety(board, pawn, destSpace)) {
+			// to tell caller function that this move is invalid:
+			// return false
       return board;
     }
       
@@ -25,6 +31,11 @@ export class MoveMain extends Move {
         destSpace.isBlockade = true;
       } else {
         // bop
+				// 
+				// remove pawn from this space
+				// (dont need to send to start since we don't have a start space)
+				// pawn lands on this space
+				// reward a bonus move of 20
       }
     }
     
