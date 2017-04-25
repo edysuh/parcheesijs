@@ -22,6 +22,7 @@ export class Board {
 	getNextSpace(curr, color) {
 		if (!curr) {
 		 	// console.error("current space is not defined");
+			return null;
 		}
 		
 		if (curr === this.getSpaceAt(homeRowLocations[color]["enter"])) {
@@ -35,16 +36,14 @@ export class Board {
 		return this.getSpaceAt(curr.getPosition() + 1);
 	}
 	
-	// TODO: this function breaks if there are 2 pawns on a space
 	findPawnLocation(pawn) {
 		for (var i = 0; i < this._spaces.length; i++) {
-			var tpawn = this._spaces[i].getPawnOnSpace();
+			var foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId());
 			
-			if (tpawn) {
-				if (pawn === tpawn) {
-					return this._spaces[i];
-				}
+			if (foundPawn) {
+				return this._spaces[i];
 			}
 		}
+		return null;
 	}
 }

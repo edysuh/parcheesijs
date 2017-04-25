@@ -12,24 +12,34 @@ export function enterPiece_test() {
 	var g = new Pawn(3, "green");
 	var r = new Pawn(0, "red");
 	
-	var m = new EnterPiece();
+	var mb = new EnterPiece(b);
+	var my = new EnterPiece(y);
+	var mg = new EnterPiece(g);
+	var mr = new EnterPiece(r);
 	
-	m.enterPiece(bd, b);
-	m.enterPiece(bd, y);
-	m.enterPiece(bd, g);
-	m.enterPiece(bd, r);
+	mb.move(bd);
+	my.move(bd);
+	mg.move(bd);
+	mr.move(bd);
 	
-	assert(b === bd.getSpaceAt(startingLocations["blue"]).getPawnOnSpace(), "ENTERPIECE: blue enters");
-	assert(y === bd.getSpaceAt(startingLocations["yellow"]).getPawnOnSpace(), "ENTERPIECE: yellow enters");
-	assert(g === bd.getSpaceAt(startingLocations["green"]).getPawnOnSpace(), "ENTERPIECE: green enters");
-	assert(r === bd.getSpaceAt(startingLocations["red"]).getPawnOnSpace(), "ENTERPIECE: red enters");
+	assert(bd.getSpaceAt(startingLocations["blue"]).getPawnOnSpaceById(b.getId()), 
+		"ENTERPIECE: blue enters");
+	assert(bd.getSpaceAt(startingLocations["yellow"]).getPawnOnSpaceById(y.getId()), 
+		"ENTERPIECE: yellow enters");
+	assert(bd.getSpaceAt(startingLocations["green"]).getPawnOnSpaceById(g.getId()), 
+		"ENTERPIECE: green enters");
+	assert(bd.getSpaceAt(startingLocations["red"]).getPawnOnSpaceById(r.getId()), 
+		"ENTERPIECE: red enters");
 	
 	var y2 = new Pawn(2, "yellow");
 	var y3 = new Pawn(3, "yellow");
 	
-	m.enterPiece(bd, y2);
-	m.enterPiece(bd, y3);
+	var my2 = new EnterPiece(y2);
+	var my3 = new EnterPiece(y3);
+	
+	my2.move(bd);
+	my3.move(bd);
 	assert(bd.getSpaceAt(startingLocations["yellow"])._pawnsOnSpace.length === 2,
-			"ENTERPIECE: blockade at starting space");
+		"ENTERPIECE: blockade at starting space");
 	// more robust test should check exact pawns as well
 }

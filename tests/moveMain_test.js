@@ -8,17 +8,16 @@ export function moveMain_test() {
   var p = new Pawn(3, "blue");
   var s5 = b.getSpaceAt(5);
   s5.setPawnOnSpace(p);
-  var mm = new MoveMain();
+  var mm = new MoveMain(p, 5);
 
   var bs = b.getSpaceAt(8);
-  // bs.isBlockade = true;
 
-  mm.moveMain(b, p, 5);
+  // mm.move(b, p, 5);
+	mm.move(b);
   var s10 = b.getSpaceAt(10);
-  var lp = s10.getPawnOnSpace();
-  // more robust test should just test that the starting space doesnt have the pawn that was moved
-  // could have been another pawn
-  assert(!s5.getPawnOnSpace(), "MOVEMAIN: No Pawn on Start");
+  var lp = s10.getPawnOnSpaceById(p.getId());
+
+  assert(!s5.getPawnOnSpaceById(p.getId()), "MOVEMAIN: No Pawn on Start");
   assert(lp == p, "MOVEMAIN: Pawn Has Been Moved to Landing");
 
   var p2 = new Pawn(0, "red");
@@ -28,11 +27,12 @@ export function moveMain_test() {
   b.getSpaceAt(24).setPawnOnSpace(p3);
   // implement moving a third piece onto the blockade
   // b.getSpaceAt(23).setPawnOnSpace(p3);
+	
 
-  mm.moveMain(b, p2, 4);
-  // mm.moveMain(b, p3, 1);
+  mm = new MoveMain(p2, 4);
+	mm.move(b);
   assert(b.getSpaceAt(24).isBlockade, "MOVEMAIN: made a blockade");
 
-  mm.moveMain(b, p3, 1);
+  mm.move(b);
   assert(!b.getSpaceAt(24).isBlockade, "MOVEMAIN: broke a blockade");
 }

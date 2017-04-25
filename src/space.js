@@ -12,7 +12,19 @@ export class Space {
 	
 	// just returning one is fine since, if there are two, they are both the same color
 	getPawnOnSpace() {
+		if (!this._pawnsOnSpace) {
+			return null;
+		}
 		return this._pawnsOnSpace[0];
+	}
+	
+	getPawnOnSpaceById(id) {
+		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
+			if (id === this._pawnsOnSpace[i].getId()) {
+				return this._pawnsOnSpace[i];
+			}
+		}
+		return null;
 	}
 	
 	setPawnOnSpace(pawn) {
@@ -26,5 +38,13 @@ export class Space {
 	
 	removePawnOnSpace() {
 		this._pawnsOnSpace.pop();
+	}
+	
+	removePawnOnSpaceById(id) {
+		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
+			if (id === this._pawnsOnSpace[i].getId()) {
+				this._pawnsOnSpace.splice(i, 1);
+			}
+		}
 	}
 }
