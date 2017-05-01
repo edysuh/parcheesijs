@@ -3,45 +3,116 @@ import { moveMain } from "./moveMain";
 import { enterPiece } from "./enterPiece";
 
 export class Turn {
-	takeTurn(prevBoard, player) {
-		var d1 = new Die();
-		var d2 = new Die();
+	takeTurn(board, player) {
+		let saveBoard = board;
+		let doubleCounter = 0;
 		
-		var r1 = d1.roll();
-		var r2 = d2.roll();
+		let d1 = new Die();
+		let d2 = new Die();
+		let r1 = d1.roll();
+		let r2 = d2.roll();
 		
-		var moveQueue = [r1, r2];
-
-		while (moveQueue) {
-			if (r1 === r2) {
-				r1 = d1.roll();
-				r2 = d2.roll();
-				
-				moveQueue.push(r1);
-				moveQueue.push(r2);
-				moveQueue.push(7-r1);
-				moveQueue.push(7-r2);
+		let rolls = [];
+		let rollsHash = [].fill(0, 1, 7);
+		let playerMoves = [];
+		
+		if (isDouble(r1, r2)) {
+			doubleCounter++;
+			if (doubleCounter < 3) {
+				rolls = [r1, r2, 7-r1, 7-r2];
+				playerMoves = player.doMove(board, rolls);
+				// give them another pair of dice rolls
+			} else {
+				board = player.doublesPenalty();
 			}
-			
-			var dist = moveQueue.shift(); // r1 = 4
-			
-			// if (move instanceof EnterPiece) {
-			// 	var move = new EnterPiece();
-			// } else if (move instanceof MoveMain()) {
-			// 	var move = new MoveMain();
-			// } else {
-			// 	var move = new Move();
-			// }
-			
-			move.move(prevBoard, pawn, dist);
+		} else {
+			rolls = [r1, r2];
+			playerMoves = player.doMove(board, rolls);
 		}
-
 		
+		rolls.forEach(el => { rollsHash[el]++; });
+		
+		while (playerMoves.length > 0) {
+			let currMove = playerMoves.shift();
+
+			// cannot make move, due to either pawn not found, blockade, or safety-bop-attempt failure
+			if (currMove instanceof MoveMain) {
+				board = currMove.move(board);
+				
+				if (!rollsHash[currMove.distance]) {
+					return "Error: roll does not exist";
+				}
+				rollsHash[currMove.distance]--;
+
+				if (!board) {
+					return "Error: cannot make move";
+				}
+			}
+
+			// checking for a 5 roll to enter piece
+			if (currMove instanceof EnterPiece) {
+				if (rollsHash[5]) {
+					rollsHash[5]--;
+				} else if (rollsHash[1] && rollsHash[4]) {
+					rollsHash[1]--;
+					rollsHash[4]--;
+				} else if (rollsHash[2] && rollsHash[3]) {
+					rollsHash[2]--;
+					rollsHash[3]--;
+				} else {
+					return "Error: didnt roll a 5";
+				}
+				
+				board = currMove.move(board);
+				
+				if (!board) {
+					return "Error: cannot make enterpiece move";
+				}
+			}
+		}
+	}
+	
+	isDouble(r1, r2) {
+		return (r1 === r2);
+	}
+}
 
 
 
 
 
+
+		// var d1 = new Die();
+		// var d2 = new Die();
+		
+		// var r1 = d1.roll();
+		// var r2 = d2.roll();
+		
+		// var moveQueue = [r1, r2];
+
+		// while (moveQueue) {
+		// 	if (r1 === r2) {
+		// 		r1 = d1.roll();
+		// 		r2 = d2.roll();
+				
+		// 		moveQueue.push(r1);
+		// 		moveQueue.push(r2);
+		// 		moveQueue.push(7-r1);
+		// 		moveQueue.push(7-r2);
+		// 	}
+			
+		// 	var dist = moveQueue.shift(); // r1 = 4
+			
+		// 	// if (move instanceof EnterPiece) {
+		// 	// 	var move = new EnterPiece();
+		// 	// } else if (move instanceof MoveMain()) {
+		// 	// 	var move = new MoveMain();
+		// 	// } else {
+		// 	// 	var move = new Move();
+		// 	// }
+			
+		// 	move.move(prevBoard, pawn, dist);
+		// }
 
 		// if rolls 5 or 1 and 4 or 2 and 3 {
 			// var retboard = enterPiece(board, pawn);
@@ -84,6 +155,4 @@ export class Turn {
 		 *		bop is a result of a move
 		 *		blockade is a resule of a move
 		 */
-	}
-}
 

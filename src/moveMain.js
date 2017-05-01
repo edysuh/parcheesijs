@@ -4,12 +4,9 @@ export class MoveMain extends Move {
 	constructor(pawn, dist) {
 		super();
 		this.pawn = pawn;
-		// this._start = start;
 		this.dist = dist;
 	}
 	
-	// change this function to a virtual implementation of move.move()
-  // moveMain(board, pawn, dist) {
   move(board) {
     var startSpace = board.findPawnLocation(this.pawn);
 		

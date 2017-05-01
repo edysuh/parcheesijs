@@ -19,7 +19,7 @@ export class Pawn {
     if (this.distRemaining >= 0) {
       this.distRemaining--;
     } else {
-      // PAWN IS HOME
+			throw new Error("Pawn is already home");
     }
   }
 }

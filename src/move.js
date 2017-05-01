@@ -4,12 +4,16 @@ export class Move {
 	move() { }
 	
   canMoveIfSafety(board, pawn, dest) {
-		if (dest.getPawnOnSpace()) {
-			if (dest._isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
-				return false;
-			}
-		}
-		return true;
+		// if (dest.getPawnOnSpace()) {
+		// 	if (dest._isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
+		// 		return false;
+		// 	}
+		// }
+		// return true;
+		
+		return !(dest._isSafety && 
+						dest.getPawnOnSpace() &&
+						dest.getPawnOnSpace().getColor() !== pawn.getColor());
 	}
 
   isBlocked(board, pawn, start, distance) {

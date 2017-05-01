@@ -27,12 +27,13 @@ export class Space {
 		return null;
 	}
 	
+	// pre: space doesn't already have two pawns
+	// post: space has the new pawn
 	setPawnOnSpace(pawn) {
-		// try ... catch exception?
 		if (this._pawnsOnSpace.length < 2) {
 			this._pawnsOnSpace.push(pawn);
 		} else {
-			// console.error("too many pawns on space");
+			throw new Error("too many pawns on space");
 		}
 	}
 	
@@ -40,6 +41,8 @@ export class Space {
 		this._pawnsOnSpace.pop();
 	}
 	
+	// pre: the pawn exists on this space?
+	// post: the space no longer holds the pawn
 	removePawnOnSpaceById(id) {
 		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
 			if (id === this._pawnsOnSpace[i].getId()) {

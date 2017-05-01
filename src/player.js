@@ -8,9 +8,15 @@ export class Player {
 		}
 	}
 	
-	takeTurn(board) {
+	// takeTurn(board) {
 		// var t = new Turn();
 		// t.takeTurn(board, this);
+	// }
+	
+	// abstract function that is different for humans and machines
+	// given a board and array of rolls, return an array of the moves the player decided on
+	doMove(board, rolls) {
+		
 	}
 	
 	doublesPenalty() {

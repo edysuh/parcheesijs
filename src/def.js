@@ -1,5 +1,6 @@
 export const NSPACES = 95;
 export const PAWN_DISTANCE = 75;
+export const HOMEROWLEN = 6;
 
 export const startingLocations = {
 	"blue": 4,

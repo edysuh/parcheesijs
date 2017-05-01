@@ -7,13 +7,12 @@ export function moveMain_test() {
   var b = new Board();
   var p = new Pawn(3, "blue");
   var s5 = b.getSpaceAt(5);
+  var bs = b.getSpaceAt(8);
+	
   s5.setPawnOnSpace(p);
   var mm = new MoveMain(p, 5);
-
-  var bs = b.getSpaceAt(8);
-
-  // mm.move(b, p, 5);
 	mm.move(b);
+
   var s10 = b.getSpaceAt(10);
   var lp = s10.getPawnOnSpaceById(p.getId());
 

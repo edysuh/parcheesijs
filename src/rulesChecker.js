@@ -8,8 +8,9 @@ import { EnterPiece } from "./enterPiece";
 
 // given a board, a pair (array) of dice rolls (already rolled), and an array of moves,
 // return either an updated board, or an error
+// export function turn(board, rolls, moves) {
 export function rulesChecker(board, rolls, moves) {
-	var saveBoard = board;
+	let saveBoard = board;
 
 	while (moves.length > 0) {
 		let currMove = moves.shift();

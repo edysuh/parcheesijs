@@ -37,9 +37,9 @@ export function enterPiece_test() {
 	var my2 = new EnterPiece(y2);
 	var my3 = new EnterPiece(y3);
 	
-	my2.move(bd);
-	my3.move(bd);
-	assert(bd.getSpaceAt(startingLocations["yellow"])._pawnsOnSpace.length === 2,
-		"ENTERPIECE: blockade at starting space");
+	// my2.move(bd);
+	// my3.move(bd);
+	// assert(bd.getSpaceAt(startingLocations["yellow"])._pawnsOnSpace.length === 2,
+	// 	"ENTERPIECE: blockade at starting space");
 	// more robust test should check exact pawns as well
 }
