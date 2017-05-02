@@ -42,16 +42,17 @@ export class Turn {
 			// hash the rolls
 			rolls.forEach(el => { rollsHash[el]++; });
 
-			var t = [{s: 55, d: 3}, {s: 55, d: 4}, {s: 58, d: 4}, {s: 59, d: 3}];
 			// check for illegal blockade moves as pairs
+			// TODO: move this out as separate function
 			var startDist = playerMoves.map(move => { return { 's': move.start, 'd': move.dist }; });
 			var duplMove = {};
 			startDist.forEach(move => {
 				if (duplMove[move.s]) {
 					if (duplMove[move.s] == move.d) {
 						return "Error: blockade attempted to move as a pair";
+					} else {
+						// if there are two moves from the same starting whose sum result in the same dest blockade
 					}
-					// if there are two moves from the same starting whose sum result in the same dest blockade
 				} else {
 					duplMove[move.s] = move.d;
 				}

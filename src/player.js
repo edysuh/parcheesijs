@@ -13,10 +13,22 @@ export class Player {
 		}
 	}
 	
+	getColor() {
+		return this._color;
+	}
+	
+	getPawnById(id) {
+		for (let i = 0; i < 4; i++) {
+			if (id === this._pawns[i].getId()) {
+				return this._pawns[i];
+			}
+		}
+	}
+	
 	// abstract function that is different for humans and machines
 	// given a board and array of rolls, return an array of the moves the player decided on
+	// TODO: temporary doMove for testing
 	doMove(board, rolls) {
-		// temporary doMove for testing
 		let p = this._pawns[0];
 		let moves = [];
 		let m;
@@ -54,20 +66,4 @@ export class Player {
 		}
 		return board; 
 	}		
-	
-	getColor() {
-		return this._color;
-	}
-	
-	getPawn() {
-		return this._pawns[0];
-	}
-	
-	getPawnById(id) {
-		for (let i = 0; i < 4; i++) {
-			if (id === this._pawns[i].getId()) {
-				return this._pawns[i];
-			}
-		}
-	}
 }

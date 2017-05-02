@@ -26,7 +26,6 @@ export class Board {
 		}
 
 		if (curr == this.getSpaceAt(homeRowLocations[color]["enter"] + HOMEROWLEN)) {
-			// return null;
 			throw new Error("pawn is on his last space");
 		}
 		
@@ -41,6 +40,8 @@ export class Board {
 		return this.getSpaceAt(curr.getPosition() + 1);
 	}
 	
+	// pre: none
+	// post: will find the pawn if it exists, return null if not found
 	findPawnLocation(pawn) {
 		for (var i = 0; i < this._spaces.length; i++) {
 			var foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId());

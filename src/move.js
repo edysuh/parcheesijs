@@ -3,12 +3,16 @@ import { Board } from "./board";
 export class Move {
 	move() { }
 	
+	// pre: assure pawn is landing on dest
+	// post: bool
   canMoveIfSafety(board, pawn, dest) {
 		return !(dest._isSafety && 
 						dest.getPawnOnSpace() &&
 						dest.getPawnOnSpace().getColor() !== pawn.getColor());
 	}
 
+	// pre: start and dist are spaces, pawn is on start
+	// post: bool
   isBlocked(board, pawn, start, distance) {
   var curr = start;
 
