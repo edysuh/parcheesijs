@@ -26,7 +26,7 @@ export class Player {
 				p = this._pawns[1];
 				m = new EnterPiece(p);
 			} else {
-				m = new MoveMain(p, dist);
+				m = new MoveMain(p, board.findPawnLocation(p), dist);
 			}
 			moves.push(m);
 		});

@@ -1,23 +1,20 @@
 import { Move } from "./move";
 
 export class MoveMain extends Move {
-	constructor(pawn, dist) {
+	constructor(pawn, start, dist) {
 		super();
 		this.pawn = pawn;
+		this.start = start;
 		this.dist = dist;
 	}
 	
   move(board) {
     var startSpace = board.findPawnLocation(this.pawn);
-		
-		if (!startSpace) {
-			console.log('startSpace', startSpace);
-			
-			return null;
+		if (this.start !== startSpace) {
+			throw new Error("pawn cannot be found");
 		}
     
     if (super.isBlocked(board, this.pawn, startSpace, this.dist)) {
-			console.log('isBlocked', isBlocked);
       return null;
     }
     
@@ -28,15 +25,9 @@ export class MoveMain extends Move {
     }
 
     if (!super.canMoveIfSafety(board, this.pawn, destSpace)) {
-			console.log('canMoveIfSafety', canMoveIfSafety);
       return null;
     }
       
-		// if (isBopOrBlockade(board, destSpace) === "blockade") {
-
-		// if (isBopOrBlockade(board, destSpace) === "bop") {
-		// 	bonus = 20;
-		// }
 		var bonus = super.isBopOrBlockade(board, destSpace);
     
     if (startSpace.isBlockade) {

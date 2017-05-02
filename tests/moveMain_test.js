@@ -10,7 +10,7 @@ export function moveMain_test() {
   var bs = b.getSpaceAt(8);
 	
   s5.setPawnOnSpace(p);
-  var mm = new MoveMain(p, 5);
+  var mm = new MoveMain(p, s5, 5);
 	mm.move(b);
 
   var s10 = b.getSpaceAt(10);
@@ -28,10 +28,11 @@ export function moveMain_test() {
   // b.getSpaceAt(23).setPawnOnSpace(p3);
 	
 
-  mm = new MoveMain(p2, 4);
+  mm = new MoveMain(p2, b.getSpaceAt(20), 4);
 	mm.move(b);
   assert(b.getSpaceAt(24).isBlockade, "MOVEMAIN: made a blockade");
 
+  mm = new MoveMain(p2, b.getSpaceAt(24), 4);
   mm.move(b);
   assert(!b.getSpaceAt(24).isBlockade, "MOVEMAIN: broke a blockade");
 }
