@@ -20,7 +20,9 @@ export class Space {
 	
 	getPawnOnSpaceById(id) {
 		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
-			if (id === this._pawnsOnSpace[i].getId()) {
+			if (!this._pawnsOnSpace[i]) {
+				continue;
+			} else if (id === this._pawnsOnSpace[i].getId()) {
 				return this._pawnsOnSpace[i];
 			}
 		}

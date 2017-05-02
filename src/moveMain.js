@@ -11,10 +11,13 @@ export class MoveMain extends Move {
     var startSpace = board.findPawnLocation(this.pawn);
 		
 		if (!startSpace) {
+			console.log('startSpace', startSpace);
+			
 			return null;
 		}
     
     if (super.isBlocked(board, this.pawn, startSpace, this.dist)) {
+			console.log('isBlocked', isBlocked);
       return null;
     }
     
@@ -25,23 +28,16 @@ export class MoveMain extends Move {
     }
 
     if (!super.canMoveIfSafety(board, this.pawn, destSpace)) {
+			console.log('canMoveIfSafety', canMoveIfSafety);
       return null;
     }
       
-    var existingPawn = destSpace.getPawnOnSpace();
-    
-    if (existingPawn) {
-      if (existingPawn.getColor() === this.pawn.getColor()) {
-        destSpace.isBlockade = true;
-      } else {
-        // bop
-				// 
-				// remove pawn from this space
-				// (dont need to send to start since we don't have a start space)
-				// pawn lands on this space
-				// reward a bonus move of 20
-      }
-    }
+		// if (isBopOrBlockade(board, destSpace) === "blockade") {
+
+		// if (isBopOrBlockade(board, destSpace) === "bop") {
+		// 	bonus = 20;
+		// }
+		var bonus = super.isBopOrBlockade(board, destSpace);
     
     if (startSpace.isBlockade) {
       startSpace.isBlockade = false;
@@ -50,6 +46,6 @@ export class MoveMain extends Move {
     startSpace.removePawnOnSpaceById(this.pawn.getId());
     destSpace.setPawnOnSpace(this.pawn);
     
-    return board;
+    return {'board': board, 'bonus': bonus};
   }
 }

@@ -1,79 +1,97 @@
+import { Die } from "./die";
 import { Move } from "./move";
-import { moveMain } from "./moveMain";
-import { enterPiece } from "./enterPiece";
+import { MoveMain } from "./moveMain";
+import { EnterPiece } from "./enterPiece";
 
 export class Turn {
 	takeTurn(board, player) {
 		let saveBoard = board;
 		let doubleCounter = 0;
+		let miniTurn = 1;
 		
-		let d1 = new Die();
-		let d2 = new Die();
-		let r1 = d1.roll();
-		let r2 = d2.roll();
-		
-		let rolls = [];
-		let rollsHash = [].fill(0, 1, 7);
-		let playerMoves = [];
-		
-		if (isDouble(r1, r2)) {
-			doubleCounter++;
-			if (doubleCounter < 3) {
-				rolls = [r1, r2, 7-r1, 7-r2];
-				playerMoves = player.doMove(board, rolls);
-				// give them another pair of dice rolls
-			} else {
-				board = player.doublesPenalty();
-			}
-		} else {
-			rolls = [r1, r2];
-			playerMoves = player.doMove(board, rolls);
-		}
-		
-		rolls.forEach(el => { rollsHash[el]++; });
-		
-		while (playerMoves.length > 0) {
-			let currMove = playerMoves.shift();
-
-			// cannot make move, due to either pawn not found, blockade, or safety-bop-attempt failure
-			if (currMove instanceof MoveMain) {
-				board = currMove.move(board);
-				
-				if (!rollsHash[currMove.distance]) {
-					return "Error: roll does not exist";
-				}
-				rollsHash[currMove.distance]--;
-
-				if (!board) {
-					return "Error: cannot make move";
-				}
-			}
-
-			// checking for a 5 roll to enter piece
-			if (currMove instanceof EnterPiece) {
-				if (rollsHash[5]) {
-					rollsHash[5]--;
-				} else if (rollsHash[1] && rollsHash[4]) {
-					rollsHash[1]--;
-					rollsHash[4]--;
-				} else if (rollsHash[2] && rollsHash[3]) {
-					rollsHash[2]--;
-					rollsHash[3]--;
+		while (miniTurn > 0) {
+			miniTurn--;
+			
+			let d1 = new Die();
+			let d2 = new Die();
+			let r1 = d1.roll();
+			let r2 = d2.roll();
+			
+			let rolls = [];
+			let rollsHash = new Array(7).fill(0, 1, 7);
+			let playerMoves = [];
+			
+			if (r1 === r2) {
+				doubleCounter++;
+				if (doubleCounter < 3) {
+					rolls = [r1, r2, 7-r1, 7-r2];
+					playerMoves = player.doMove(board, rolls);
+					miniTurn++;
 				} else {
-					return "Error: didnt roll a 5";
+					board = player.doublesPenalty();
+					return board;
+				}
+			} else {
+				rolls = [r1, r2];
+				playerMoves = player.doMove(board, rolls);
+			}
+			
+			rolls.forEach(el => { rollsHash[el]++; });
+			
+			while (playerMoves.length > 0) {
+				let currMove = playerMoves.shift();
+				var moveObj;
+				var bonus;
+
+				// cannot make move, due to either pawn not found, blockade, or safety-bop-attempt failure
+				if (currMove instanceof MoveMain) {
+					if (!rollsHash[currMove.dist]) {
+						return "Error: roll does not exist";
+					}
+					rollsHash[currMove.dist]--;
+					
+					moveObj = currMove.move(board);
+					board = moveObj[board];
+					bonus = moveObj[bonus];
+
+					if (!board) {
+						return "Error: cannot make move";
+					}
+					
+					currMove.pawn.distRemaining -= currMove.dist;
+				}
+
+				// checking for a 5 roll to enter piece
+				if (currMove instanceof EnterPiece) {
+					if (rollsHash[5]) {
+						rollsHash[5]--;
+					} else if (rollsHash[1] && rollsHash[4]) {
+						rollsHash[1]--;
+						rollsHash[4]--;
+					} else if (rollsHash[2] && rollsHash[3]) {
+						rollsHash[2]--;
+						rollsHash[3]--;
+					} else {
+						return "Error: didnt roll a 5";
+					}
+					
+					moveObj = currMove.move(board);
+					board = moveObj[board];
+					bonus = moveObj[bonus];
+					
+					if (!board) {
+						return "Error: cannot make enterpiece move";
+					}
 				}
 				
-				board = currMove.move(board);
-				
-				if (!board) {
-					return "Error: cannot make enterpiece move";
+				if (bonus) {
+					var bonusMove = player.doMove(board, bonus);
+					playerMoves.push(bonusMove);
 				}
 			}
 		}
-	}
-	
-	isDouble(r1, r2) {
-		return (r1 === r2);
+		
+		return board;
 	}
 }
 

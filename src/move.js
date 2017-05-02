@@ -4,13 +4,6 @@ export class Move {
 	move() { }
 	
   canMoveIfSafety(board, pawn, dest) {
-		// if (dest.getPawnOnSpace()) {
-		// 	if (dest._isSafety && pawn.getColor() !== dest.getPawnOnSpace().getColor()) {
-		// 		return false;
-		// 	}
-		// }
-		// return true;
-		
 		return !(dest._isSafety && 
 						dest.getPawnOnSpace() &&
 						dest.getPawnOnSpace().getColor() !== pawn.getColor());
@@ -28,4 +21,23 @@ export class Move {
     }
     return false;
   }
+	
+	// pre: dest is a space on the board
+	// post: returns the bonus of 20 if bopped, returns null if not bop
+	// post: also will set blockade on space if same color pawn exist
+	isBopOrBlockade(board, dest) {
+    var existingPawn = dest.getPawnOnSpace();
+    
+    if (existingPawn) {
+      if (existingPawn.getColor() === this.pawn.getColor()) {
+        dest.isBlockade = true;
+      } else {
+				dest.removePawnOnSpaceById(existingPawn.getId());
+				existingPawn.distRemaining = 75;
+				
+				return 20;
+      }
+    }
+		return null;
+	}
 }

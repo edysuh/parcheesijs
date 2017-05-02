@@ -14,12 +14,4 @@ export class Pawn {
   getColor() {
     return this._color;
   }
-  
-  decrDistRemaining() {
-    if (this.distRemaining >= 0) {
-      this.distRemaining--;
-    } else {
-			throw new Error("Pawn is already home");
-    }
-  }
 }

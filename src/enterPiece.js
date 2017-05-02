@@ -14,13 +14,13 @@ export class EnterPiece extends Move {
 		var pawnStarting = board.getSpaceAt(pawnColorStartSpace);
 		
 		if (super.isBlocked(board, this.pawn, board.getSpaceAt(pawnColorStartSpace - 1), 1)) {
-			// to tell caller function that this move is invalid:
-			// return false
 			return null;
 		}
 		
+		var bonus = super.isBopOrBlockade(board, pawnStarting);
+		
 		pawnStarting.setPawnOnSpace(this.pawn);
 		
-		return board;
+    return {'board': board, 'bonus': bonus};
 	}
 }
