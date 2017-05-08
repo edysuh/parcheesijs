@@ -9,7 +9,7 @@ export class Board {
 			this._spaces[i] = new Space(i);
 		}
 		
-		for (i = 0; i < SAFETIES.length; i++) {
+		for (let i = 0; i < SAFETIES.length; i++) {
 			this._spaces[SAFETIES[i]]._isSafety = true;
 		}
 	}

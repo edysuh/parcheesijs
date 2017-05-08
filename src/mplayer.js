@@ -12,9 +12,9 @@ export class MPlayer extends Player {
 		let moves = [];
 		
 		rolls.forEach(roll => {
-			console.log('roll', roll);
+			// console.log('roll', roll);
 			let move = this.moveFirstPawn(board, roll);
-			console.log('move', move);
+			// console.log('move', move);
 			
 			if (move) {
 				moves.push(move);
@@ -29,23 +29,8 @@ export class MPlayer extends Player {
 		let pawnsByFar = this.pawns.sort((curr, prev) => {
 			return curr.distRemaining - prev.distRemaining;
 		});
-		
-		for (let i = 0; i < pawnsByFar.length; i++) {
-			let pawnSpace = board.findPawnLocation(pawnsByFar[i]);
-			
-			if (!pawnSpace) {
-				continue;
-			}
-			
-			let mm = new MoveMain(pawnsByFar[i], pawnSpace, roll);
-			console.log('mm', mm);
-			let { newBoard, _ } = mm.move(board);
-			
-			if (newBoard) {
-				return mm;
-			} 
-		}
-		return null;
+		console.log('pawnsByFar', pawnsByFar);
+		return this.tryAllPawns(board, roll, pawnsByFar);
 	}
 
 	// This player tries to move the rearmost pawn with each die roll. If the rearmost pawn cannot move, this player considers the one in front of it, etc. (Note that once the rearmost pawn moves, it may no longer be the rearmost pawn.)
@@ -54,15 +39,18 @@ export class MPlayer extends Player {
 		let pawnsByClose = this.pawns.sort((curr, prev) => {
 			return prev.distRemaining - curr.distRemaining;
 		});
-		
-		for (let i = 0; i < pawnsByFar.length; i++) {
-			let pawnSpace = board.findPawnLocation(pawnsByClose[i]);
+		return this.tryAllPawns(board, roll, pawnsByClose);
+	}
+	
+	tryAllPawns(board, roll, pawnList) {
+		for (let i = 0; i < pawnList.length; i++) {
+			let pawnSpace = board.findPawnLocation(pawnList[i]);
 			
 			if (!pawnSpace) {
 				continue;
 			}
 			
-			let mm = new MoveMain(pawnsByFar[i], pawnSpace, roll);
+			let mm = new MoveMain(pawnList[i], pawnSpace, roll);
 			let { newBoard, _ } = mm.move(board);
 			
 			if (newBoard) {

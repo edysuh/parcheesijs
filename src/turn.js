@@ -42,26 +42,10 @@ export class Turn {
 			// hash the rolls
 			rolls.forEach(el => { rollsHash[el]++; });
 
-			// check for illegal blockade moves as pairs
-			// TODO: move this out as separate function
-			let startDist = playerMoves.map(move => { return { 's': move.start, 'd': move.dist }; });
-			let duplMove = {};
-			startDist.forEach(move => {
-				if (duplMove[move.s]) {
-					if (duplMove[move.s] == move.d) {
-						return "Error: blockade attempted to move as a pair";
-					} else {
-						// if there are two moves from the same starting whose sum result in the same dest blockade
-					}
-				} else {
-					duplMove[move.s] = move.d;
-				}
-			});
-			
 			// while the player has moves left, check for validity of the move, and then execute
 			while (playerMoves.length > 0) {
 				let currMove = playerMoves.shift();
-				let bonus;
+				let bonus = null;
 
 				// check MoveMain consumes the proper roll, and that the move is allowed
 				if (currMove instanceof MoveMain) {
@@ -77,7 +61,7 @@ export class Turn {
 					}
 				}
 
-				// check EnterPiece is properly using a 5 roll
+				// check EnterPiece is properly using a "5 roll"
 				if (currMove instanceof EnterPiece) {
 					if (rollsHash[5]) {
 						rollsHash[5]--;
@@ -105,7 +89,9 @@ export class Turn {
 				}
 			}
 		}
-		
+
+		// TODO: check for illegal blockade moves as pairs by comparing board states
+			
 		return board;
 	}
 }

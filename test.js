@@ -5,6 +5,7 @@ import { moveMain_test } from "./tests/moveMain_test";
 import { enterPiece_test } from "./tests/enterPiece_test";
 import { turn_test } from "./tests/turn_test";
 import { player_test } from "./tests/player_test";
+import { parse_test } from "./xml/parse_test";
 
 function test() {
 	die_test();
@@ -14,6 +15,8 @@ function test() {
 	enterPiece_test();
 	turn_test();
 	player_test();
+	
+	parse_test();
 }
 
 test();
