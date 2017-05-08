@@ -44,8 +44,8 @@ export class Turn {
 
 			// check for illegal blockade moves as pairs
 			// TODO: move this out as separate function
-			var startDist = playerMoves.map(move => { return { 's': move.start, 'd': move.dist }; });
-			var duplMove = {};
+			let startDist = playerMoves.map(move => { return { 's': move.start, 'd': move.dist }; });
+			let duplMove = {};
 			startDist.forEach(move => {
 				if (duplMove[move.s]) {
 					if (duplMove[move.s] == move.d) {
@@ -61,8 +61,7 @@ export class Turn {
 			// while the player has moves left, check for validity of the move, and then execute
 			while (playerMoves.length > 0) {
 				let currMove = playerMoves.shift();
-				var moveObj;
-				var bonus;
+				let bonus;
 
 				// check MoveMain consumes the proper roll, and that the move is allowed
 				if (currMove instanceof MoveMain) {
@@ -71,15 +70,11 @@ export class Turn {
 					}
 					rollsHash[currMove.dist]--;
 					
-					moveObj = currMove.move(board);
-					board = moveObj[board];
-					bonus = moveObj[bonus];
+					({ board, bonus } = currMove.move(board));
 
 					if (!board) {
 						return "Error: cannot make move";
 					}
-					
-					currMove.pawn.distRemaining -= currMove.dist;
 				}
 
 				// check EnterPiece is properly using a 5 roll
@@ -96,9 +91,7 @@ export class Turn {
 						return "Error: didnt roll a 5";
 					}
 					
-					moveObj = currMove.move(board);
-					board = moveObj[board];
-					bonus = moveObj[bonus];
+					({ board, bonus } = currMove.move(board));
 					
 					if (!board) {
 						return "Error: cannot make enterpiece move";
@@ -107,7 +100,7 @@ export class Turn {
 				
 				// if a bonus was returned from a move, give the player a bonus move
 				if (bonus) {
-					var bonusMove = player.doMove(board, bonus);
+					let bonusMove = player.doMove(board, bonus);
 					playerMoves.push(bonusMove);
 				}
 			}

@@ -9,7 +9,8 @@ export class MoveMain extends Move {
 	}
 	
   move(board) {
-    var startSpace = board.findPawnLocation(this.pawn);
+    let startSpace = board.findPawnLocation(this.pawn);
+		
 		if (this.start !== startSpace) {
 			throw new Error("pawn cannot be found");
 		}
@@ -18,9 +19,9 @@ export class MoveMain extends Move {
       return null;
     }
     
-    var destSpace = startSpace;
+    let destSpace = startSpace;
     
-    for (var i = 0; i < this.dist; i++) {
+    for (let i = 0; i < this.dist; i++) {
       destSpace = board.getNextSpace(destSpace, this.pawn.getColor());
     }
 
@@ -28,7 +29,7 @@ export class MoveMain extends Move {
       return null;
     }
       
-		var bonus = super.isBopOrBlockade(board, destSpace);
+		let bonus = super.isBopOrBlockade(board, destSpace);
     
     if (startSpace.isBlockade) {
       startSpace.isBlockade = false;
@@ -36,6 +37,8 @@ export class MoveMain extends Move {
 
     startSpace.removePawnOnSpaceById(this.pawn.getId());
     destSpace.setPawnOnSpace(this.pawn);
+		
+		this.pawn.distRemaining -= this.dist;
     
     return {'board': board, 'bonus': bonus};
   }

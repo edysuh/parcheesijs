@@ -1,11 +1,11 @@
 import { Space } from "./space";
-import { NSPACES, SAFETIES, HOMEROWLEN, homeRowLocations } from "./def";
+import { NSPACES, SAFETIES, HOMEROWLENGTH, homeRowLocations } from "./def";
 
 export class Board {
 	constructor() {
 		this._spaces = [];
 		
-		for (var i = 0; i < NSPACES; i++) {
+		for (let i = 0; i < NSPACES; i++) {
 			this._spaces[i] = new Space(i);
 		}
 		
@@ -25,7 +25,7 @@ export class Board {
 			throw new Error("current space is not defined");
 		}
 
-		if (curr == this.getSpaceAt(homeRowLocations[color]["enter"] + HOMEROWLEN)) {
+		if (curr == this.getSpaceAt(homeRowLocations[color]["enter"] + HOMEROWLENGTH)) {
 			throw new Error("pawn is on his last space");
 		}
 		
@@ -43,8 +43,8 @@ export class Board {
 	// pre: none
 	// post: will find the pawn if it exists, return null if not found
 	findPawnLocation(pawn) {
-		for (var i = 0; i < this._spaces.length; i++) {
-			var foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId());
+		for (let i = 0; i < this._spaces.length; i++) {
+			let foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId());
 			
 			if (foundPawn) {
 				return this._spaces[i];

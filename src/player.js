@@ -1,15 +1,13 @@
 import { Pawn } from "./pawn";
-import { Move } from "./move";
-import { MoveMain } from './moveMain';
-import { EnterPiece } from './enterPiece';
+import { NUMPAWNS } from './def';
 
 export class Player {
 	constructor(color) {
 		this._color = color;
-		this._pawns = [];
+		this.pawns = [];
 		
-		for (let i = 0; i < 4; i++) {
-			this._pawns[i] = new Pawn(i, color);
+		for (let i = 0; i < NUMPAWNS; i++) {
+			this.pawns[i] = new Pawn(i, color);
 		}
 	}
 	
@@ -18,52 +16,29 @@ export class Player {
 	}
 	
 	getPawnById(id) {
-		for (let i = 0; i < 4; i++) {
-			if (id === this._pawns[i].getId()) {
-				return this._pawns[i];
+		for (let i = 0; i < NUMPAWNS; i++) {
+			if (id === this.pawns[i].getId()) {
+				return this.pawns[i];
 			}
 		}
 	}
 	
-	// abstract function that is different for humans and machines
-	// given a board and array of rolls, return an array of the moves the player decided on
-	// TODO: temporary doMove for testing
-	doMove(board, rolls) {
-		let p = this._pawns[0];
-		let moves = [];
-		let m;
-
-		rolls.forEach(dist => {
-			if (dist === 5) {
-				p = this._pawns[1];
-				m = new EnterPiece(p);
-			} else {
-				m = new MoveMain(p, board.findPawnLocation(p), dist);
-			}
-			moves.push(m);
-		});
-		
-		return moves;
-	}
+	// abstract function that, given a board and rolls, returns and Move array
+	doMove(board, rolls) { }
 	
-	doublesPenalty(board) {
-		let pawnDistArr = [];
-		for (let i=0; i<this._pawns.length; i++) {
-			pawnDistArr[i] = this._pawns[i].distRemaining;
+  doublesPenalty(board) {
+    let farPawn = this.pawns.reduce((prev, curr) => {
+      return prev.distRemaining < curr.distRemaining ? prev : curr;
+    });
+    let pawnSpace = board.findPawnLocation(farPawn);
+			
+		if (pawnSpace) {
+			pawnSpace.removePawnOnSpaceById(farPawn.getId());
+			farPawn.resetToStart();
 		}
-		
-		var farPawnDist = pawnDistArr.reduce((prev, curr) => {
-			return prev < curr ? prev : curr;
-		});
-		
-		for (let i=0; i<this._pawns.length; i++) {
-			if (this._pawns[i].distRemaining === farPawnDist) {
-				var pawnSpace = board.findPawnLocation(this._pawns[i]); 
-				pawnSpace.removePawnOnSpaceById(i);
-				// make reset-to-starting function for pawn?
-				this._pawns[i].distRemaining = 75;
-			}
-		}
-		return board; 
-	}		
+  }
+	
+	isDone() {
+		return this.pawns > 0;
+	}
 }

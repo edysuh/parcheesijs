@@ -14,9 +14,9 @@ export class Move {
 	// pre: start and dist are spaces, pawn is on start
 	// post: bool
   isBlocked(board, pawn, start, distance) {
-  var curr = start;
+  let curr = start;
 
-    for (var i = 0; i < distance; i++) {
+    for (let i = 0; i < distance; i++) {
       if (board.getNextSpace(curr, pawn.getColor()).isBlockade) {
         return true;
       } else {
@@ -30,7 +30,7 @@ export class Move {
 	// post: returns the bonus of 20 if bopped, returns null if not bop
 	// post: also will set blockade on space if same color pawn exist
 	isBopOrBlockade(board, dest) {
-    var existingPawn = dest.getPawnOnSpace();
+    let existingPawn = dest.getPawnOnSpace();
     
     if (existingPawn) {
       if (existingPawn.getColor() === this.pawn.getColor()) {

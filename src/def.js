@@ -1,6 +1,9 @@
 export const NSPACES = 95;
 export const PAWN_DISTANCE = 75;
-export const HOMEROWLEN = 6;
+export const HOMEROWLENGTH = 6;
+export const NUMPAWNS = 4;
+
+export const COLORS = ["blue", "yellow", "green", "red"];
 
 export const startingLocations = {
 	"blue": 4,

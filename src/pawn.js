@@ -14,4 +14,8 @@ export class Pawn {
   getColor() {
     return this._color;
   }
+  
+  resetToStart() {
+    this.distRemaining = 75;
+  }
 }
