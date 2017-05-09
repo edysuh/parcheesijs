@@ -1,8 +1,9 @@
 import { Board } from './board';
 import { COLORS } from './def';
-import express from 'express';
+import net from 'net';
+import { encode } from '../xml/encode';
+import { parse } from '../xml/parse';
 
-// TODO: COMPLETELY UNTESTED
 export class Game {
 	constructor() {
 		this.players = [];
@@ -19,18 +20,27 @@ export class Game {
 	}
 	
 	startServer() {
-		var app = express();
-		console.log('app', app);
-
-		app.get('/', (req, res) => {
-			res.send("hello from game.js");
-			// parse req and execute commands
-			// at first, wait for four players to register, then run start game
+		const server = net.createServer();
+		
+		server.listen(8000, () => {
+			console.log("game server listening on port 8000");
 		});
-
-		app.listen(8000, () => {
-			console.log("game.js listening on port 8000");
-		});
+		
+		while (this.players < 4) {
+			// do i need threads? or async?
+			server.on('connection', (conn) => {
+				// conn.write(encode(COLOR[i]));
+				
+				// testing receiving data
+				conn.on('data', (data) => {
+					console.log("received: %s", data);
+				});
+				
+				// register player
+			});
+		}
+		
+		// start game and send doMove/doublesPenalty requests to connections
 	}
 	
 	start() {
@@ -39,15 +49,14 @@ export class Game {
 		
 		while (!this.allPlayersDone) {
 			let player = this.players[i];
-			let t = new Turn();
+			let t = new Turn(board, player);
+			let rolls = t.rollDice();
 			
-			var newBoard = t.takeTurn(board, player);
-			// var newBoard = t.takeTurn(board, player, t.rollDice());
+			var newBoard = t.takeTurn();
 			
 			if (newBoard instanceof Board) {
 				board = newBoard;
 			} else {
-				// kick player out; he cheated
 				throw new Error("player cheated");
 			}
 			

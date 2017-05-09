@@ -1,5 +1,8 @@
 import { Pawn } from "./pawn";
 import { NUMPAWNS } from './def';
+import net from 'net';
+import { encode } from '../xml/encode';
+import { parse } from '../xml/parse';
 
 export class Player {
 	constructor(color) {
@@ -12,8 +15,16 @@ export class Player {
 		}
 	}
 	
-	register() {
-		// encode this._name and send over the network
+	connectToGame() {
+		const client = net.createConnection(8000, 'localhost', () => {
+			// receive player color first
+			// client.on('data', (data) => {
+			// 	this._color = data;
+			// });
+
+			// client.write(encode(this._name));
+			client.write(this._name);
+		});
 	}
 	
 	getColor() {

@@ -11,12 +11,10 @@ export class Turn {
 		this.miniTurn = 1;
 	}
 
-	// pre: rolls is an array of two dice rolls 
 	takeTurn(rolls) {
 		let board = this.saveBoard;
 		let doublesPenalty = false;
 		
-		// continue giving a player moves when rolls doubles, unless he rolls 3 in a row
 		while (this.miniTurn > 0) {
 			this.miniTurn--;
 			
