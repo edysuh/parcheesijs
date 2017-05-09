@@ -31,7 +31,7 @@ export class Game {
 			let player = this.players[i];
 			let t = new Turn();
 			
-			var newBoard = t.takeTurn(board, player);
+			var newBoard = t.takeTurn(board, player, t.rollDice());
 			
 			if (newBoard instanceof Board) {
 				board = newBoard;

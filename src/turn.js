@@ -4,7 +4,7 @@ import { MoveMain } from "./moveMain";
 import { EnterPiece } from "./enterPiece";
 
 export class Turn {
-	takeTurn(board, player) {
+	takeTurn(board, player, rolls) {
 		let saveBoard = board;
 		let doubleCounter = 0;
 		let miniTurn = 1;
@@ -13,20 +13,16 @@ export class Turn {
 		while (miniTurn > 0) {
 			miniTurn--;
 			
-			let d1 = new Die();
-			let d2 = new Die();
-			let r1 = d1.roll();
-			let r2 = d2.roll();
-			
-			let rolls = [];
 			let rollsHash = new Array(7).fill(0, 1, 7);
+			rolls.forEach(el => { rollsHash[el]++; });
+
 			let playerMoves = [];
 			
 			// if player rolls doubles, give him 4 mini-moves and another pair of rolls
-			if (r1 === r2) {
+			if (rolls[0] === rolls[1]) {
 				doubleCounter++;
 				if (doubleCounter < 3) {
-					rolls = [r1, r2, 7-r1, 7-r2];
+					rolls.push(7-rolls[0], 7-rolls[1]);
 					playerMoves = player.doMove(board, rolls);
 					miniTurn++;
 				} else {
@@ -35,13 +31,9 @@ export class Turn {
 				}
 			// else just give him his pair of rolls and execute his turn
 			} else {
-				rolls = [r1, r2];
 				playerMoves = player.doMove(board, rolls);
 			}
 			
-			// hash the rolls
-			rolls.forEach(el => { rollsHash[el]++; });
-
 			// while the player has moves left, check for validity of the move, and then execute
 			while (playerMoves.length > 0) {
 				let currMove = playerMoves.shift();
@@ -93,5 +85,14 @@ export class Turn {
 		// TODO: check for illegal blockade moves as pairs by comparing board states
 			
 		return board;
+	}
+	
+	rollDice() {
+		let d1 = new Die();
+		let d2 = new Die();
+		let r1 = d1.roll();
+		let r2 = d2.roll();
+		
+		return [r1, r2];
 	}
 }

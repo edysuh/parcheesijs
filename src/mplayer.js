@@ -20,6 +20,7 @@ export class MPlayer extends Player {
 				moves.push(move);
 			}
 		});
+		
 		return moves;
 	}
 	
@@ -46,6 +47,7 @@ export class MPlayer extends Player {
 		for (let i = 0; i < pawnList.length; i++) {
 			let pawnSpace = board.findPawnLocation(pawnList[i]);
 			
+			// is in Start
 			if (!pawnSpace) {
 				continue;
 			}

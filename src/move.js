@@ -37,7 +37,7 @@ export class Move {
         dest.isBlockade = true;
       } else {
 				dest.removePawnOnSpaceById(existingPawn.getId());
-				existingPawn.distRemaining = 75;
+				existingPawn.resetToStart();
 				
 				return 20;
       }

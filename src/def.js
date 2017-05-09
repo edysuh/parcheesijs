@@ -1,5 +1,5 @@
 export const NSPACES = 95;
-export const PAWN_DISTANCE = 75;
+export const PAWN_DISTANCE = 71;
 export const HOMEROWLENGTH = 6;
 export const NUMPAWNS = 4;
 

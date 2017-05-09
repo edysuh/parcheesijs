@@ -16,6 +16,7 @@ export class Pawn {
   }
   
   resetToStart() {
-    this.distRemaining = 75;
+    this.distRemaining = 71;
   }
 }
+
