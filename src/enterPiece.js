@@ -23,4 +23,21 @@ export class EnterPiece extends Move {
 		
     return {'board': board, 'bonus': bonus};
 	}
+	
+	// check EnterPiece is properly using a "5 roll"
+	checkMove(rollsHash) {
+		if (rollsHash[5]) {
+			rollsHash[5]--;
+		} else if (rollsHash[1] && rollsHash[4]) {
+			rollsHash[1]--;
+			rollsHash[4]--;
+		} else if (rollsHash[2] && rollsHash[3]) {
+			rollsHash[2]--;
+			rollsHash[3]--;
+		} else {
+			throw new Error("Error: didnt roll a 5");
+		}
+		
+		return rollsHash;
+	}
 }

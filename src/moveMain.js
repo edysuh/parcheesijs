@@ -52,4 +52,14 @@ export class MoveMain extends Move {
     
     return {'board': newBoard, 'bonus': bonus};
   }
+	
+	// check MoveMain consumes the proper roll, and that the move is allowed
+	checkMove(rollsHash, isBonus) {
+		if (!rollsHash[this.dist] && isBonus !== null) {
+			throw new Error("Error: roll does not exist");
+		}
+		rollsHash[this.dist]--;
+		
+		return rollsHash;
+	}
 }
