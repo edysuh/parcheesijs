@@ -1,5 +1,6 @@
 import { Board } from './board';
 import { COLORS } from './def';
+import express from 'express';
 
 // TODO: COMPLETELY UNTESTED
 export class Game {
@@ -17,21 +18,31 @@ export class Game {
 		}
 	}
 	
+	startServer() {
+		var app = express();
+		console.log('app', app);
+
+		app.get('/', (req, res) => {
+			res.send("hello from game.js");
+			// parse req and execute commands
+			// at first, wait for four players to register, then run start game
+		});
+
+		app.listen(8000, () => {
+			console.log("game.js listening on port 8000");
+		});
+	}
+	
 	start() {
 		let board = new Board();
 		let i = 0;
-		
-		// TODO: change this to vary for M and H players
-		COLORS.forEach(color => {
-			let np = new Player(color);
-			register(player);
-		});
 		
 		while (!this.allPlayersDone) {
 			let player = this.players[i];
 			let t = new Turn();
 			
-			var newBoard = t.takeTurn(board, player, t.rollDice());
+			var newBoard = t.takeTurn(board, player);
+			// var newBoard = t.takeTurn(board, player, t.rollDice());
 			
 			if (newBoard instanceof Board) {
 				board = newBoard;

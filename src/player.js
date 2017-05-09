@@ -4,11 +4,16 @@ import { NUMPAWNS } from './def';
 export class Player {
 	constructor(color) {
 		this._color = color;
+		this._name = color + " player";
 		this.pawns = [];
 		
 		for (let i = 0; i < NUMPAWNS; i++) {
 			this.pawns[i] = new Pawn(i, color);
 		}
+	}
+	
+	register() {
+		// encode this._name and send over the network
 	}
 	
 	getColor() {

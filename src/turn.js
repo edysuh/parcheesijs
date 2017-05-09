@@ -4,15 +4,22 @@ import { MoveMain } from "./moveMain";
 import { EnterPiece } from "./enterPiece";
 
 export class Turn {
-	takeTurn(board, player, rolls) {
-		let saveBoard = board;
-		let doubleCounter = 0;
-		let miniTurn = 1;
+	constructor(board, player) {
+		this.saveBoard = board;
+		this.player = player;
+		this.doubleCounter = 0;
+		this.miniTurn = 1;
+	}
+
+	// pre: rolls is an array of two dice rolls 
+	takeTurn(rolls) {
+		let board = this.saveBoard;
 		
 		// continue giving a player moves when rolls doubles, unless he rolls 3 in a row
-		while (miniTurn > 0) {
-			miniTurn--;
+		while (this.miniTurn > 0) {
+			this.miniTurn--;
 			
+			// let rolls = this.rollDice();
 			let rollsHash = new Array(7).fill(0, 1, 7);
 			rolls.forEach(el => { rollsHash[el]++; });
 
@@ -20,18 +27,18 @@ export class Turn {
 			
 			// if player rolls doubles, give him 4 mini-moves and another pair of rolls
 			if (rolls[0] === rolls[1]) {
-				doubleCounter++;
-				if (doubleCounter < 3) {
+				this.doubleCounter++;
+				if (this.doubleCounter < 3) {
 					rolls.push(7-rolls[0], 7-rolls[1]);
-					playerMoves = player.doMove(board, rolls);
-					miniTurn++;
+					playerMoves = this.player.doMove(board, rolls);
+					this.miniTurn++;
 				} else {
-					board = player.doublesPenalty();
+					board = this.player.doublesPenalty();
 					return board;
 				}
 			// else just give him his pair of rolls and execute his turn
 			} else {
-				playerMoves = player.doMove(board, rolls);
+				playerMoves = this.player.doMove(board, rolls);
 			}
 			
 			// while the player has moves left, check for validity of the move, and then execute
@@ -41,15 +48,15 @@ export class Turn {
 
 				// check MoveMain consumes the proper roll, and that the move is allowed
 				if (currMove instanceof MoveMain) {
-					if (!rollsHash[currMove.dist]) {
-						return "Error: roll does not exist";
+					if (!rollsHash[currMove.dist] && bonus !== null) {
+						throw new Error("Error: roll does not exist");
 					}
 					rollsHash[currMove.dist]--;
 					
 					({ board, bonus } = currMove.move(board));
 
 					if (!board) {
-						return "Error: cannot make move";
+						throw new Error("Error: cannot make move");
 					}
 				}
 
@@ -64,20 +71,20 @@ export class Turn {
 						rollsHash[2]--;
 						rollsHash[3]--;
 					} else {
-						return "Error: didnt roll a 5";
+						throw new Error("Error: didnt roll a 5");
 					}
 					
 					({ board, bonus } = currMove.move(board));
 					
 					if (!board) {
-						return "Error: cannot make enterpiece move";
+						throw new Error("Error: cannot make enterpiece move");
 					}
 				}
 				
 				// if a bonus was returned from a move, give the player a bonus move
 				if (bonus) {
-					let bonusMove = player.doMove(board, bonus);
-					playerMoves.push(bonusMove);
+					let bonusMoves = this.player.doMove(board, [bonus]);
+					playerMoves.push(bonusMoves[0]);
 				}
 			}
 		}

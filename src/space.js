@@ -52,4 +52,11 @@ export class Space {
 			}
 		}
 	}
+	
+	equals(space) {
+		return (this._position === space._position &&
+						this._pawnsOnSpace === space._pawnsOnSpace &&
+						this._isSafety === space._isSafety &&
+						this.isBlockade === space.isBlockade);
+	}
 }

@@ -13,6 +13,7 @@
   "author": "edys",
   "license": "ISC",
   "dependencies": {
-    "babel-plugin-transform-class-properties": "^6.24.1"
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "express": "^4.15.2"
   }
 }

@@ -12,9 +12,9 @@ export class MPlayer extends Player {
 		let moves = [];
 		
 		rolls.forEach(roll => {
-			// console.log('roll', roll);
+			console.log('roll', roll);
 			let move = this.moveFirstPawn(board, roll);
-			// console.log('move', move);
+			console.log('move', move);
 			
 			if (move) {
 				moves.push(move);
@@ -46,6 +46,7 @@ export class MPlayer extends Player {
 	tryAllPawns(board, roll, pawnList) {
 		for (let i = 0; i < pawnList.length; i++) {
 			let pawnSpace = board.findPawnLocation(pawnList[i]);
+			console.log('pawnSpace', pawnSpace);
 			
 			// is in Start
 			if (!pawnSpace) {
@@ -53,7 +54,9 @@ export class MPlayer extends Player {
 			}
 			
 			let mm = new MoveMain(pawnList[i], pawnSpace, roll);
-			let { newBoard, _ } = mm.move(board);
+			// console.log('mm', mm);
+			let { board: newBoard, bonus: _ } = mm.move(board);
+			// console.log('newBoard', newBoard);
 			
 			if (newBoard) {
 				return mm;

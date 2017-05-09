@@ -1,5 +1,8 @@
-import { test } from "./test";
+import { Game } from "./src/game";
 
 function main() {
-	test();
+	let g = new Game();
+	g.startServer();
 }
+
+main();

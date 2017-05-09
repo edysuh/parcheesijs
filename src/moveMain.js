@@ -1,4 +1,5 @@
 import { Move } from "./move";
+import { Board } from "./board";
 
 export class MoveMain extends Move {
 	constructor(pawn, start, dist) {
@@ -9,27 +10,30 @@ export class MoveMain extends Move {
 	}
 	
   move(board) {
-    let startSpace = board.findPawnLocation(this.pawn);
+		let newBoard = board;
+    let startSpace = newBoard.findPawnLocation(this.pawn);
 		
 		if (this.start !== startSpace) {
 			throw new Error("pawn cannot be found");
 		}
     
-    if (super.isBlocked(board, this.pawn, startSpace, this.dist)) {
+    if (super.isBlocked(newBoard, this.pawn, startSpace, this.dist)) {
+			console.log("blocked");
       return null;
     }
     
     let destSpace = startSpace;
     
     for (let i = 0; i < this.dist; i++) {
-      destSpace = board.getNextSpace(destSpace, this.pawn.getColor());
+      destSpace = newBoard.getNextSpace(destSpace, this.pawn.getColor());
     }
 
-    if (!super.canMoveIfSafety(board, this.pawn, destSpace)) {
+    if (!super.canMoveIfSafety(newBoard, this.pawn, destSpace)) {
+			console.log("safety");
       return null;
     }
       
-		let bonus = super.isBopOrBlockade(board, destSpace);
+		let bonus = super.isBopOrBlockade(newBoard, destSpace);
     
     if (startSpace.isBlockade) {
       startSpace.isBlockade = false;
@@ -38,8 +42,14 @@ export class MoveMain extends Move {
     startSpace.removePawnOnSpaceById(this.pawn.getId());
     destSpace.setPawnOnSpace(this.pawn);
 		
+		// if (board === newBoard) {
+		// 	console.log("board equality");
+		// } else {
+		// 	console.log("not equal");
+		// }
+		
 		this.pawn.distRemaining -= this.dist;
     
-    return {'board': board, 'bonus': bonus};
+    return {'board': newBoard, 'bonus': bonus};
   }
 }
