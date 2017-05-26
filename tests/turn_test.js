@@ -33,9 +33,9 @@ export function turn_test() {
 	
 	// --------------------------------------------------------------------------
 	
-	// d = {"blue": { "pawns": { 0: 40, 1: 20, 2: 60, 3: 30 }, "type": "mplayer" }};
-	// ({board, playerList} = generateTestBoard(d));
+	d = {"blue": { "pawns": { 0: 40, 1: 20, 2: 60, 3: 30 }, "type": "mplayer" }};
+	({board, playerList} = generateTestBoard(d));
 	
-	// t = new Turn(board, playerList[0]);
-	// newBoard = t.takeTurn([4]);
+	t = new Turn(board, playerList[0]);
+	newBoard = t.takeTurn([4]);
 }

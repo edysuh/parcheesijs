@@ -1,5 +1,7 @@
 import { Move } from "./move";
 import { Board } from "./board";
+import cloneDeep from "lodash/cloneDeep";
+import isEqual from "lodash";
 
 export class MoveMain extends Move {
 	constructor(pawn, start, dist) {
@@ -10,10 +12,10 @@ export class MoveMain extends Move {
 	}
 	
   move(board) {
-		let newBoard = board;
+		let newBoard = cloneDeep(board);
     let startSpace = newBoard.findPawnLocation(this.pawn);
 		
-		if (this.start !== startSpace) {
+		if (!isEqual(this.start, startSpace)) {
 			throw new Error("pawn cannot be found");
 		}
     
@@ -41,13 +43,6 @@ export class MoveMain extends Move {
 
     startSpace.removePawnOnSpaceById(this.pawn.getId());
     destSpace.setPawnOnSpace(this.pawn);
-		
-		// if (board === newBoard) {
-		// 	console.log("board equality");
-		// } else {
-		// 	console.log("not equal");
-		// }
-		
 		this.pawn.distRemaining -= this.dist;
     
     return {'board': newBoard, 'bonus': bonus};

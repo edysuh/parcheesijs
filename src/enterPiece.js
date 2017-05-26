@@ -1,5 +1,6 @@
 import { Move } from "./move";
 import { startingLocations } from "./def";
+import cloneDeep from "lodash/cloneDeep";
 
 export class EnterPiece extends Move {
 	constructor(pawn) {
@@ -10,18 +11,19 @@ export class EnterPiece extends Move {
 	// pre: assure that the starting space is not blocked
 	// post: starting space now has the newly entered pawn
 	move(board) {
+		let newBoard = cloneDeep(board);
 		let pawnColorStartSpace = startingLocations[this.pawn.getColor()];
-		let pawnStarting = board.getSpaceAt(pawnColorStartSpace);
+		let pawnStarting = newBoard.getSpaceAt(pawnColorStartSpace);
 		
-		if (super.isBlocked(board, this.pawn, board.getSpaceAt(pawnColorStartSpace - 1), 1)) {
+		if (super.isBlocked(newBoard, this.pawn, newBoard.getSpaceAt(pawnColorStartSpace - 1), 1)) {
 			return null;
 		}
 		
-		let bonus = super.isBopOrBlockade(board, pawnStarting);
+		let bonus = super.isBopOrBlockade(newBoard, pawnStarting);
 		
 		pawnStarting.setPawnOnSpace(this.pawn);
 		
-    return {'board': board, 'bonus': bonus};
+    return {'board': newBoard, 'bonus': bonus};
 	}
 	
 	// check EnterPiece is properly using a "5 roll"

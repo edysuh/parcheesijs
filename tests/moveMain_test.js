@@ -2,37 +2,39 @@ import { assert } from "./tester";
 import { Board } from "../src/board";
 import { Pawn } from "../src/pawn";
 import { MoveMain } from "../src/moveMain";
+import isEqual from "lodash";
 
 export function moveMain_test() {
-  var b = new Board();
+  var board = new Board();
   var p = new Pawn(3, "blue");
-  var s5 = b.getSpaceAt(5);
-  var bs = b.getSpaceAt(8);
+  var s5 = board.getSpaceAt(5);
+  var bs = board.getSpaceAt(8);
 	
   s5.setPawnOnSpace(p);
   var mm = new MoveMain(p, s5, 5);
-	mm.move(b);
+	var bonus;
+	({board, bonus} = mm.move(board));
 
-  var s10 = b.getSpaceAt(10);
-  var lp = s10.getPawnOnSpaceById(p.getId());
+  var s10 = board.getSpaceAt(10);
+  var lp = board.getSpaceAt(10).getPawnOnSpaceById(p.getId());
 
-  assert(!s5.getPawnOnSpaceById(p.getId()), "MOVEMAIN: No Pawn on Start");
-  assert(lp == p, "MOVEMAIN: Pawn Has Been Moved to Landing");
+  assert(!board.getSpaceAt(5).getPawnOnSpaceById(p.getId()), "MOVEMAIN: No Pawn on Start");
+  assert(isEqual(lp, p), "MOVEMAIN: Pawn Has Been Moved to Landing");
 
   var p2 = new Pawn(0, "red");
   var p3 = new Pawn(1, "red");
   var p4 = new Pawn(2, "red");
-  b.getSpaceAt(20).setPawnOnSpace(p2);
-  b.getSpaceAt(24).setPawnOnSpace(p3);
+  board.getSpaceAt(20).setPawnOnSpace(p2);
+  board.getSpaceAt(24).setPawnOnSpace(p3);
   // implement moving a third piece onto the blockade
-  // b.getSpaceAt(23).setPawnOnSpace(p3);
+  // board.getSpaceAt(23).setPawnOnSpace(p3);
 	
 
-  mm = new MoveMain(p2, b.getSpaceAt(20), 4);
-	mm.move(b);
-  assert(b.getSpaceAt(24).isBlockade, "MOVEMAIN: made a blockade");
+  mm = new MoveMain(p2, board.getSpaceAt(20), 4);
+	({board, bonus} = mm.move(board));
+  assert(board.getSpaceAt(24).isBlockade, "MOVEMAIN: made a blockade");
 
-  mm = new MoveMain(p2, b.getSpaceAt(24), 4);
-  mm.move(b);
-  assert(!b.getSpaceAt(24).isBlockade, "MOVEMAIN: broke a blockade");
+  mm = new MoveMain(p2, board.getSpaceAt(24), 4);
+	({board, bonus} = mm.move(board));
+  assert(!board.getSpaceAt(24).isBlockade, "MOVEMAIN: broke a blockade");
 }

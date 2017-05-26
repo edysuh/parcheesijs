@@ -1,13 +1,12 @@
 import { Pawn } from "./pawn";
 import { NUMPAWNS } from './def';
-import net from 'net';
 import { encode } from '../xml/encode';
 import { parse } from '../xml/parse';
+import net from 'net';
 
 export class Player {
 	constructor(color) {
 		this._color = color;
-		this._name = color + " player";
 		this.pawns = [];
 		
 		for (let i = 0; i < NUMPAWNS; i++) {
@@ -15,15 +14,23 @@ export class Player {
 		}
 	}
 	
-	connectToGame() {
+	startGame(color) {
+		// return stringNameColor;
 		const client = net.createConnection(8000, 'localhost', () => {
-			// receive player color first
-			// client.on('data', (data) => {
-			// 	this._color = data;
-			// });
-
-			// client.write(encode(this._name));
-			client.write(this._name);
+			client.on('data', (data) => {
+				let req = parse(data);
+				// on startGame:
+				// this._color = parse(data);
+				// response: named player (color)
+				// 
+				// on doMove:
+				// call doMove
+				// response: Moves array
+				// 
+				// on doublesPenalty:
+				// call doublesPenalty
+				// response: void (?) this is executed on the server side?
+			});
 		});
 	}
 	

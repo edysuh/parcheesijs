@@ -1,8 +1,8 @@
 import { Board } from './board';
 import { COLORS } from './def';
-import net from 'net';
 import { encode } from '../xml/encode';
 import { parse } from '../xml/parse';
+import net from 'net';
 
 export class Game {
 	constructor() {
@@ -20,25 +20,19 @@ export class Game {
 	}
 	
 	startServer() {
+		let playerCount = 0;
 		const server = net.createServer();
 		
 		server.listen(8000, () => {
 			console.log("game server listening on port 8000");
 		});
 		
-		while (this.players < 4) {
-			// do i need threads? or async?
-			server.on('connection', (conn) => {
-				// conn.write(encode(COLOR[i]));
-				
-				// testing receiving data
-				conn.on('data', (data) => {
-					console.log("received: %s", data);
-				});
-				
-				// register player
-			});
-		}
+		server.on('connection', (conn) => {
+			this.players.push(conn);
+			conn.write(COLORS[playerCount]);
+			
+			playerCount++;
+		});
 		
 		// start game and send doMove/doublesPenalty requests to connections
 	}
@@ -52,7 +46,7 @@ export class Game {
 			let t = new Turn(board, player);
 			let rolls = t.rollDice();
 			
-			var newBoard = t.takeTurn();
+			var newBoard = t.takeTurn(rolls);
 			
 			if (newBoard instanceof Board) {
 				board = newBoard;
