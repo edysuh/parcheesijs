@@ -16,8 +16,8 @@ export class Player {
 	
 	startGame(color) {
 		// return stringNameColor;
-		const client = net.createConnection(8000, 'localhost', () => {
-			client.on('data', (data) => {
+		const conn = net.createConnection(8000, 'localhost', () => {
+			conn.on('data', (data) => {
 				let req = parse(data);
 				// on startGame:
 				// this._color = parse(data);
@@ -26,6 +26,8 @@ export class Player {
 				// on doMove:
 				// call doMove
 				// response: Moves array
+				let moves = this.doMove(board, roll);
+				conn.write(encode(moves));
 				// 
 				// on doublesPenalty:
 				// call doublesPenalty

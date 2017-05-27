@@ -19,11 +19,13 @@ export class Turn {
 			this.miniTurn--;
 			
 			let rollsHash = new Array(7).fill(0, 1, 7);
-			rolls.forEach(el => { rollsHash[el]++; });
+			rolls.forEach(roll => { rollsHash[roll]++; });
 			
 			({rolls, doublesPenalty} = this.checkDoubles(rolls));
 			if (doublesPenalty) { return this.player.doublesPenalty(); }
 			
+			// TODO: async -> how to wait for reponse?
+			// this needs to be a request over the network to a player
 			let playerMoves = this.player.doMove(board, rolls);
 			
 			while (playerMoves.length > 0) {

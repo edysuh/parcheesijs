@@ -1,4 +1,5 @@
 import { Board } from './board';
+import { NPlayer } from './nplayer';
 import { COLORS } from './def';
 import { encode } from '../xml/encode';
 import { parse } from '../xml/parse';
@@ -21,6 +22,7 @@ export class Game {
 	
 	startServer() {
 		let playerCount = 0;
+		let gameStarted = false;
 		const server = net.createServer();
 		
 		server.listen(8000, () => {
@@ -28,10 +30,21 @@ export class Game {
 		});
 		
 		server.on('connection', (conn) => {
-			this.players.push(conn);
-			conn.write(COLORS[playerCount]);
-			
 			playerCount++;
+			
+			if (playerCount <= 4) {
+				let color = COLORS[playerCount-1];
+				let nplayer = new NPlayer(color, conn);
+				this.players.push(nplayer);
+
+				conn.write(color + "\n");
+			}
+			
+			console.log(this.players);
+			
+			if (playerCount === 4) {
+				this.start();
+			}
 		});
 		
 		// start game and send doMove/doublesPenalty requests to connections
