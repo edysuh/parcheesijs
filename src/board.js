@@ -26,7 +26,8 @@ export class Board {
 		}
 
 		if (curr == this.getSpaceAt(homeRowLocations[color]["enter"] + HOMEROWLENGTH)) {
-			throw new Error("pawn is on his last space");
+			// throw new Error("pawn is on his last space");
+			return null;
 		}
 		
 		if (curr === this.getSpaceAt(homeRowLocations[color]["enter"])) {

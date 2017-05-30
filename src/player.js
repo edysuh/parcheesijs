@@ -14,24 +14,33 @@ export class Player {
 		}
 	}
 	
-	startGame(color) {
+	connectToGame() {
 		// return stringNameColor;
 		const conn = net.createConnection(8000, 'localhost', () => {
 			conn.on('data', (data) => {
 				let req = parse(data);
+				
+				switch (req.name) {
 				// on startGame:
 				// this._color = parse(data);
 				// response: named player (color)
-				// 
+					case 'start-game':
+						break;
+
 				// on doMove:
 				// call doMove
 				// response: Moves array
-				let moves = this.doMove(board, roll);
-				conn.write(encode(moves));
-				// 
+					case 'do-move':
+						let moves = this.doMove(board, roll);
+						conn.write(encode(moves));
+						break;
+
 				// on doublesPenalty:
 				// call doublesPenalty
 				// response: void (?) this is executed on the server side?
+					case 'doubles-penalty':
+						break;
+				}
 			});
 		});
 	}

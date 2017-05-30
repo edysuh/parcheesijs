@@ -1,5 +1,6 @@
 import { Board } from './board';
 import { NPlayer } from './nplayer';
+import { Turn } from './turn';
 import { COLORS } from './def';
 import { encode } from '../xml/encode';
 import { parse } from '../xml/parse';
@@ -40,8 +41,6 @@ export class Game {
 				conn.write(color + "\n");
 			}
 			
-			console.log(this.players);
-			
 			if (playerCount === 4) {
 				this.start();
 			}
@@ -54,12 +53,12 @@ export class Game {
 		let board = new Board();
 		let i = 0;
 		
-		while (!this.allPlayersDone) {
+		while (!this.allPlayersDone()) {
 			let player = this.players[i];
 			let t = new Turn(board, player);
 			let rolls = t.rollDice();
 			
-			var newBoard = t.takeTurn(rolls);
+			let newBoard = t.takeTurn(rolls);
 			
 			if (newBoard instanceof Board) {
 				board = newBoard;

@@ -18,11 +18,5 @@ export class Pawn {
   resetToStart() {
     this.distRemaining = 71;
   }
-	
-	equals(pawn) {
-		return (this._id === pawn._id && 
-						this._color === pawn._color && 
-						this.distRemaining === pawn.distRemaining);
-	}
 }
 

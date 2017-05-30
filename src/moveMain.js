@@ -20,18 +20,18 @@ export class MoveMain extends Move {
 		}
     
     if (super.isBlocked(newBoard, this.pawn, startSpace, this.dist)) {
-			console.log("blocked");
       return null;
     }
     
     let destSpace = startSpace;
-    
     for (let i = 0; i < this.dist; i++) {
+			if (!destSpace) {
+				return null;
+			}
       destSpace = newBoard.getNextSpace(destSpace, this.pawn.getColor());
     }
 
     if (!super.canMoveIfSafety(newBoard, this.pawn, destSpace)) {
-			console.log("safety");
       return null;
     }
       
@@ -44,6 +44,10 @@ export class MoveMain extends Move {
     startSpace.removePawnOnSpaceById(this.pawn.getId());
     destSpace.setPawnOnSpace(this.pawn);
 		this.pawn.distRemaining -= this.dist;
+		
+		if (this.pawn.distRemaining === 0) {
+			bonus = 10;
+		}
     
     return {'board': newBoard, 'bonus': bonus};
   }
