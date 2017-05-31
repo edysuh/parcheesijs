@@ -53,4 +53,12 @@ export class Board {
 		}
 		return null;
 	}
+	
+	findBlockades() {
+		blockadeSpaces = [];
+		this._spaces.forEach(space => {
+			if (space.isBlockade) { blockadeSpaces.push(space); }
+		});
+		return blockadeSpaces;
+	}
 }

@@ -32,7 +32,7 @@ export class Turn {
 				let currMove = playerMoves.shift();
 				let bonus = null;
 
-				currMove.checkMove(rollsHash, bonus);
+				rollsHash = currMove.checkMove(rollsHash, bonus);
 				({ board, bonus } = currMove.move(board));
 				if (!board) { throw new Error("Error: cannot make move"); }
 				
@@ -40,11 +40,15 @@ export class Turn {
 					let bonusMove = this.player.doMove(board, [bonus]);
 					playerMoves.push(bonusMove[0]);
 				}
+				
+				this.player.removeDonePawns();
 			}
 		}
-
+		
 		// TODO: check for illegal blockade moves as pairs by comparing board states
-			
+		// let oldBlockades = this.saveBoard.findBlockades();
+		// let newBlockades = board.findBlockades();
+		
 		return board;
 	}
 	

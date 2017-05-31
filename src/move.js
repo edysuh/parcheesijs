@@ -17,11 +17,13 @@ export class Move {
   let curr = start;
 
     for (let i = 0; i < distance; i++) {
-      if (board.getNextSpace(curr, pawn.getColor()).isBlockade) {
-        return true;
-      } else {
-        curr = board.getNextSpace(curr, pawn.getColor());
-      }
+			if (board.getNextSpace(curr, pawn.getColor())) {
+				if (board.getNextSpace(curr, pawn.getColor()).isBlockade) {
+					return true;
+				} else {
+					curr = board.getNextSpace(curr, pawn.getColor());
+				}
+			}
     }
     return false;
   }

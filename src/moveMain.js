@@ -14,6 +14,7 @@ export class MoveMain extends Move {
   move(board) {
 		let newBoard = cloneDeep(board);
     let startSpace = newBoard.findPawnLocation(this.pawn);
+		let bonus;
 		
 		if (!isEqual(this.start, startSpace)) {
 			throw new Error("pawn cannot be found");
@@ -25,24 +26,29 @@ export class MoveMain extends Move {
     
     let destSpace = startSpace;
     for (let i = 0; i < this.dist; i++) {
+			// if the player overshoots home
 			if (!destSpace) {
 				return null;
 			}
       destSpace = newBoard.getNextSpace(destSpace, this.pawn.getColor());
     }
+		
+		// if dest space is not home
+		if (destSpace) {
+			if (!super.canMoveIfSafety(newBoard, this.pawn, destSpace)) {
+				return null;
+			}
+				
+			bonus = super.isBopOrBlockade(newBoard, destSpace);
+			
+			if (startSpace.isBlockade) {
+				startSpace.isBlockade = false;
+			}
 
-    if (!super.canMoveIfSafety(newBoard, this.pawn, destSpace)) {
-      return null;
-    }
-      
-		let bonus = super.isBopOrBlockade(newBoard, destSpace);
-    
-    if (startSpace.isBlockade) {
-      startSpace.isBlockade = false;
-    }
-
-    startSpace.removePawnOnSpaceById(this.pawn.getId());
-    destSpace.setPawnOnSpace(this.pawn);
+			destSpace.setPawnOnSpace(this.pawn);
+		}
+		
+		startSpace.removePawnOnSpaceById(this.pawn.getId());
 		this.pawn.distRemaining -= this.dist;
 		
 		if (this.pawn.distRemaining === 0) {

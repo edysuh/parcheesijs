@@ -31,6 +31,7 @@ export class HPlayer extends Player {
 	
 	doMove(board, rolls) {
 		// renderBoard()?
+		// reupdate after they choose their move?
 	}
 	
 	doublesPenalty(board) {

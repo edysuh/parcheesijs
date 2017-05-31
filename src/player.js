@@ -50,9 +50,18 @@ export class Player {
 	}
 	
 	getPawnById(id) {
-		for (let i = 0; i < NUMPAWNS; i++) {
+		for (let i = 0; i < this.pawns.length; i++) {
 			if (id === this.pawns[i].getId()) {
 				return this.pawns[i];
+			}
+		}
+	}
+	
+	removeDonePawns() {
+		for (let i = 0; i < this.pawns.length; i++) {
+			if (this.pawns[i].distRemaining === 0) {
+				this.pawns.splice(i, 1);
+				i--;
 			}
 		}
 	}
