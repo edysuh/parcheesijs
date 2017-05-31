@@ -8,5 +8,6 @@ export function parse_test() {
 	
 	let test3 = "<move-piece-main> <pawn> <color> green </color> <id> 0 </id> </pawn> <start> 5 </start> <distance> 3 </distance> </move-piece-main>";
 	
-	console.log("parse_test", parse(test3));
+	let t = parse(test);
+	console.log("board", t);
 }
