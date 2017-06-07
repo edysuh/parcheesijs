@@ -16,9 +16,9 @@ export function moveMain_test() {
 	({board, bonus} = mm.move(board));
 
   var s10 = board.getSpaceAt(10);
-  var lp = board.getSpaceAt(10).getPawnOnSpaceById(p.getId());
+  var lp = board.getSpaceAt(10).getPawnOnSpaceById(p.getId(), p.getColor());
 
-  assert(!board.getSpaceAt(5).getPawnOnSpaceById(p.getId()), "MOVEMAIN: No Pawn on Start");
+  assert(!board.getSpaceAt(5).getPawnOnSpaceById(p.getId(), p.getColor()), "MOVEMAIN: No Pawn on Start");
   assert(isEqual(lp, p), "MOVEMAIN: Pawn Has Been Moved to Landing");
 
   var p2 = new Pawn(0, "red");
@@ -34,7 +34,9 @@ export function moveMain_test() {
 	({board, bonus} = mm.move(board));
   assert(board.getSpaceAt(24).isBlockade, "MOVEMAIN: made a blockade");
 
+	// console.log('board', board.getSpaceAt(24));
   mm = new MoveMain(p2, board.getSpaceAt(24), 4);
+	// console.log('here');
 	({board, bonus} = mm.move(board));
   assert(!board.getSpaceAt(24).isBlockade, "MOVEMAIN: broke a blockade");
 }

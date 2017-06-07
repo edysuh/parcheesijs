@@ -23,8 +23,8 @@ export function move_test() {
 	start.setPawnOnSpace(p);
 	
 	var p2 = new Pawn(2, "yellow");
-	var safe = b.getSpaceAt(16);
-	var unsafe = b.getSpaceAt(17);
+	var safe = b.getSpaceAt(12);
+	var unsafe = b.getSpaceAt(13);
 	safe.setPawnOnSpace(p2);
 	
 	assert(!(m.canMoveIfSafety(b, p, safe)), "MOVE: can move test to a safety");

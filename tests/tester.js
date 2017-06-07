@@ -60,12 +60,12 @@ export function generateTestBoard(dict) {
 }
 
 function calcPawnDistRem(pawn, spaceIndex) {
-	if (spaceIndex >= homeRowLocations["home"]) {
-		pawn.distRemaining = homeRowLocations["home"] + HOMEROWLENGTH - spaceIndex;
+	if (spaceIndex >= homeRowLocations[pawn.getColor()]["home"]) {
+		pawn.distRemaining = 
+			homeRowLocations[pawn.getColor()]["home"] + HOMEROWLENGTH - spaceIndex;
 	} else if (spaceIndex < startingLocations[pawn.getColor()]) {
 		pawn.distRemaining = 71 - (spaceIndex + 1 + 67 - startingLocations[pawn.getColor()]);
 	} else {
 		pawn.distRemaining = 71 + startingLocations[pawn.getColor()] - spaceIndex;
 	}
 }
-

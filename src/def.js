@@ -6,29 +6,29 @@ export const NUMPAWNS = 4;
 export const COLORS = ["blue", "yellow", "green", "red"];
 
 export const startingLocations = {
-	"blue": 4,
-	"yellow": 21,
-	"green": 38,
-	"red": 55
+	"blue": 39,
+	"yellow": 56,
+	"green": 5,
+	"red": 22
 };
 
 export const homeRowLocations = {
 	"blue": {
-		"enter": 67,
+		"enter": 34,
 		"home": 68
 	},
 	"yellow": {
-		"enter" : 16,
+		"enter" : 51,
 		"home": 75
 	},
 	"green": {
-		"enter": 33,
+		"enter": 0,
 		"home": 82
 	},
 	"red": {
-		"enter": 50,
+		"enter": 17,
 		"home": 89
 	}
 };
 
-export const SAFETIES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67];
+export const SAFETIES = [0, 5, 12, 17, 22, 29, 34, 39, 46, 51, 56, 63];

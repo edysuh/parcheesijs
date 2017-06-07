@@ -1,97 +1,122 @@
 import { Tag } from './tag';
+import { Board } from '../src/board';
+import { Pawn } from '../src/pawn';
+import { homeRowLocations } from '../src/def.js';
+import { js2xml, xml2js } from 'xml-js';
 
 export function parse(input) {
-	input = input.split(' ');
-	
-	let root = new Tag("root");
-	let parent = []; 
-	
-	for (let i = 0; i < input.length; i++) {
-		let str = input[i];
-		let tag;
-		
-		// close tag
-		if (str.startsWith("</")) {
-			tag = str.slice(2, str.indexOf(">"));
-			
-			if (root.name === tag) {
-				root = parent.pop();
-			} else {
-				throw new Error("tag mismatch");
-			}
-
-		// open tag
-		} else if (str.startsWith("<")) {
-			tag = str.slice(1, str.indexOf(">"));
-			let curr = new Tag(tag);
-			
-			root.children.push(curr);
-			parent.push(root);
-			root = curr;
-
-		// is data
-		} else {
-			tag = str;
-			root.data = tag;
-		}
-	}
-	
-	return root.children[0];
+	return xml2js(input);
 }
 
-export function generateBoard(boardTag) {
-	if (tag.name !== 'board') {
-		throw new Error("Tag is not a board");
+export function generateBoard(boardObj) {
+	if (boardObj.name !== "board") {
+		throw new Error("xml is not a board");
 	}
-
 	let board = new Board();
-	
-	for (i = 0; i < tag.children.length; i++) {
-		switch (tag.children[i]) {
+
+	let spaceTypesArray = boardObj.elements[0].elements;
+	for (var i = 0; i < spaceTypesArray.length; i++) {
+		switch (spaceTypesArray[i].name) {
 			case "start": 
-				
+				console.log('start');
+				// do we need to do anything here? maybe set distRemaining to 71
 				break;
 			case "main":
-        for (j = 0; i < tag.children.children.length; j ++) {
-					// if (tag.children.children[j] == "color") {
-					// 	//pawncolor = tag.children.children[]
-					// }
-					// else if (tag.children.children[j] == "id") {
-					// 	//pawnid = tag.children.children[]
-					// }
-					// else (tag.children.children[j] == "loc") {
-					// 	//pawnloc = tag.children.children[]
-					// }
+				console.log('main');
+				for (let j = 0; j < spaceTypesArray[i].elements.length; j++) {
+					let pawn;
+					let loc;
+					let pieceLocObj = spaceTypesArray[i].elements[j];
+					
+					for (let k = 0; k < pieceLocObj.elements.length; k++) {
+						if (pieceLocObj.elements[k].name === "pawn") {
+							let id, color;
+							let p = pieceLocObj.elements[k];
+							for (let l = 0; l < p.elements.length; l++) {
+								if (p.elements[l].name === "id") {
+									id = parseInt(p.elements[l].elements[0].text);
+								} else if (p.elements[l].name === 'color') {
+									color = p.elements[l].elements[0].text.trim();
+								}
+							}
+							pawn = new Pawn(id, color);
+						} else if (pieceLocObj.elements[k].name === "loc") {
+							loc = parseInt(pieceLocObj.elements[k].elements[0].text);
+						}
+					}
+					
+					board.getSpaceAt(loc).setPawnOnSpace(pawn);
+					pawn.calcPawnDistRem(loc);
 				}
-				// pawn = {pawncolor, id, loc}
-				//set this pawn on board 
-				
 				break;
-
 			case "home-rows":
-
+				console.log('home-rows');
+				for (let j = 0; j < spaceTypesArray[i].elements.length; j++) {
+					let pawn;
+					let loc;
+					let pieceLocObj = spaceTypesArray[i].elements[j];
+					
+					for (let k = 0; k < pieceLocObj.elements.length; k++) {
+						if (pieceLocObj.elements[k].name === "pawn") {
+							let id, color;
+							let p = pieceLocObj.elements[k];
+							for (let l = 0; l < p.elements.length; l++) {
+								if (p.elements[l].name === "id") {
+									id = parseInt(p.elements[l].elements[0].text);
+								} else if (p.elements[l].name === 'color') {
+									color = p.elements[l].elements[0].text.trim();
+								}
+							}
+							pawn = new Pawn(id, color);
+						} else if (pieceLocObj.elements[k].name === "loc") {
+							loc = parseInt(pieceLocObj.elements[k].elements[0].text);
+						}
+					}
+					
+					loc = homeRowLocations[pawn.getColor()]['home'] + loc;
+					pawn.calcPawnDistRem(loc);
+					
+					board.getSpaceAt(loc).setPawnOnSpace(pawn);
+				}
 				break;
 			case "home":
-				//
+				console.log('home');
+				// should not have to do anything here?
 				break;
 		}
 	}
+	return board;
 }
 
+export function getInside(obj) {
+	let inside = obj.elements[0].text;
+	if (typeof inside === "string") {
+		inside = inside.trim();
+	} else if (typeof inside === "number") {
+		inside = parseInt(inside);
+	}
+	return inside;
+}
 
-// function traverstree(tag) {
-//if (tag.name == "board")
-		// traverstree on each child
-		// 
-		// for each tho, if child == 'start':
-		// put child.child.pawn on start 
-		// 
-		// if child === 'main'
-		// piece-loc
-		// put pawn on that piece loc
-		// 
-		// if child === 'home-row'
-		//
-		// if child === 'home'
-		//  pawn are children
-// } 
+export function doMoveParse(obj) {
+	let inside = obj.elements[0].elements;
+	let board;
+	let dice = [];
+	for (let i = 0; i < inside.length; i++) {
+		if (inside[i].name === 'board') {
+			board = generateBoard(inside[i]);
+
+		} else if (inside[i].name === 'dice') {
+			for (let j = 0; j < inside[i].elements.length; j++) {
+				dice.push(getInside(inside[i].elements[j]));
+			}
+		}
+	}
+	
+	return {'board': board, 'rolls': dice};
+}
+
+// moves =	 <moves> move ... </moves>
+export function moveListParse(obj) {
+
+}

@@ -16,9 +16,12 @@ export class Player {
 	
 	connectToGame() {
 		// return stringNameColor;
+		console.log("connectToGame");
 		const conn = net.createConnection(8000, 'localhost', () => {
+			console.log("connected to game server at port 8000");
 			conn.on('data', (data) => {
 				let req = parse(data);
+				console.log('req', req);
 				
 				switch (req.name) {
 				// on startGame:
@@ -31,8 +34,9 @@ export class Player {
 				// call doMove
 				// response: Moves array
 					case 'do-move':
+						
 						let moves = this.doMove(board, roll);
-						conn.write(encode(moves));
+						// conn.write(encode(moves));
 						break;
 
 				// on doublesPenalty:

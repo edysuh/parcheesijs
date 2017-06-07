@@ -18,11 +18,12 @@ export class Space {
 		return this._pawnsOnSpace[0];
 	}
 	
-	getPawnOnSpaceById(id) {
+	getPawnOnSpaceById(id, color) {
 		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
 			if (!this._pawnsOnSpace[i]) {
 				continue;
-			} else if (id === this._pawnsOnSpace[i].getId()) {
+			} else if (id === this._pawnsOnSpace[i].getId() && 
+								 color === this._pawnsOnSpace[i].getColor()) {
 				return this._pawnsOnSpace[i];
 			}
 		}

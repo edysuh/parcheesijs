@@ -23,13 +23,17 @@ export function enterPiece_test() {
 	({board, bonus} = mg.move(board));
 	({board, bonus} = mr.move(board));
 	
-	assert(board.getSpaceAt(startingLocations["blue"]).getPawnOnSpaceById(b.getId()), 
+	assert(board.getSpaceAt(startingLocations["blue"])
+		.getPawnOnSpaceById(b.getId(), b.getColor()), 
 		"ENTERPIECE: blue enters");
-	assert(board.getSpaceAt(startingLocations["yellow"]).getPawnOnSpaceById(y.getId()), 
+	assert(board.getSpaceAt(startingLocations["yellow"])
+		.getPawnOnSpaceById(y.getId(), y.getColor()), 
 		"ENTERPIECE: yellow enters");
-	assert(board.getSpaceAt(startingLocations["green"]).getPawnOnSpaceById(g.getId()), 
+	assert(board.getSpaceAt(startingLocations["green"])
+		.getPawnOnSpaceById(g.getId(), g.getColor()), 
 		"ENTERPIECE: green enters");
-	assert(board.getSpaceAt(startingLocations["red"]).getPawnOnSpaceById(r.getId()), 
+	assert(board.getSpaceAt(startingLocations["red"])
+		.getPawnOnSpaceById(r.getId(), r.getColor()), 
 		"ENTERPIECE: red enters");
 	
 	var y2 = new Pawn(2, "yellow");

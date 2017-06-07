@@ -9,6 +9,7 @@ export class NPlayer extends Player {
 	}
 	
 	doMove(board, roll) {
+		// create json then -> xml
 		this.conn.write(encode(domove, board, roll));
 		
 		// wait for a response
@@ -18,6 +19,7 @@ export class NPlayer extends Player {
 	}
 	
 	doublesPenalty(board) {
+		// create json then -> xml
 		this.conn.write(encode(doublesPenalty));
 		
 		// return void;

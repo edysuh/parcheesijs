@@ -25,8 +25,9 @@ export class Board {
 			throw new Error("current space is not defined");
 		}
 
-		if (curr == this.getSpaceAt(homeRowLocations[color]["enter"] + HOMEROWLENGTH)) {
+		if (curr == this.getSpaceAt(homeRowLocations[color]["home"] + HOMEROWLENGTH)) {
 			// throw new Error("pawn is on his last space");
+			console.log("pawn is done");
 			return null;
 		}
 		
@@ -45,7 +46,7 @@ export class Board {
 	// post: will find the pawn if it exists, return null if not found
 	findPawnLocation(pawn) {
 		for (let i = 0; i < this._spaces.length; i++) {
-			let foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId());
+			let foundPawn = this._spaces[i].getPawnOnSpaceById(pawn.getId(), pawn.getColor());
 			
 			if (foundPawn) {
 				return this._spaces[i];
@@ -54,10 +55,14 @@ export class Board {
 		return null;
 	}
 	
-	findBlockades() {
-		blockadeSpaces = [];
+	findBlockades(color) {
+		let blockadeSpaces = [];
 		this._spaces.forEach(space => {
-			if (space.isBlockade) { blockadeSpaces.push(space); }
+			if (space.getPawnOnSpace()) {
+				if (space.getPawnOnSpace().getColor() === color && space.isBlockade) { 
+					blockadeSpaces.push(space); 
+				}
+			}
 		});
 		return blockadeSpaces;
 	}

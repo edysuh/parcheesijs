@@ -16,15 +16,15 @@ export function turn_test() {
 	
 	playerList[0].moves.push(new MoveMain(playerList[0].pawns[0], board.getSpaceAt(40), 6));
 	playerList[0].moves.push(new MoveMain(playerList[0].pawns[1], board.getSpaceAt(20), 4));
-	playerList[0].moves.push(new MoveMain(playerList[0].pawns[1], board.getSpaceAt(24), 20));
+	playerList[0].moves.push(new MoveMain(playerList[0].pawns[0], board.getSpaceAt(46), 20));
 	
 	let t = new Turn(board, playerList[0]);
 	let newBoard = t.takeTurn([6, 4]);
 	
-	assert(newBoard.findPawnLocation(playerList[0].pawns[0]) === newBoard.getSpaceAt(46), 
+	assert(newBoard.findPawnLocation(playerList[0].pawns[0]) === newBoard.getSpaceAt(66), 
 				 "TURN TEST: a basic turn");
 	
-	assert(newBoard.findPawnLocation(playerList[0].pawns[1]) === newBoard.getSpaceAt(44),
+	assert(newBoard.findPawnLocation(playerList[0].pawns[1]) === newBoard.getSpaceAt(24),
 				 "TURN TEST: bop and do bonus move");
 
 	// --------------------------------------------------------------------------
@@ -38,6 +38,7 @@ export function turn_test() {
 	t = new Turn(board, playerList[0]);
 	newBoard = t.takeTurn([5]);
 	
+	console.log(newBoard.findPawnLocation(playerList[0].pawns[0]));
 	assert(!playerList[0].getPawnById(0), "TURN: pawn is done");
 	
 	// --------------------------------------------------------------------------

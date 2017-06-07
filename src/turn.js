@@ -2,6 +2,7 @@ import { Die } from "./die";
 import { Move } from "./move";
 import { MoveMain } from "./moveMain";
 import { EnterPiece } from "./enterPiece";
+import isEqual from "lodash";
 
 export class Turn {
 	constructor(board, player) {
@@ -30,11 +31,14 @@ export class Turn {
 			
 			while (playerMoves.length > 0) {
 				let currMove = playerMoves.shift();
+				// console.log('currMove', currMove);
 				let bonus = null;
 
 				rollsHash = currMove.checkMove(rollsHash, bonus);
 				({ board, bonus } = currMove.move(board));
-				if (!board) { throw new Error("Error: cannot make move"); }
+				// console.log('board', board);
+				//// FUCK TODO: check board null is happening before this idk why
+				if (board === null) { throw new Error("Error: cannot make move"); }
 				
 				if (bonus) {
 					let bonusMove = this.player.doMove(board, [bonus]);
@@ -46,8 +50,15 @@ export class Turn {
 		}
 		
 		// TODO: check for illegal blockade moves as pairs by comparing board states
-		// let oldBlockades = this.saveBoard.findBlockades();
-		// let newBlockades = board.findBlockades();
+		let oldBlockades = this.saveBoard.findBlockades(this.player.getColor());
+		let newBlockades = board.findBlockades(this.player.getColor());
+		oldBlockades.forEach(oldb => {
+			newBlockades.forEach(newb => {
+				if (!isEqual(oldb, newb)) {
+					throw new Error("Error: Blockade moved together");
+				}
+			});
+		});
 		
 		return board;
 	}

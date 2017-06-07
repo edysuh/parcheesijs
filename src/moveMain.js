@@ -21,14 +21,17 @@ export class MoveMain extends Move {
 		}
     
     if (super.isBlocked(newBoard, this.pawn, startSpace, this.dist)) {
-      return null;
+			console.log('caught at isBlocked');
+      return {'board': null, 'bonus': null};
     }
     
     let destSpace = startSpace;
     for (let i = 0; i < this.dist; i++) {
+			// console.log('destSpace', destSpace);
 			// if the player overshoots home
 			if (!destSpace) {
-				return null;
+				console.log('caught at destSpace');
+				return {'board': null, 'bonus': null};
 			}
       destSpace = newBoard.getNextSpace(destSpace, this.pawn.getColor());
     }
@@ -36,7 +39,8 @@ export class MoveMain extends Move {
 		// if dest space is not home
 		if (destSpace) {
 			if (!super.canMoveIfSafety(newBoard, this.pawn, destSpace)) {
-				return null;
+				console.log('caught at canMoveIfSafety');
+				return {'board': null, 'bonus': null};
 			}
 				
 			bonus = super.isBopOrBlockade(newBoard, destSpace);
