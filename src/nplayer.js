@@ -10,7 +10,7 @@ export class NPlayer extends Player {
 	
 	doMove(board, roll) {
 		// create json then -> xml
-		this.conn.write(encode(domove, board, roll));
+		this.conn.write(encode('do-move', board, roll));
 		
 		// wait for a response
 		this.conn.on("data", (data) => {
@@ -20,7 +20,7 @@ export class NPlayer extends Player {
 	
 	doublesPenalty(board) {
 		// create json then -> xml
-		this.conn.write(encode(doublesPenalty));
+		this.conn.write(encode('doublesPenalty'));
 		
 		// return void;
 	}

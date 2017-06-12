@@ -45,14 +45,14 @@ export class MPlayer extends Player {
 	tryAllPawns(board, roll, pawnList) {
 		let thisPawns = cloneDeep(pawnList);
 		for (let i = 0; i < thisPawns.length; i++) {
-			let thisBoard = cloneDeep(board);
+			// let thisBoard = cloneDeep(board);
 			let pawnSpace = thisBoard.findPawnLocation(thisPawns[i]);
 			// console.log('pawnSpace', pawnSpace);
 			
-			// is in Start
-			if (!pawnSpace) {
-				continue;
-			}
+			// // is in Start
+			// if (!pawnSpace) {
+			// 	continue;
+			// }
 			
 			let mm = new MoveMain(thisPawns[i], pawnSpace, roll);
 			// console.log('mm', mm);

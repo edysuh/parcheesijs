@@ -25,7 +25,6 @@ export class Turn {
 			({rolls, doublesPenalty} = this.checkDoubles(rolls));
 			if (doublesPenalty) { return this.player.doublesPenalty(); }
 			
-			// TODO: async -> how to wait for reponse?
 			// this needs to be a request over the network to a player
 			let playerMoves = this.player.doMove(board, rolls);
 			
@@ -37,7 +36,6 @@ export class Turn {
 				rollsHash = currMove.checkMove(rollsHash, bonus);
 				({ board, bonus } = currMove.move(board));
 				// console.log('board', board);
-				//// FUCK TODO: check board null is happening before this idk why
 				if (board === null) { throw new Error("Error: cannot make move"); }
 				
 				if (bonus) {
@@ -49,7 +47,6 @@ export class Turn {
 			}
 		}
 		
-		// TODO: check for illegal blockade moves as pairs by comparing board states
 		let oldBlockades = this.saveBoard.findBlockades(this.player.getColor());
 		let newBlockades = board.findBlockades(this.player.getColor());
 		oldBlockades.forEach(oldb => {

@@ -19,7 +19,7 @@ export function turn_test() {
 	playerList[0].moves.push(new MoveMain(playerList[0].pawns[0], board.getSpaceAt(46), 20));
 	
 	let t = new Turn(board, playerList[0]);
-	let newBoard = t.takeTurn([6, 4]);
+	let newBoard = t.takeTurn([5, 4]);
 	
 	assert(newBoard.findPawnLocation(playerList[0].pawns[0]) === newBoard.getSpaceAt(66), 
 				 "TURN TEST: a basic turn");
