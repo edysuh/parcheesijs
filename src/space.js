@@ -1,56 +1,47 @@
-export class Space {
-	constructor(i) {
-		this._position = i;
-		this._pawnsOnSpace = [];
-		this._isSafety = false;
-		this.isBlockade = false;
-	}
-	
-	getPosition() {
-		return this._position;
-	}
-	
-	// just returning one is fine since, if there are two, they are both the same color
-	getPawnOnSpace() {
-		if (!this._pawnsOnSpace) {
-			return null;
+import { enterHomeRowSpaces, NUM_HOME_ROW_SPACES, NUM_MAIN_SPACES } from './def';
+
+export class Space { }
+
+export class NestSpace extends Space { }
+
+export class MainSpace extends Space {
+	constructor(index) {
+		super();
+		if (index >= NUM_MAIN_SPACES) {
+			throw new Error("Main ring space cannot have index > 67");
 		}
-		return this._pawnsOnSpace[0];
+		this.index = index;
 	}
 	
-	getPawnOnSpaceById(id, color) {
-		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
-			if (!this._pawnsOnSpace[i]) {
-				continue;
-			} else if (id === this._pawnsOnSpace[i].getId() && 
-								 color === this._pawnsOnSpace[i].getColor()) {
-				return this._pawnsOnSpace[i];
-			}
+	getNextSpace(color) {
+		if (this.index === enterHomeRowSpaces[color]) {
+			return new HomeRowSpace(0, color);
 		}
-		return null;
-	}
-	
-	// pre: space doesn't already have two pawns
-	// post: space has the new pawn
-	setPawnOnSpace(pawn) {
-		if (this._pawnsOnSpace.length < 2) {
-			this._pawnsOnSpace.push(pawn);
-		} else {
-			throw new Error("too many pawns on space");
-		}
-	}
-	
-	removePawnOnSpace() {
-		this._pawnsOnSpace.pop();
-	}
-	
-	// pre: the pawn exists on this space?
-	// post: the space no longer holds the pawn
-	removePawnOnSpaceById(id) {
-		for (let i = 0; i < this._pawnsOnSpace.length; i++) {
-			if (id === this._pawnsOnSpace[i].getId()) {
-				this._pawnsOnSpace.splice(i, 1);
-			}
-		}
+		return new MainSpace((this.index + 1) % NUM_MAIN_SPACES);
 	}
 }
+
+/////////////////////////////////////////////////////////////
+export class SafeMainSpace extends MainSpace { }
+/////////////////////////////////////////////////////////////
+
+export class HomeRowSpace extends Space {
+	constructor(index, color) {
+		super();
+		if (index >= NUM_HOME_ROW_SPACES) {
+			throw new Error("Home row space cannot have index > 6");
+		}
+		this.index = index;
+		this.color = color;
+	}
+	
+	// color parameter will be unused
+	getNextSpace() {
+		if (this.index === NUM_HOME_ROW_SPACES - 1) {
+			return new HomeSpace();
+		}
+		return new HomeRowSpace(this.index + 1, this.color);
+	}
+}
+
+export class HomeSpace extends Space { }
