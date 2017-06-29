@@ -1,8 +1,7 @@
-// var homeRowLocations = require('def/homeRowLocations');
-import { enterHomeRowSpaces } from './def';
+import { enterHomeRowSpaces, HOME_ROW_LENGTH } from './def';
 
 export class Space {
-	constructor() { }
+	// constructor() { }
 	
 }
 
@@ -26,7 +25,7 @@ export class MainSpace extends Space {
 }
 
 export class SafeMainSpace extends MainSpace {
-	foo() { }
+
 }
 
 export class HomeSpace extends Space {
@@ -36,7 +35,7 @@ export class HomeSpace extends Space {
 export class HomeRowSpace extends Space {
 	constructor(index, color) {
 		super();
-		if (index >= HOMEROWLENGTH) {
+		if (index >= HOME_ROW_LENGTH) {
 			throw new Error("Home row space cannot have index greater than 7");
 		}
 		this.index = index;
