@@ -5,9 +5,10 @@ export const NSPACES = 95;
 export const NUMPAWNS = 4;
 // export const PAWN_DISTANCE = 71;
 
-export const HOME_ROW_LENGTH = 7;
-export const NUM_SPACES = 95;
+export const NUM_HOME_ROW_SPACES = 7;
+export const NUM_MAIN_SPACES = 68;
 export const NUM_PAWNS = 4;
+export const NUM_SPACES = 95;
 export const PAWN_DISTANCE = 71;
 
 export const SAFETIES = [0, 5, 12, 17, 22, 29, 34, 39, 46, 51, 56, 63];
