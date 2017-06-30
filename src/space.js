@@ -1,4 +1,8 @@
-import { enterHomeRowSpaces, NUM_HOME_ROW_SPACES, NUM_MAIN_SPACES } from './def';
+import { EnterHomeRowSpaces, 
+				 NUM_HOME_ROW_SPACES, 
+				 NUM_MAIN_SPACES, 
+				 ColoredSafeties, 
+				 Safeties } from './def';
 
 export class Space { }
 
@@ -14,16 +18,24 @@ export class MainSpace extends Space {
 	}
 	
 	getNextSpace(color) {
-		if (this.index === enterHomeRowSpaces[color]) {
+		if (this.index === EnterHomeRowSpaces[color]) {
 			return new HomeRowSpace(0, color);
 		}
+		
+		// not sure if this is the best way to design this
+		if (Safeties.includes(this.index + 1)) {
+			return new SafeSpace(this.index + 1);
+		} else if (ColoredSafeties.includes(this.index + 1)) {
+			return new ColoredSafeSpace(this.index + 1);
+		}
+		
 		return new MainSpace((this.index + 1) % NUM_MAIN_SPACES);
 	}
 }
 
-/////////////////////////////////////////////////////////////
-export class SafeMainSpace extends MainSpace { }
-/////////////////////////////////////////////////////////////
+export class SafeSpace extends MainSpace { }
+
+export class ColoredSafeSpace extends SafeSpace { }
 
 export class HomeRowSpace extends Space {
 	constructor(index, color) {

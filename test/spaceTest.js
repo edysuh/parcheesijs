@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { NestSpace, MainSpace, HomeRowSpace, HomeSpace } from '../src/space';
+import { NestSpace, 
+				 MainSpace, 
+				 HomeRowSpace, 
+				 HomeSpace, 
+				 SafeSpace, 
+				 ColoredSafeSpace } from '../src/space';
 
 describe('Space', function() {
 	describe('subclass: MainSpace', function() {
@@ -27,6 +32,20 @@ describe('Space', function() {
 			expect(yellowSp.getNextSpace("yellow")).to.deep.equal(new HomeRowSpace(0, "yellow"));
 			expect(greenSp.getNextSpace("green")).to.deep.equal(new HomeRowSpace(0, "green"));
 			expect(redSp.getNextSpace("red")).to.deep.equal(new HomeRowSpace(0, "red"));
+		});
+		
+		it('should land on a SafeSpace if it is the next space', function() {
+			let space = new MainSpace(11);
+			let next = space.getNextSpace("blue");
+			
+			expect(next).to.deep.equal(new SafeSpace(12));
+		});
+		
+		it('should land on a ColoredSafeSpace if it is the next space', function() {
+			let space = new MainSpace(4);
+			let next = space.getNextSpace("red");
+			
+			expect(next).to.deep.equal(new ColoredSafeSpace(5));
 		});
 	});
 	
