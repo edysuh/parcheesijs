@@ -1,15 +1,17 @@
-import { EnterHomeRowSpaces, 
+import { EnterHomeRowMap, 
 				 NUM_HOME_ROW_SPACES, 
 				 NUM_MAIN_SPACES, 
 				 ColoredSafeties, 
-				 Safeties } from './def';
+				 Safeties } from './defs';
 
 export class Space { }
 
 export class NestSpace extends Space { }
 
 export class MainSpace extends Space {
-	constructor(index) {
+	index: number;
+	
+	constructor(index: number) {
 		super();
 		if (index >= NUM_MAIN_SPACES) {
 			throw new Error("Main ring space cannot have index > 67");
@@ -17,8 +19,8 @@ export class MainSpace extends Space {
 		this.index = index;
 	}
 	
-	getNextSpace(color) {
-		if (this.index === EnterHomeRowSpaces[color]) {
+	getNextSpace(color: string): Space {
+		if (this.index === EnterHomeRowMap.get(color)) {
 			return new HomeRowSpace(0, color);
 		}
 		
@@ -38,7 +40,10 @@ export class SafeSpace extends MainSpace { }
 export class ColoredSafeSpace extends SafeSpace { }
 
 export class HomeRowSpace extends Space {
-	constructor(index, color) {
+	index: number;
+	color: string;
+	
+	constructor(index: number, color: string) {
 		super();
 		if (index >= NUM_HOME_ROW_SPACES) {
 			throw new Error("Home row space cannot have index > 6");
@@ -47,8 +52,7 @@ export class HomeRowSpace extends Space {
 		this.color = color;
 	}
 	
-	// color parameter will be unused
-	getNextSpace() {
+	getNextSpace(color?: string) {
 		if (this.index === NUM_HOME_ROW_SPACES - 1) {
 			return new HomeSpace();
 		}
