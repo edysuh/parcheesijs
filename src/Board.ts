@@ -3,7 +3,7 @@ import { Space, NestSpace, MainSpace, HomeRowSpace, HomeSpace } from './Space';
 import { Pawn } from './Pawn';
 import { isEqual } from 'lodash';
 
-interface Blockade {
+export interface Blockade {
 	space: Space,
 	color: Color
 }
@@ -31,15 +31,26 @@ export class Board {
 	}
 
 	setPawnOnSpace(pawn: Pawn, space: Space): void {
-		this.pawnPositions.set(pawn.key, space);
+		let count = this.countPawnsOnSpace(space);
+		if (count >= 2) {
+			throw new Error("invalid attempt to set pawn on space with two existing pawns");
+		} else if (count == 1) {
+			this.pawnPositions.set(pawn.key, space);
+			this.setColoredBlockade(space, pawn.color);
+		} else {
+			this.pawnPositions.set(pawn.key, space);
+		}
 	}
 	
 	getSpaceForPawn(pawn: Pawn): Space {
 		return this.pawnPositions.get(pawn.key);
 	}
 	
-	// TODO error check for whether this space has two colored pawns
+	removePawnOnSpace(pawn: Pawn, space: Space): void { }
+	
 	setColoredBlockade(space: Space, color: Color): void {
+		let count = this.countPawnsOnSpace(space);
+		if (count != 2) { throw new Error("invalid attempt to set blockade"); }
 		this.blockades.push(<Blockade>({"space": space, "color": color}));
 	}
 	
@@ -49,5 +60,13 @@ export class Board {
 				this.blockades.splice(i, 1);
 			}
 		}
+	}
+	
+	countPawnsOnSpace(space: Space): number {
+		let count = 0;
+		for (let [_, pspace] of this.pawnPositions) {
+			if (isEqual(space, pspace)) { count++; }
+		}
+		return count;
 	}
 }
