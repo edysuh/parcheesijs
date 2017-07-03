@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { NestSpace, 
 				 MainSpace, 
 				 HomeRowSpace, 
@@ -12,14 +14,14 @@ describe('Space', function() {
 			let space = new MainSpace(0);
 			let next = space.getNextSpace("blue");
 			
-			expect(next).to.deep.equal(new MainSpace(1));
+			(next).should.deep.equal(new MainSpace(1));
 		});
 		
 		it('should complete the main ring', function() {
 			let space = new MainSpace(67);
 			let next = space.getNextSpace("blue");
 			
-			expect(next).to.deep.equal(new MainSpace(0));
+			(next).should.deep.equal(new MainSpace(0));
 		});
 		
 		it('should turn into the homerow for corresponding pawn color', function() {
@@ -28,24 +30,24 @@ describe('Space', function() {
 			let greenSp = new MainSpace(0);
 			let redSp = new MainSpace(17);
 			
-			expect(blueSp.getNextSpace("blue")).to.deep.equal(new HomeRowSpace(0, "blue"));
-			expect(yellowSp.getNextSpace("yellow")).to.deep.equal(new HomeRowSpace(0, "yellow"));
-			expect(greenSp.getNextSpace("green")).to.deep.equal(new HomeRowSpace(0, "green"));
-			expect(redSp.getNextSpace("red")).to.deep.equal(new HomeRowSpace(0, "red"));
+			(blueSp.getNextSpace("blue")).should.deep.equal(new HomeRowSpace(0, "blue"));
+			(yellowSp.getNextSpace("yellow")).should.deep.equal(new HomeRowSpace(0, "yellow"));
+			(greenSp.getNextSpace("green")).should.deep.equal(new HomeRowSpace(0, "green"));
+			(redSp.getNextSpace("red")).should.deep.equal(new HomeRowSpace(0, "red"));
 		});
 		
 		it('should land on a SafeSpace if it is the next space', function() {
 			let space = new MainSpace(11);
 			let next = space.getNextSpace("blue");
 			
-			expect(next).to.deep.equal(new SafeSpace(12));
+			(next).should.deep.equal(new SafeSpace(12));
 		});
 		
 		it('should land on a ColoredSafeSpace if it is the next space', function() {
 			let space = new MainSpace(4);
 			let next = space.getNextSpace("red");
 			
-			expect(next).to.deep.equal(new ColoredSafeSpace(5));
+			(next).should.deep.equal(new ColoredSafeSpace(5));
 		});
 	});
 	
@@ -54,14 +56,14 @@ describe('Space', function() {
 			let space = new HomeRowSpace(2, "green");
 			let next = space.getNextSpace("green");
 			
-			expect(next).to.deep.equal(new HomeRowSpace(3, "green"));
+			(next).should.deep.equal(new HomeRowSpace(3, "green"));
 		});
 		
 		it('should enter HomeSpace on the last HomeRowSpace', function() {
 			let space = new HomeRowSpace(6, "yellow");
 			let next = space.getNextSpace("yellow");
 			
-			expect(next).to.deep.equal(new HomeSpace());
+			(next).should.deep.equal(new HomeSpace());
 		});
 	});
 });

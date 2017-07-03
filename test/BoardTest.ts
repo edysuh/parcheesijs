@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { Color } from '../src/defs';
 import { Board, Blockade } from '../src/board';
 import { Pawn } from '../src/pawn';
@@ -10,7 +12,7 @@ describe('Board', function() {
 			let board = new Board();
 			board.setPawnOnSpace(new Pawn(1, Color.blue), new MainSpace(1));
 			
-			expect(board.getSpaceForPawn(new Pawn(1, Color.blue))).to.deep.equal(new MainSpace(1));
+			(board.getSpaceForPawn(new Pawn(1, Color.blue))).should.deep.equal(new MainSpace(1));
 		});
 		
 		it('should throw an error if there are already 2 pawns on the space', function() {
@@ -19,7 +21,7 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 			
-			// TODO expect(board.setPawnOnSpace(new Pawn(2, Color.blue), space)).to.throw();
+			// TODO (board.setPawnOnSpace(new Pawn(2, Color.blue), space)).should.throw();
 		});
 		
 		it('should set a blockade if there are now two colored pawns on the space', function() {
@@ -28,12 +30,17 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 			
-			expect(board.blockades)
-				.to.deep.include(<Blockade>({'space': new MainSpace(50), 'color': Color.blue}));
+			(board.blockades).should
+				.deep.include(<Blockade>({'space': new MainSpace(50), 'color': Color.blue}));
 		});
 		
 		it('should bop the existing pawn if it is a different color');
 	});
+	
+	describe('member: removePawnOnSpace', function() {
+		it('should remove a pawn on space');
+		it('should throw an error if the pawn doesnt exist');
+	})
 	
 	describe('member: setColoredBlockade', function() {
 		it('should map Spaces to the blockade color', function() {
@@ -42,8 +49,8 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 			
-			expect(board.blockades)
-				.to.deep.include(<Blockade>({'space': new MainSpace(20), 'color': Color.blue}));
+			(board.blockades).should
+				.deep.include(<Blockade>({'space': new MainSpace(20), 'color': Color.blue}));
 		});
 	});
 	
@@ -56,7 +63,7 @@ describe('Board', function() {
 			board.removeBlockade(new MainSpace(30));
 
 			/* jshint expr:true */
-			expect(board.blockades).to.be.empty;
+			(board.blockades).should.be.empty;
 		});
 	});
 });

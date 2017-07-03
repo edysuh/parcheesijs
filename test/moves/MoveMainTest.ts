@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { MoveMain } from '../../src/moves/MoveMain';
 
 describe('MoveMain', function() {

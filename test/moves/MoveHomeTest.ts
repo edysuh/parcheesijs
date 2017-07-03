@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { MoveHome } from '../../src/moves/MoveHome';
 
 describe("MoveHome", function() {

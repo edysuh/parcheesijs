@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { Game } from '../src/Game';
 import { Player } from '../src/players/Player';
 

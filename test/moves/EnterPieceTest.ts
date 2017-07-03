@@ -1,4 +1,6 @@
-import { expect } from 'chai';
+import { should } from 'chai';
+should();
+
 import { EnterPiece } from '../../src/moves/EnterPiece';
 
 describe("EnterPiece", function() {
