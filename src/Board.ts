@@ -1,4 +1,4 @@
-import { Color, NUM_COLORS, NUM_PAWNS } from './defs';
+import { Color, Colors, NUM_PAWNS } from './defs';
 import { Space, NestSpace, MainSpace, HomeRowSpace, HomeSpace } from './Space';
 import { Pawn } from './Pawn';
 import { isEqual } from 'lodash';
@@ -19,11 +19,9 @@ export class Board {
 		this.pawnPositions = new Map();
 		this.blockades = [];
 		
-		let colors = [Color.blue, Color.yellow, Color.green, Color.red];
-		
-		for (let i = 0; i < colors.length; i++) {
+		for (let i = 0; i < Colors.length; i++) {
 			for (let j = 0; j < NUM_PAWNS; j++) {
-				let pawn = new Pawn(j, colors[i]);
+				let pawn = new Pawn(j, Colors[i]);
 				this.pawns.push(pawn);
 				this.pawnPositions.set(pawn.key, new NestSpace());
 			}
@@ -35,6 +33,7 @@ export class Board {
 		if (count >= 2) {
 			throw new Error("invalid attempt to set pawn on space with two existing pawns");
 		} else if (count == 1) {
+			// TODO check for color
 			this.pawnPositions.set(pawn.key, space);
 			this.setColoredBlockade(space, pawn.color);
 		} else {

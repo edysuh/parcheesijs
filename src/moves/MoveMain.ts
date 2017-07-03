@@ -14,5 +14,8 @@ export class MoveMain implements Move {
 		this.dist = dist;
 	}
 	
-	move(board: Board): void { }
+	move(board: Board): { 'board': Board, 'bonus': number } {
+
+		return { 'board': new Board(), 'bonus': 0 };
+	}
 }

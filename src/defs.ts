@@ -1,5 +1,5 @@
 export enum Color { blue, yellow, green, red };
-// export type Color = "blue" | "yellow" | "green" | "red";
+export const Colors: Color[] = [Color.blue, Color.yellow, Color.green, Color.red];
 
 export const NUM_COLORS: number = 4;
 export const NUM_HOME_ROW_SPACES: number = 7;
@@ -11,16 +11,16 @@ export const PAWN_DISTANCE: number = 71;
 export const ColoredSafeties: number[] = [5, 22, 39, 56];
 export const Safeties: number[] = [0, 12, 17, 29, 34, 46, 51, 63];
 
-export const EnterHomeRowMap: Map<string, number> = new Map([
-	["blue", 34],
-	["yellow", 51],
-	["green", 0],
-	["red", 17] 
+export const EnterHomeRowMap: Map<Color, number> = new Map([
+	[Color.blue, 34],
+	[Color.yellow, 51],
+	[Color.green, 0],
+	[Color.red, 17] 
 ]);
 
-export const StartMap: Map<string, number> = new Map([
-	["blue", 39],
-	["yellow", 56],
-	["green", 5],
-	["red", 22]
+export const StartMap: Map<Color, number> = new Map([
+	[Color.blue, 39],
+	[Color.yellow, 56],
+	[Color.green, 5],
+	[Color.red, 22]
 ]);
