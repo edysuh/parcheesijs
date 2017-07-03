@@ -33,7 +33,7 @@ export class Board {
 		if (count >= 2) {
 			throw new Error("invalid attempt to set pawn on space with two existing pawns");
 		} else if (count == 1) {
-			// TODO check for color
+			// check for color
 			this.pawnPositions.set(pawn.key, space);
 			this.setColoredBlockade(space, pawn.color);
 		} else {

@@ -4,8 +4,31 @@ import { Color,
 				 NUM_MAIN_SPACES, 
 				 ColoredSafeties, 
 				 Safeties } from './defs';
+import { Bop } from './Bop';
+import { Pawn } from './Pawn';
 
-export class Space { }
+export abstract class Space {
+	pawns: Pawn[];
+	
+	constructor() {
+		this.pawns = [];
+	}
+	
+	setPawnOnSpace(pawn: Pawn): Bop|void {
+		if (this.pawns.length >= 2) {
+			throw new Error("invalid attempt to set pawn on space with two existing pawns");
+		} else if (this.pawns.length == 1) {
+			if (pawn.color == this.pawns[0].color) {
+				this.pawns.push(pawn);
+			} else {
+				this.pawns = [pawn];
+				return new Bop();
+			}
+		} else {
+			this.pawns.push(pawn);
+		}
+	}
+}
 
 export class NestSpace extends Space { }
 

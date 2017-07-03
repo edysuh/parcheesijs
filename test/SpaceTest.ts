@@ -1,7 +1,9 @@
 import { should } from 'chai';
 should();
 
+import { Bop } from '../src/Bop'
 import { Color } from '../src/defs'
+import { Pawn } from '../src/Pawn'
 import { NestSpace, 
 				 MainSpace, 
 				 HomeRowSpace, 
@@ -10,6 +12,34 @@ import { NestSpace,
 				 ColoredSafeSpace } from '../src/space';
 
 describe('Space', function() {
+	describe('abstract Space class: setPawnOnSpace', function() {
+		it('should set a pawn on this space', function() {
+			let space = new MainSpace(10);
+			let pawn = new Pawn(0, Color.green);
+			space.setPawnOnSpace(pawn);
+			
+			(space.pawns).should.include(pawn);
+		});
+		
+		it('should bop if there is a existing pawn of different color', function() {
+			let space = new MainSpace(10);
+			let pawn = new Pawn(0, Color.green);
+			let redpawn = new Pawn(0, Color.red);
+			space.setPawnOnSpace(pawn);
+			
+			// TODO evidence of poor design
+			// (space.setPawnOnSpace(redpawn)).should.be.a(Bop);
+		});
+		
+		it('should throw an error if there are already two pawns', function() {
+			let space = new MainSpace(10);
+			space.setPawnOnSpace(new Pawn(0, Color.green));
+			space.setPawnOnSpace(new Pawn(1, Color.green));
+			
+			// TODO here too
+			// (space.setPawnOnSpace(new Pawn(2, Color.green))).should.throw();
+		});
+	})
 	describe('subclass: MainSpace', function() {
 		it('should get the next MainSpace', function() {
 			let space = new MainSpace(0);
