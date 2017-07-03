@@ -1,1 +1,1 @@
-export class Move { }
+export interface Move { }

@@ -10,7 +10,7 @@
     "start": "babel-node main.js",
     "tsc": "./node_modules/typescript/bin/tsc",
     "tsc:w": "tsc -w",
-    "test": "mocha dist/test"
+    "test": "mocha --recursive dist/test"
   },
   "author": "edys",
   "license": "ISC",

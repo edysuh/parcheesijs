@@ -10,4 +10,12 @@ describe("Game", function() {
 	it('should enforce contracts between the game rules and the player');
 	it('should uphold behavioral contracts');
 	it('should adher to sequencial contracts');
+	
+	it('should not be able to ignore a die roll');
+	it('should allow for no move, due to a blockade');
+	it('should allow for just first die, due to a blockade');
+	it('should allow for just second die, due to a blockade');
+	it('should be able to bop, but dont take bonus of 20');
+	it('should be able to move home, but dont take bonus of 10');
+	it('should be able to move just one die, to not move a blockade together');
 });
