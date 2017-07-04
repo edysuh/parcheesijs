@@ -1,6 +1,7 @@
 import { should } from 'chai';
 should();
 
+import { Bop } from '../src/Bop'
 import { Color } from '../src/defs';
 import { Board, Blockade } from '../src/board';
 import { Pawn } from '../src/pawn';
@@ -21,7 +22,7 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 			
-			// TODO (board.setPawnOnSpace(new Pawn(2, Color.blue), space)).should.throw();
+			(() => board.setPawnOnSpace(new Pawn(2, Color.blue), space)).should.throw();
 		});
 		
 		it('should set a blockade if there are now two colored pawns on the space', function() {
@@ -34,7 +35,13 @@ describe('Board', function() {
 				.deep.include(<Blockade>({'space': new MainSpace(50), 'color': Color.blue}));
 		});
 		
-		it('should bop the existing pawn if it is a different color');
+		it('should bop the existing pawn if it is a different color', function() {
+			let board = new Board();
+			let space = new MainSpace(60);
+			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
+			
+			(board.setPawnOnSpace(new Pawn(0, Color.red), space)).should.be.an.instanceof(Bop);
+		});
 	});
 	
 	describe('member: removePawnOnSpace', function() {

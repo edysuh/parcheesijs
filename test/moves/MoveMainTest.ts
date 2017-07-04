@@ -13,7 +13,7 @@ import { NestSpace,
 				 ColoredSafeSpace } from '../../src/space';
 
 describe('MoveMain', function() {
-  it('should make a basic move', function() {
+  it.skip('should make a basic move', function() {
 		let pawn = new Pawn(0, Color.blue);
 		let space = new MainSpace(25);
 		let dist = 6;
@@ -25,7 +25,7 @@ describe('MoveMain', function() {
 		(mm.move(board).board.getSpaceForPawn(pawn)).should.deep.equal(new MainSpace(31));
 	});
 	
-	it('should move into homerow', function() {
+	it.skip('should move into homerow', function() {
 		let pawn = new Pawn(0, Color.blue);
 		let space = new MainSpace(30);
 		let dist = 6;
@@ -38,7 +38,7 @@ describe('MoveMain', function() {
 			.should.deep.equal(new HomeRowSpace(1, Color.blue));
 	});
 	
-	it('should move inside of homerow', function() {
+	it.skip('should move inside of homerow', function() {
 		let pawn = new Pawn(0, Color.blue);
 		let space = new HomeRowSpace(1, Color.blue);
 		let dist = 5;
@@ -51,7 +51,7 @@ describe('MoveMain', function() {
 			.should.deep.equal(new HomeRowSpace(6, Color.blue));
 	});
 	
-	// it('should have the specified pawn on the space');
+	it('should have the specified pawn on the space');
 	
 	it('should bop if theres a different color pawn on the space');
 	

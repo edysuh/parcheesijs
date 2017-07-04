@@ -14,9 +14,12 @@ export abstract class Space {
 		this.pawns = [];
 	}
 	
-	setPawnOnSpace(pawn: Pawn): Bop|void {
+	abstract getNextSpace(pcolor: Color): Space;
+	
+	// TODO likely poor design
+	setPawnOnSpace(pawn: Pawn): Bop | null {
 		if (this.pawns.length >= 2) {
-			throw new Error("invalid attempt to set pawn on space with two existing pawns");
+			throw new Error("invalid attempt to set pawn on blockade");
 		} else if (this.pawns.length == 1) {
 			if (pawn.color == this.pawns[0].color) {
 				this.pawns.push(pawn);
@@ -27,10 +30,16 @@ export abstract class Space {
 		} else {
 			this.pawns.push(pawn);
 		}
+		return null;
 	}
 }
 
-export class NestSpace extends Space { }
+export class NestSpace extends Space {
+	getNextSpace(pcolor: Color): Space {
+		// TODO
+		return new NestSpace();
+	}
+}
 
 export class MainSpace extends Space {
 	index: number;
@@ -43,9 +52,9 @@ export class MainSpace extends Space {
 		this.index = index;
 	}
 	
-	getNextSpace(color: Color): Space {
-		if (this.index === EnterHomeRowMap.get(color)) {
-			return new HomeRowSpace(0, color);
+	getNextSpace(pcolor: Color): Space {
+		if (this.index === EnterHomeRowMap.get(pcolor)) {
+			return new HomeRowSpace(0, pcolor);
 		}
 		
 		// not sure if this is the best way to design this
@@ -76,7 +85,7 @@ export class HomeRowSpace extends Space {
 		this.color = color;
 	}
 	
-	getNextSpace(color?: Color) {
+	getNextSpace(pcolor?: Color): Space {
 		if (this.index === NUM_HOME_ROW_SPACES - 1) {
 			return new HomeSpace();
 		}
@@ -84,4 +93,8 @@ export class HomeRowSpace extends Space {
 	}
 }
 
-export class HomeSpace extends Space { }
+export class HomeSpace extends Space {
+	getNextSpace(pcolor: Color): Space {
+		return null;
+	}
+}

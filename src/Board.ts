@@ -1,7 +1,9 @@
+import { isEqual } from 'lodash';
+
+import { Bop } from './Bop';
 import { Color, Colors, NUM_PAWNS } from './defs';
 import { Space, NestSpace, MainSpace, HomeRowSpace, HomeSpace } from './Space';
 import { Pawn } from './Pawn';
-import { isEqual } from 'lodash';
 
 export interface Blockade {
 	space: Space,
@@ -9,36 +11,53 @@ export interface Blockade {
 }
 
 export class Board {
-	pawns: Pawn[];
+	pawns: Map<string, Pawn>;
 	pawnPositions: Map<string, Space>;
 	blockades: Blockade[];
 	
 	constructor() {
 		// pawn keys
-		this.pawns = [];
+		this.pawns = new Map();
 		this.pawnPositions = new Map();
 		this.blockades = [];
 		
 		for (let i = 0; i < Colors.length; i++) {
 			for (let j = 0; j < NUM_PAWNS; j++) {
 				let pawn = new Pawn(j, Colors[i]);
-				this.pawns.push(pawn);
+				this.pawns.set(pawn.key, pawn);
 				this.pawnPositions.set(pawn.key, new NestSpace());
 			}
 		}
 	}
 
-	setPawnOnSpace(pawn: Pawn, space: Space): void {
-		let count = this.countPawnsOnSpace(space);
-		if (count >= 2) {
-			throw new Error("invalid attempt to set pawn on space with two existing pawns");
-		} else if (count == 1) {
-			// check for color
-			this.pawnPositions.set(pawn.key, space);
-			this.setColoredBlockade(space, pawn.color);
+	setPawnOnSpace(pawn: Pawn, space: Space): Bop | null {
+		let pawnsOnSpace = this.getPawnsOnSpace(space);
+		if (pawnsOnSpace.length >= 2) {
+			throw new Error("invalid attempt to set pawn on blockade");
+		} else if (pawnsOnSpace.length == 1) {
+			if (pawn.color == pawnsOnSpace[0].color) {
+				this.pawnPositions.set(pawn.key, space);
+				this.setColoredBlockade(space, pawn.color);
+			} else {
+				this.pawnPositions.delete(pawnsOnSpace[0].key);
+				this.pawnPositions.set(pawn.key, space);
+				return new Bop();
+				// bop?
+			}
 		} else {
 			this.pawnPositions.set(pawn.key, space);
 		}
+		return null;
+	}
+	
+	getPawnsOnSpace(space: Space): Pawn[] {
+		let pawns = [];
+		for (let [ppkey, ppspace] of this.pawnPositions) {
+			if (isEqual(space, ppspace)) {
+				pawns.push(this.pawns.get(ppkey));
+			}
+		}
+		return pawns;
 	}
 	
 	getSpaceForPawn(pawn: Pawn): Space {
@@ -48,24 +67,17 @@ export class Board {
 	removePawnOnSpace(pawn: Pawn, space: Space): void { }
 	
 	setColoredBlockade(space: Space, color: Color): void {
-		let count = this.countPawnsOnSpace(space);
-		if (count != 2) { throw new Error("invalid attempt to set blockade"); }
+		let pawnsOnSpace = this.getPawnsOnSpace(space);
+		// console.log('pawnsOnSpace', pawnsOnSpace.length);
+		if (pawnsOnSpace.length != 2) { throw new Error("invalid attempt to form blockade"); }
 		this.blockades.push(<Blockade>({"space": space, "color": color}));
 	}
 	
 	removeBlockade(space: Space): void {
 		for (let i = 0; i < this.blockades.length; i++) {
-			if (isEqual(this.blockades[i].space, space)) {
+			if (isEqual(space, this.blockades[i].space)) {
 				this.blockades.splice(i, 1);
 			}
 		}
-	}
-	
-	countPawnsOnSpace(space: Space): number {
-		let count = 0;
-		for (let [_, pspace] of this.pawnPositions) {
-			if (isEqual(space, pspace)) { count++; }
-		}
-		return count;
 	}
 }

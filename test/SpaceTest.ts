@@ -27,8 +27,7 @@ describe('Space', function() {
 			let redpawn = new Pawn(0, Color.red);
 			space.setPawnOnSpace(pawn);
 			
-			// TODO evidence of poor design
-			// (space.setPawnOnSpace(redpawn)).should.be.a(Bop);
+			(space.setPawnOnSpace(redpawn)).should.be.an.instanceOf(Bop);
 		});
 		
 		it('should throw an error if there are already two pawns', function() {
@@ -36,8 +35,7 @@ describe('Space', function() {
 			space.setPawnOnSpace(new Pawn(0, Color.green));
 			space.setPawnOnSpace(new Pawn(1, Color.green));
 			
-			// TODO here too
-			// (space.setPawnOnSpace(new Pawn(2, Color.green))).should.throw();
+			(() => space.setPawnOnSpace(new Pawn(2, Color.green))).should.throw();
 		});
 	})
 	describe('subclass: MainSpace', function() {
