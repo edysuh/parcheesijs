@@ -3,7 +3,7 @@ import { cloneDeep, isEqual } from 'lodash';
 import { Board } from '../Board';
 import { Pawn } from '../Pawn';
 import { Move } from './Move';
-import { Space } from '../Space';
+import { Space } from '../spaces/Space';
 
 export class MoveMain implements Move {
   pawn: Pawn;

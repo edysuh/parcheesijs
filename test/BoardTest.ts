@@ -1,17 +1,22 @@
 import { should } from 'chai';
 should();
 
+import { Board, Blockade } from '../src/Board';
 import { Bop } from '../src/Bop'
 import { Color } from '../src/defs';
-import { Board, Blockade } from '../src/board';
-import { Pawn } from '../src/pawn';
-import { Space, NestSpace, MainSpace, HomeRowSpace, HomeSpace } from '../src/space';
+import { Pawn } from '../src/Pawn';
+import { Space } from '../src/spaces/Space';
+import { NestSpace } from '../src/spaces/NestSpace';
+import { MainSpace } from '../src/spaces/MainSpace';
+import { HomeSpace } from '../src/spaces/HomeSpace';
+import { HomeRowSpace } from '../src/spaces/HomeRowSpace';
 
 describe('Board', function() {
 	describe('member: setPawnOnSpace', function() {
 		it('should map a Space to a Pawn', function() {
 			let board = new Board();
 			board.setPawnOnSpace(new Pawn(1, Color.blue), new MainSpace(1));
+			console.log('board', board.pawnPositions);
 			
 			(board.getSpaceForPawn(new Pawn(1, Color.blue))).should.deep.equal(new MainSpace(1));
 		});

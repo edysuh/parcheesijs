@@ -5,12 +5,13 @@ import { Board } from '../../src/Board';
 import { Color } from '../../src/defs';
 import { MoveMain } from '../../src/moves/MoveMain';
 import { Pawn } from '../../src/Pawn';
-import { NestSpace, 
-				 MainSpace, 
-				 HomeRowSpace, 
-				 HomeSpace, 
-				 SafeSpace, 
-				 ColoredSafeSpace } from '../../src/space';
+import { Space } from '../../src/spaces/Space';
+import { NestSpace } from '../../src/spaces/NestSpace';
+import { MainSpace } from '../../src/spaces/MainSpace';
+import { HomeSpace } from '../../src/spaces/HomeSpace';
+import { HomeRowSpace } from '../../src/spaces/HomeRowSpace';
+import { SafeSpace } from '../../src/spaces/SafeSpace';
+import { ColoredSafeSpace } from '../../src/spaces/ColoredSafeSpace';
 
 describe('MoveMain', function() {
   it.skip('should make a basic move', function() {

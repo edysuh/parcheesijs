@@ -1,7 +1,7 @@
 import { Board } from '../Board';
 import { Pawn } from '../Pawn';
 import { Move } from './Move';
-import { Space } from '../Space';
+import { Space } from '../spaces/Space';
 
 export class MoveHome implements Move {
   pawn: Pawn;

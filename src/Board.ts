@@ -2,8 +2,9 @@ import { isEqual } from 'lodash';
 
 import { Bop } from './Bop';
 import { Color, Colors, NUM_PAWNS } from './defs';
-import { Space, NestSpace, MainSpace, HomeRowSpace, HomeSpace } from './Space';
-import { Pawn } from './Pawn';
+import { Space } from './spaces/Space';
+import { NestSpace } from './spaces/NestSpace';
+import { Pawn, pkey } from './Pawn';
 
 export interface Blockade {
 	space: Space,
@@ -11,9 +12,12 @@ export interface Blockade {
 }
 
 export class Board {
-	pawns: Map<string, Pawn>;
-	pawnPositions: Map<string, Space>;
+	pawns: Map<pkey, Pawn>;
+	pawnPositions: Map<pkey, Space>;
 	blockades: Blockade[];
+	
+	// example of gorilla with the banana?
+	pawnSpaces: Map<pkey, Space>;
 	
 	constructor() {
 		// pawn keys
@@ -21,13 +25,30 @@ export class Board {
 		this.pawnPositions = new Map();
 		this.blockades = [];
 		
+		this.pawnSpaces = new Map();
+		
 		for (let i = 0; i < Colors.length; i++) {
 			for (let j = 0; j < NUM_PAWNS; j++) {
 				let pawn = new Pawn(j, Colors[i]);
 				this.pawns.set(pawn.key, pawn);
-				this.pawnPositions.set(pawn.key, new NestSpace());
+				this.pawnPositions.set(pawn.key, new NestSpace(Colors[i]));
 			}
 		}
+		
+		for (let i = 0; i < Colors.length; i++) {
+			for (let j = 0; j < NUM_PAWNS; j++) {
+				let pawn = new Pawn(j, Colors[i]);
+				let space = new NestSpace(Colors[i]);
+				space.setPawn(pawn);
+				this.pawnSpaces.set(pawn.key, space);
+			}
+		}
+	}
+	
+	setPawn(pawn: Pawn, space: Space): void {
+		// better to keep these independent?
+		// space.setPawn(pawn);
+		this.pawnSpaces.set(pawn.key, space);
 	}
 
 	setPawnOnSpace(pawn: Pawn, space: Space): Bop | null {

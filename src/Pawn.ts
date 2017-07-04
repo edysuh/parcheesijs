@@ -1,9 +1,11 @@
 import { Color } from './defs';
 
+export type pkey = string;
+
 export class Pawn {
-	id: number;
-	color: Color;
-	key: string;
+	readonly id: number;
+	readonly color: Color;
+	readonly key: pkey;
 	
   constructor(id: number, color: Color) {
     this.id = id;
