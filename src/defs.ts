@@ -15,7 +15,7 @@ export const EnterHomeRowMap: Map<Color, number> = new Map([
 	[Color.blue, 34],
 	[Color.yellow, 51],
 	[Color.green, 0],
-	[Color.red, 17] 
+	[Color.red, 17]
 ]);
 
 export const StartMap: Map<Color, number> = new Map([

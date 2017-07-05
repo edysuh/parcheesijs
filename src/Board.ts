@@ -16,16 +16,10 @@ export class Board {
 	pawnPositions: Map<pkey, Space>;
 	blockades: Blockade[];
 
-	// example of gorilla with the banana?
-	// pawnSpaces: Map<pkey, Space>;
-
 	constructor() {
-		// pawn keys
 		this.pawns = new Map();
 		this.pawnPositions = new Map();
 		this.blockades = [];
-
-		// this.pawnSpaces = new Map();
 
 		for (let i = 0; i < Colors.length; i++) {
 			for (let j = 0; j < NUM_PAWNS; j++) {
@@ -34,37 +28,9 @@ export class Board {
 				this.pawnPositions.set(pawn.key, new NestSpace(Colors[i]));
 			}
 		}
-
-		// for (let i = 0; i < Colors.length; i++) {
-		// 	for (let j = 0; j < NUM_PAWNS; j++) {
-		// 		let pawn = new Pawn(j, Colors[i]);
-		// 		let space = new NestSpace(Colors[i]);
-		// 		space.setPawn(pawn);
-		// 		this.pawnSpaces.set(pawn.key, space);
-		// 	}
-		// }
 	}
 
-	// setPawnOnSpace(pawn: Pawn, space: Space): void {
-	// 	// better to keep these independent?
-	// 	// space.setPawn(pawn);
-	// 	this.pawnSpaces.set(pawn.key, space);
-	// }
-
-	// getSpaceForPawn(pawn: Pawn): Space {
-	// 	return this.pawnSpaces.get(pawn.key);
-	// }
-
-	// getPawnsOnSpace(space: Space): Pawn[] {
-	// 	let pawns = [];
-	// 	for (let [ppkey, ppspace] of this.pawnSpaces) {
-	// 		if (isEqual(space, ppspace)) {
-	// 			pawns.push(this.pawns.get(ppkey));
-	// 		}
-	// 	}
-	// 	return pawns;
-	// }
-
+	// procondition: isBop move helper has been called ????
 	setPawnOnSpace(pawn: Pawn, space: Space): Bop | null {
 		let pawnsOnSpace = this.getPawnsOnSpace(space);
 		if (pawnsOnSpace.length >= 2) {
@@ -72,7 +38,7 @@ export class Board {
 		} else if (pawnsOnSpace.length == 1) {
 			if (pawn.color == pawnsOnSpace[0].color) {
 				this.pawnPositions.set(pawn.key, space);
-				this.setColoredBlockade(space, pawn.color);
+				this.setBlockade(space, pawn.color);
 			} else {
 				this.pawnPositions.delete(pawnsOnSpace[0].key);
 				this.pawnPositions.set(pawn.key, space);
@@ -98,13 +64,15 @@ export class Board {
 		return this.pawnPositions.get(pawn.key);
 	}
 
-	removePawnOnSpace(pawn: Pawn, space: Space): void { }
+	removePawnOnSpace(pawn: Pawn, space: Space): void {
 
-	setColoredBlockade(space: Space, color: Color): void {
+	}
+
+	setBlockade(space: Space, color: Color): void {
 		let pawnsOnSpace = this.getPawnsOnSpace(space);
 		// console.log('pawnsOnSpace', pawnsOnSpace.length);
 		if (pawnsOnSpace.length != 2) { throw new Error("invalid attempt to form blockade"); }
-		this.blockades.push(<Blockade>({"space": space, "color": color}));
+		this.blockades.push(<Blockade>{"space": space, "color": color});
 	}
 
 	removeBlockade(space: Space): void {
@@ -113,5 +81,9 @@ export class Board {
 				this.blockades.splice(i, 1);
 			}
 		}
+	}
+
+	isBlockade(space: Space): boolean {
+		return (this.getPawnsOnSpace(space).length == 2);
 	}
 }

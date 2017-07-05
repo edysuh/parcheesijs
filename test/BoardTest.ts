@@ -26,7 +26,7 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 
-			(() => board.setPawnOnSpace(new Pawn(2, Color.blue), space)).should.throw();
+			(() => board.setPawnOnSpace(new Pawn(2, Color.blue), space)).should.throw("invalid attempt to set pawn on blockade");
 		});
 
 		it('should set a blockade if there are now two colored pawns on the space', function() {
@@ -36,24 +36,24 @@ describe('Board', function() {
 			board.setPawnOnSpace(new Pawn(1, Color.blue), space);
 
 			(board.blockades).should
-				.deep.include(<Blockade>({'space': new MainSpace(50), 'color': Color.blue}));
+				.deep.include(<Blockade>{'space': new MainSpace(50), 'color': Color.blue});
 		});
 
-		it.skip('should bop the existing pawn if it is a different color', function() {
+		it('should bop the existing pawn if it is a different color', function() {
 			let board = new Board();
 			let space = new MainSpace(60);
 			board.setPawnOnSpace(new Pawn(0, Color.blue), space);
 
-			// (board.setPawnOnSpace(new Pawn(0, Color.red), space)).should.be.an.instanceof(Bop);
+			(board.setPawnOnSpace(new Pawn(0, Color.red), space)).should.be.an.instanceof(Bop);
 		});
 	});
 
 	describe('member: removePawnOnSpace', function() {
 		it('should remove a pawn on space');
 		it('should throw an error if the pawn doesnt exist');
-	})
+	});
 
-	describe('member: setColoredBlockade', function() {
+	describe('member: setBlockade', function() {
 		it('should map Spaces to the blockade color', function() {
 			let board = new Board();
 			let space = new MainSpace(20);
