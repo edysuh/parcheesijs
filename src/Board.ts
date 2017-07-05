@@ -70,7 +70,6 @@ export class Board {
 
 	setBlockade(space: Space, color: Color): void {
 		let pawnsOnSpace = this.getPawnsOnSpace(space);
-		// console.log('pawnsOnSpace', pawnsOnSpace.length);
 		if (pawnsOnSpace.length != 2) { throw new Error("invalid attempt to form blockade"); }
 		this.blockades.push(<Blockade>{"space": space, "color": color});
 	}

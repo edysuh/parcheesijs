@@ -100,8 +100,6 @@ describe('MoveMain', function() {
 		}
 	});
 
-	it('should be able to make a bonus move upon receiving it');
-
 	// TODO
 	it('should not bop on a safety', function() {
 		let bluepawn = new Pawn(0, Color.blue);
@@ -148,15 +146,50 @@ describe('MoveMain', function() {
 		}
 	});
 
-	it('shold not be able to pass your own blockade');
+	it('shold not be able to pass your own blockade', function() {
+		let pawn0 = new Pawn(0, Color.blue);
+		let pawn1 = new Pawn(1, Color.blue);
+		let pawn2 = new Pawn(2, Color.blue);
+		let space = new MainSpace(35);
+		let blockspace = new MainSpace(38);
+		let dist = 6;
+		let mm = new MoveMain(pawn2, space, dist);
 
-	it('should break a blockade after a move');
+		let board = new Board();
+		board.setPawnOnSpace(pawn2, space);
+		board.setPawnOnSpace(pawn0, blockspace);
+		board.setPawnOnSpace(pawn1, blockspace);
 
+		let ret = mm.move(board);
+		if (isMoveResult(ret)) {
+			('this').should.not.be.ok;
+		} else {
+			(ret).should.be.an.instanceof(Cheat);
+		}
+	});
+
+	it('should break a blockade after a move', function() {
+		let pawn0 = new Pawn(0, Color.blue);
+		let pawn1 = new Pawn(1, Color.blue);
+		let space = new MainSpace(51);
+		let dist = 1;
+		let mm = new MoveMain(pawn0, space, dist);
+
+		let board = new Board();
+		board.setPawnOnSpace(pawn0, space);
+		board.setPawnOnSpace(pawn1, space);
+
+		let ret = mm.move(board);
+		if (isMoveResult(ret)) {
+			(ret.board.isBlockade(space)).should.be.false;
+		} else {
+			(ret).should.be.an.instanceof(Cheat);
+		}
+	});
+
+	it('should be able to make a bonus move upon receiving it');
 	it('should not be able to move a blockade together');
-
 	it('should not be able to move a blockade together with bonuses of 20');
-
 	it('should not be able to move a blockade together with bonuses of 10');
-
 	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
 });
