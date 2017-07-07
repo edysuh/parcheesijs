@@ -12,8 +12,7 @@ export abstract class Player {
 		this.color = color;
 	}
 	
-	// doMove(board: Board, dice: Die): Move[] { return [new Move()]; }
-	doMove(board: Board, dice: Die): void { }
+	abstract doMove(board: Board, rolls: number[]): Move[];
 	
 	doublesPenalty(): void { }
 }

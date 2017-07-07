@@ -1,5 +1,5 @@
 export class Die {
-	roll() {
+	roll(): number {
 		let min = Math.ceil(1);
 		let max = Math.floor(6);
 		

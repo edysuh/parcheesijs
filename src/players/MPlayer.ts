@@ -8,9 +8,9 @@ import { MoveMain } from '../moves/MoveMain';
 export abstract class MPlayer extends Player { }
 
 export class MFirstPlayer extends MPlayer {
-	doMove(board: Board, dice: Die): void { }
+	doMove(board: Board, rolls: number[]): Move[] { }
 }
 
 export class MLastPlayer extends MPlayer {
-	doMove(board: Board, dice: Die): void { }
+	doMove(board: Board, rolls: number[]): Move[] { }
 }
