@@ -4,9 +4,9 @@ import { Move } from './Move';
 import { Space } from '../spaces/Space';
 
 export class MoveHome implements Move {
-  pawn: Pawn;
-  start: Space;
-  dist: number;
+  readonly pawn: Pawn;
+  readonly start: Space;
+  readonly dist: number;
   
 	constructor(pawn: Pawn, start: Space, dist: number) {
 		this.pawn = pawn;
@@ -14,5 +14,7 @@ export class MoveHome implements Move {
 		this.dist = dist;
 	}
 	
-	move(board: Board): void { }
+	move(board: Board): { 'board': Board, 'bonus': number } {
+		return { 'board': board, 'bonus': 0 };
+	}
 }

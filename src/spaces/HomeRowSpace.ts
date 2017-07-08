@@ -4,8 +4,8 @@ import { Space } from './Space';
 import { HomeSpace } from './HomeSpace';
 
 export class HomeRowSpace extends Space {
-	index: number;
-	color: Color;
+	readonly index: number;
+	readonly color: Color;
 	
 	constructor(index: number, color: Color) {
 		super();
@@ -18,7 +18,7 @@ export class HomeRowSpace extends Space {
 	
 	getNextSpace(pcolor?: Color): Space {
 		if (this.index === NUM_HOME_ROW_SPACES - 1) {
-			return new HomeSpace();
+			return new HomeSpace(this.color);
 		}
 		return new HomeRowSpace(this.index + 1, this.color);
 	}

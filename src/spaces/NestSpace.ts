@@ -5,7 +5,7 @@ import { ColoredSafeSpace } from './ColoredSafeSpace';
 
 
 export class NestSpace extends Space {
-	color: Color;
+	readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -13,17 +13,13 @@ export class NestSpace extends Space {
 	}
 
 	getNextSpace(pcolor?: Color): Space {
-		return new ColoredSafeSpace(StartMap.get(this.color));
+		return new ColoredSafeSpace(StartMap.get(this.color), this.color);
 	}
 	
-	// override Space::setPawn
+	// TODO TEST
 	setPawn(pawn: Pawn): null {
-		if (this.color != pawn.color) {
-			throw new Error("pawn is on wrong color nest");
-		}
-		if (this.pawns.length >= 4) {
-			throw new Error("max 4 pawns in the nest");
-		}
+		if (this.color != pawn.color) { throw new Error("pawn is on wrong color nest"); }
+		if (this.pawns.length >= 4) { throw new Error("max 4 pawns in the nest"); }
 		this.pawns.push(pawn);
 		return null;
 	}

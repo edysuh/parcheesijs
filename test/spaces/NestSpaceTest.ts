@@ -13,12 +13,12 @@ describe('NestSpace', function() {
 		let redNest = new NestSpace(Color.red);
 		
 		(blueNest.getNextSpace(Color.blue))
-			.should.deep.equal(new ColoredSafeSpace(39));
+			.should.deep.equal(new ColoredSafeSpace(39, Color.blue));
 		(yellowNest.getNextSpace(Color.yellow))
-			.should.deep.equal(new ColoredSafeSpace(56));
+			.should.deep.equal(new ColoredSafeSpace(56, Color.yellow));
 		(greenNest.getNextSpace(Color.green))
-			.should.deep.equal(new ColoredSafeSpace(5));
+			.should.deep.equal(new ColoredSafeSpace(5, Color.green));
 		(redNest.getNextSpace(Color.red))
-			.should.deep.equal(new ColoredSafeSpace(22));
+			.should.deep.equal(new ColoredSafeSpace(22, Color.red));
 	});
 })

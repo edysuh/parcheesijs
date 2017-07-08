@@ -8,8 +8,14 @@ export const NUM_PAWNS: number = 4;
 export const NUM_SPACES: number = 95;
 export const PAWN_DISTANCE: number = 71;
 
-export const ColoredSafeties: number[] = [5, 22, 39, 56];
 export const Safeties: number[] = [0, 12, 17, 29, 34, 46, 51, 63];
+
+export const ColoredSafeties: Map<Color, number> = new Map([
+	[39, Color.blue],
+	[56, Color.yellow],
+	[5, Color.green],
+	[22, Color.red]
+]);
 
 export const EnterHomeRowMap: Map<Color, number> = new Map([
 	[Color.blue, 34],

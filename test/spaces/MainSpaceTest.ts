@@ -49,6 +49,6 @@ describe('MainSpace', function() {
 		let space = new MainSpace(4);
 		let next = space.getNextSpace(Color.red);
 		
-		(next).should.deep.equal(new ColoredSafeSpace(5));
+		(next).should.deep.equal(new ColoredSafeSpace(5, Color.green));
 	});
 });

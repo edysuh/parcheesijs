@@ -2,9 +2,8 @@ import { should } from 'chai';
 should();
 
 import { Board } from '../../src/Board';
-import { Cheat } from '../../src/Cheat';
 import { Color } from '../../src/defs';
-import { MoveMain, isMoveResult, MoveResult } from '../../src/moves/MoveMain';
+import { MoveMain } from '../../src/moves/MoveMain';
 import { Pawn } from '../../src/Pawn';
 import { Space } from '../../src/spaces/Space';
 import { NestSpace } from '../../src/spaces/NestSpace';
@@ -25,11 +24,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn, space);
 
 		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new MainSpace(31));
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new MainSpace(31));
 	});
 
 	it('should move into homerow', function() {
@@ -42,11 +37,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn, space);
 
 		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(1, Color.blue));
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(1, Color.blue));
 	});
 
 	it('should move inside of homerow', function() {
@@ -59,14 +50,10 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn, space);
 
 		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(6, Color.blue));
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(6, Color.blue));
 	});
 
-	it('should have the specified pawn on the space', function() {
+	it('should have the specified pawn on the specified space', function() {
 		let pawn = new Pawn(0, Color.blue);
 		let wrongpawn = new Pawn(1, Color.blue);
 		let space = new MainSpace(1);
@@ -76,7 +63,7 @@ describe('MoveMain', function() {
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
 
-		(() => mm.move(board)).should.throw("pawn is not on the specified space");
+		(() => mm.move(board)).should.throw("specified pawn is not on the specified space");
 	});
 
 	it('should bop if theres a different color pawn on the space ' +
@@ -93,11 +80,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(greenpawn, landspace);
 
 		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			(ret.bonus).should.equal(10);
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(ret.bonus).should.equal(10);
 	});
 
 	// TODO
@@ -113,15 +96,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(bluepawn, space);
 		board.setPawnOnSpace(greenpawn, safespace);
 
-		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			console.log('MoveResult');
-			('this').should.not.be.ok;
-			// (ret).should.be.an.instanceof(MoveResult);
-		} else {
-			console.log('Cheat');
-			(ret).should.throw();
-		}
+		(() => mm.move(board)).should.throw('cannot bop on a safety');
 	});
 
 	it('shold not be able to pass an opponents blockade', function() {
@@ -138,12 +113,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn0, blockspace);
 		board.setPawnOnSpace(pawn1, blockspace);
 
-		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			('this').should.not.be.ok;
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(() => mm.move(board)).should.throw("tried to make a move past a blockade");
 	});
 
 	it('shold not be able to pass your own blockade', function() {
@@ -160,12 +130,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn0, blockspace);
 		board.setPawnOnSpace(pawn1, blockspace);
 
-		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			('this').should.not.be.ok;
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(() => mm.move(board)).should.throw("tried to make a move past a blockade");
 	});
 
 	it('should break a blockade after a move', function() {
@@ -180,11 +145,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(pawn1, space);
 
 		let ret = mm.move(board);
-		if (isMoveResult(ret)) {
-			(ret.board.isBlockade(space)).should.be.false;
-		} else {
-			(ret).should.be.an.instanceof(Cheat);
-		}
+		(ret.board.isBlockade(space)).should.be.false;
 	});
 
 	it('should be able to make a bonus move upon receiving it');

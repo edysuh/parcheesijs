@@ -34,4 +34,5 @@ describe("Game", function() {
 	it('should be able to bop, but dont take bonus of 20');
 	it('should be able to move home, but dont take bonus of 10');
 	it('should be able to move just one die, to not move a blockade together');
+	it('should move the furthest along pawn back to home on doublesPenalty');
 });

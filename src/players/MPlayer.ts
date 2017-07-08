@@ -4,13 +4,20 @@ import { Die } from '../Die';
 import { Player } from '../players/Player';
 import { Move } from '../moves/Move';
 import { MoveMain } from '../moves/MoveMain';
+import { MainSpace } from '../spaces/MainSpace';
 
-export abstract class MPlayer extends Player { }
+import { Pawn } from '../Pawn';
 
-export class MFirstPlayer extends MPlayer {
-	doMove(board: Board, rolls: number[]): Move[] { }
+export abstract class MPlayer extends Player { 
+	doMove(board: Board, rolls: number[]): Move[] {
+		let moves = [];
+		for (let i = 0; i < rolls.length; i++) {
+			moves.push(new MoveMain(new Pawn(0, Color.blue), new MainSpace(0), rolls[i]));
+		}
+		return moves;
+	}
 }
 
-export class MLastPlayer extends MPlayer {
-	doMove(board: Board, rolls: number[]): Move[] { }
-}
+export class MFirstPlayer extends MPlayer { }
+
+export class MLastPlayer extends MPlayer { }

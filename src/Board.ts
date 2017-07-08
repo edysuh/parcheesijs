@@ -83,6 +83,14 @@ export class Board {
 	}
 
 	isBlockade(space: Space): boolean {
+		// should loop through blockades list to match with parameter
 		return (this.getPawnsOnSpace(space).length == 2);
 	}
+	
+	// getPlayerPawnPositions(color: Color) {
+	// 	let pawns = [];
+	// 	for (let [pkey, pawn] of this.pawns) {
+			
+	// 	}
+	// }
 }

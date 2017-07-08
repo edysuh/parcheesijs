@@ -17,6 +17,6 @@ describe('HomeRowSpace', function() {
 		let space = new HomeRowSpace(6, Color.yellow);
 		let next = space.getNextSpace(Color.yellow);
 		
-		(next).should.deep.equal(new HomeSpace());
+		(next).should.deep.equal(new HomeSpace(Color.yellow));
 	});
 });
