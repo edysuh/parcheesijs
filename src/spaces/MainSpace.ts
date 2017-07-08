@@ -1,4 +1,4 @@
-import { Color, EnterHomeRowMap, NUM_MAIN_SPACES, Safeties, ColoredSafeties } from '../defs';
+import { Color, EnterHomeRowMap, NUM_MAIN_SPACES, Safeties, ColoredSafeties } from '../definitions';
 import { Bop } from '../Bop';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';

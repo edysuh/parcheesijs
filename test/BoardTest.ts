@@ -3,7 +3,7 @@ should();
 
 import { Board, Blockade } from '../src/Board';
 import { Bop } from '../src/Bop'
-import { Color } from '../src/defs';
+import { Color } from '../src/definitions';
 import { Pawn } from '../src/Pawn';
 import { Space } from '../src/spaces/Space';
 import { NestSpace } from '../src/spaces/NestSpace';

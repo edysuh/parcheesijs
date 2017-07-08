@@ -2,7 +2,7 @@ import { should } from 'chai';
 should();
 
 import { Board } from '../../src/Board';
-import { Color } from '../../src/defs';
+import { Color } from '../../src/definitions';
 import { MoveMain } from '../../src/moves/MoveMain';
 import { Pawn } from '../../src/Pawn';
 import { Space } from '../../src/spaces/Space';

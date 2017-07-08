@@ -1,4 +1,4 @@
-import { Color } from '../defs';
+import { Color } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';
 
@@ -14,7 +14,6 @@ export class HomeSpace extends Space {
 		throw new Error("no next space");
 	}
 	
-	// TODO TEST
 	setPawn(pawn: Pawn): null {
 		if (this.color != pawn.color) { throw new Error("pawn is on wrong color home"); }
 		if (this.pawns.length >= 4) { throw new Error("max 4 pawns in home"); }

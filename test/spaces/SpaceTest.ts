@@ -1,7 +1,7 @@
 import { should } from 'chai';
 should();
 
-import { Color } from '../../src/defs'
+import { Color } from '../../src/definitions'
 import { Pawn } from '../../src/Pawn'
 import { Space } from '../../src/spaces/Space';
 import { MainSpace } from '../../src/spaces/MainSpace';
@@ -20,7 +20,8 @@ describe('Space', function() {
 		space.setPawn(new Pawn(0, Color.yellow));
 		space.setPawn(new Pawn(1, Color.yellow));
 		
-		(() => space.setPawn(new Pawn(3, Color.red))).should.throw();
+		(() => space.setPawn(new Pawn(3, Color.red))).should
+			.throw('invalid attempt to set pawn on blockade');
 	});
 	
 	it('should tell us if a pawn bops on this space', function() {

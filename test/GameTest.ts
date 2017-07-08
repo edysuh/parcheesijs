@@ -1,7 +1,7 @@
 import { should } from 'chai';
 should();
 
-import { Color } from '../src/defs';
+import { Color } from '../src/definitions';
 import { Game } from '../src/Game';
 import { MFirstPlayer, MLastPlayer } from '../src/players/MPlayer';
 

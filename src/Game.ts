@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { Board } from './Board';
-import { Color, Colors } from './defs';
+import { Color, Colors } from './definitions';
 import { Die } from './Die';
 import { Player } from './players/Player';
 import { MFirstPlayer } from './players/MPlayer';

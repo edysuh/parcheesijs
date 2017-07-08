@@ -1,4 +1,4 @@
-import { Color } from './defs';
+import { Color } from './definitions';
 
 export type pkey = string;
 

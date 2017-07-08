@@ -1,7 +1,7 @@
 import { should } from 'chai';
 should();
 
-import { Color } from '../../src/defs'
+import { Color } from '../../src/definitions'
 import { NestSpace } from '../../src/spaces/NestSpace';
 import { ColoredSafeSpace } from '../../src/spaces/ColoredSafeSpace';
 

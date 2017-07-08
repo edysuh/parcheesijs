@@ -1,5 +1,5 @@
 import { Board } from '../Board';
-import { Color } from '../defs';
+import { Color } from '../definitions';
 import { Die } from '../Die';
 import { Player } from '../players/Player';
 import { Move } from '../moves/Move';

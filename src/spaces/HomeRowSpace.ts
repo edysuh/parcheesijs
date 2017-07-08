@@ -1,4 +1,4 @@
-import { Color, NUM_HOME_ROW_SPACES } from '../defs';
+import { Color, NUM_HOME_ROW_SPACES } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';
 import { HomeSpace } from './HomeSpace';

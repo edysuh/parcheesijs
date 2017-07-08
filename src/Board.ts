@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash';
 
 import { Bop } from './Bop';
-import { Color, Colors, NUM_PAWNS } from './defs';
+import { Color, Colors, NUM_PAWNS } from './definitions';
 import { Space } from './spaces/Space';
 import { NestSpace } from './spaces/NestSpace';
 import { Pawn, pkey } from './Pawn';
