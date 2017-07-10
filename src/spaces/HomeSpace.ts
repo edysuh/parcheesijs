@@ -9,11 +9,11 @@ export class HomeSpace extends Space {
 		super();
 		this.color = color;
 	}
-	
+
 	getNextSpace(pcolor?: Color): Space {
 		throw new Error("no next space");
 	}
-	
+
 	setPawn(pawn: Pawn): null {
 		if (this.color != pawn.color) { throw new Error("pawn is on wrong color home"); }
 		if (this.pawns.length >= 4) { throw new Error("max 4 pawns in home"); }

@@ -23,4 +23,3 @@ export class HomeRowSpace extends Space {
 		return new HomeRowSpace(this.index + 1, this.color);
 	}
 }
-

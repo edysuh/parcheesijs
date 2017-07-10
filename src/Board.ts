@@ -4,7 +4,7 @@ import { Bop } from './Bop';
 import { Color, Colors, NUM_PAWNS } from './definitions';
 import { Space } from './spaces/Space';
 import { NestSpace } from './spaces/NestSpace';
-import { Pawn, pkey } from './Pawn';
+import { Pawn, pid } from './Pawn';
 
 export interface Blockade {
 	space: Space,
@@ -12,66 +12,53 @@ export interface Blockade {
 }
 
 export class Board {
-	pawns: Map<pkey, Pawn>;
-	pawnPositions: Map<pkey, Space>;
+	// private?
 	blockades: Blockade[];
+	pawnSpaces: Map<Color, Map<pid, Space>>;
 
 	constructor() {
-		this.pawns = new Map();
-		this.pawnPositions = new Map();
 		this.blockades = [];
+		this.pawnSpaces = new Map();
 
 		for (let i = 0; i < Colors.length; i++) {
+			let pidToSpace = new Map();
 			for (let j = 0; j < NUM_PAWNS; j++) {
-				let pawn = new Pawn(j, Colors[i]);
-				this.pawns.set(pawn.key, pawn);
-				this.pawnPositions.set(pawn.key, new NestSpace(Colors[i]));
+				pidToSpace.set(j, new NestSpace(Colors[i]));
 			}
+			this.pawnSpaces.set(Colors[i], pidToSpace);
 		}
 	}
 
-	// procondition: isBop move helper has been called ????
-	setPawnOnSpace(pawn: Pawn, space: Space): Bop | null {
-		let pawnsOnSpace = this.getPawnsOnSpace(space);
-		if (pawnsOnSpace.length >= 2) {
-			throw new Error("invalid attempt to set pawn on blockade");
-		} else if (pawnsOnSpace.length == 1) {
-			if (pawn.color == pawnsOnSpace[0].color) {
-				this.pawnPositions.set(pawn.key, space);
-				this.setBlockade(space, pawn.color);
-			} else {
-				this.pawnPositions.delete(pawnsOnSpace[0].key);
-				this.pawnPositions.set(pawn.key, space);
-				return new Bop();
-			}
-		} else {
-			this.pawnPositions.set(pawn.key, space);
+	// procondition: isBop move helper has already been called
+	// space.setPawn(pawn) is now uncoupled from this method due to issues with equality
+	setPawnOnSpace(pawn: Pawn, space: Space): void {
+		// space.setPawn(pawn);
+		this.pawnSpaces.get(pawn.color).set(pawn.id, space);
+		if (this.getPawnsOnSpace(space).length == 2) {
+			this.setBlockade(pawn.color, space);
 		}
-		return null;
 	}
 
 	getPawnsOnSpace(space: Space): Pawn[] {
 		let pawns = [];
-		for (let [ppkey, ppspace] of this.pawnPositions) {
-			if (isEqual(space, ppspace)) {
-				pawns.push(this.pawns.get(ppkey));
+		for (let [color, pidToSpace] of this.pawnSpaces) {
+			for (let [pid, pspace] of pidToSpace) {
+				if (isEqual(space, pspace)) {
+					pawns.push(new Pawn(pid, color));
+				}
 			}
 		}
 		return pawns;
 	}
 
 	getSpaceForPawn(pawn: Pawn): Space {
-		return this.pawnPositions.get(pawn.key);
+		return this.pawnSpaces.get(pawn.color).get(pawn.id);
 	}
 
-	removePawnOnSpace(pawn: Pawn, space: Space): void {
-
-	}
-
-	setBlockade(space: Space, color: Color): void {
+	setBlockade(color: Color, space: Space): void {
 		let pawnsOnSpace = this.getPawnsOnSpace(space);
 		if (pawnsOnSpace.length != 2) { throw new Error("invalid attempt to form blockade"); }
-		this.blockades.push(<Blockade>{"space": space, "color": color});
+		this.blockades.push(<Blockade>{ "color": color, "space": space });
 	}
 
 	removeBlockade(space: Space): void {
@@ -83,14 +70,11 @@ export class Board {
 	}
 
 	isBlockade(space: Space): boolean {
-		// should loop through blockades list to match with parameter
-		return (this.getPawnsOnSpace(space).length == 2);
+		for (let i = 0; i < this.blockades.length; i++) {
+			if (isEqual(space, this.blockades[i].space)) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
-	// getPlayerPawnPositions(color: Color) {
-	// 	let pawns = [];
-	// 	for (let [pkey, pawn] of this.pawns) {
-			
-	// 	}
-	// }
 }

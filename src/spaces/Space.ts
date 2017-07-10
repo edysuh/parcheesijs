@@ -12,7 +12,7 @@ export abstract class Space {
 	abstract getNextSpace(pcolor: Color): Space;
 	
 	// precondition: isBop is always called before this function is used
-	// some code duplication across: Space -> SafeSpace -> ColoredSafeSpace
+	// some code duplication across subclasses: Space -> SafeSpace -> ColoredSafeSpace
 	setPawn(pawn: Pawn): void {
 		if (this.pawns.length == 2) {
 			throw new Error("invalid attempt to set pawn on blockade");

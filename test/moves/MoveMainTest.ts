@@ -22,9 +22,12 @@ describe('MoveMain', function() {
 
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
+		
+		let landspace = new MainSpace(31);
+		landspace.setPawn(pawn);
 
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new MainSpace(31));
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
 	});
 
 	it('should move into homerow', function() {
@@ -35,9 +38,12 @@ describe('MoveMain', function() {
 
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
+		
+		let landspace = new HomeRowSpace(1, Color.blue);
+		landspace.setPawn(pawn);
 
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(1, Color.blue));
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
 	});
 
 	it('should move inside of homerow', function() {
@@ -48,9 +54,12 @@ describe('MoveMain', function() {
 
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
+		
+		let landspace = new HomeRowSpace(6, Color.blue);
+		landspace.setPawn(pawn);
 
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(new HomeRowSpace(6, Color.blue));
+		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
 	});
 
 	it('should have the specified pawn on the specified space', function() {
@@ -76,14 +85,15 @@ describe('MoveMain', function() {
 		let mm = new MoveMain(bluepawn, space, dist);
 
 		let board = new Board();
+		space.setPawn(bluepawn);
 		board.setPawnOnSpace(bluepawn, space);
+		landspace.setPawn(greenpawn);
 		board.setPawnOnSpace(greenpawn, landspace);
 
 		let ret = mm.move(board);
 		(ret.bonus).should.equal(10);
 	});
 
-	// TODO
 	it('should not bop on a safety', function() {
 		let bluepawn = new Pawn(0, Color.blue);
 		let greenpawn = new Pawn(0, Color.yellow);

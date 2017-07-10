@@ -6,12 +6,6 @@ import { Pawn } from '../Pawn';
 import { Move } from './Move';
 import { Space } from '../spaces/Space';
 
-// TODO move out to its own file
-interface MoveResult {
-	board: Board;
-	bonus: number;
-}
-
 export class MoveMain implements Move {
   readonly pawn: Pawn;
   readonly start: Space;
@@ -23,7 +17,7 @@ export class MoveMain implements Move {
 		this.dist = dist;
 	}
 
-	move(board: Board): MoveResult {
+	move(board: Board): { 'board': Board, 'bonus': number } {
 		let nboard = cloneDeep(board);
 		let currSpace = cloneDeep(this.start);
 		let bonus = 0;
@@ -39,12 +33,14 @@ export class MoveMain implements Move {
 			}
 		}
 
-		// try ... catch maybeBop
-		let maybeBop = nboard.setPawnOnSpace(this.pawn, currSpace);
-		if (maybeBop instanceof Bop) {
+		// this currSpace is a new space, not one on the board
+		currSpace.setPawn(this.pawn);
+		nboard.setPawnOnSpace(this.pawn, currSpace);
+		
+		if (currSpace.isBop(this.pawn)) {
 			bonus = 10;
 		}
-		
+
 		// might be better to have like a Board::calculateAllBlockades function
 		if (board.isBlockade(this.start)) { nboard.removeBlockade(this.start); }
 

@@ -1,15 +1,13 @@
 import { Color } from './definitions';
 
-export type pkey = string;
+export type pid = number;
 
 export class Pawn {
-	readonly id: number;
+	readonly id: pid;
 	readonly color: Color;
-	readonly key: pkey;
 	
   constructor(id: number, color: Color) {
     this.id = id;
     this.color = color;
-		this.key = Color[this.color].toString() + this.id;
   }
 }
