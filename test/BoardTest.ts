@@ -58,4 +58,16 @@ describe('Board', function() {
 		(space.pawns).should.include(pawn);
 		(space.pawns).should.not.include(boppedpawn);
 	});
+	
+	it('should remove a space from the board if there are no pawns left', function() {
+		let board = new Board();
+		let space = new MainSpace(15);
+		let newspace = new MainSpace(25);
+		let pawn = new Pawn(1, Color.yellow);
+		board.setPawnOnSpace(pawn, space);
+		board.setPawnOnSpace(pawn, newspace);
+		
+		(board.spaces).should.not.include(space);
+		(board.spaces).should.include(newspace);
+	});
 });

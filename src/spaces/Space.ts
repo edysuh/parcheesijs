@@ -10,10 +10,10 @@ export abstract class Space {
 		this._pawns = [];
 	}
 
-	get pawns() { return this._pawns; }
+	get pawns() {
+		return this._pawns;
+	}
 
-	// precondition: isBop is always called before this function is used
-	// some code duplication across subclasses: Space -> SafeSpace -> ColoredSafeSpace
 	setPawn(pawn: Pawn): void {
 		if (this._pawns.length == 2) {
 			throw new Error("invalid attempt to set pawn on blockade");
@@ -36,14 +36,18 @@ export abstract class Space {
 	}
 
 	isBop(pawn: Pawn): boolean {
-		return (this._pawns.length == 1 && pawn.color != this._pawns[0].color);
+		return (this._pawns.length == 1 && 
+						pawn.color != this._pawns[0].color);
 	}
 	
 	isBlockade(): boolean {
-		return (this._pawns.length == 2 && this._pawns[0].color == this._pawns[1].color)
+		return (this._pawns.length == 2 && 
+						this._pawns[0].color == this._pawns[1].color)
 	}
 
-	abstract getNextSpace(pcolor: Color): Space;
+	abstract getNextSpace(pawnColor: Color): Space;
 
 	abstract equals(space: Space): boolean;
+	
+	abstract distanceFromHome(pawnColor: Color): number;
 }

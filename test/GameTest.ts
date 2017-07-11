@@ -14,7 +14,18 @@ describe("Game", function() {
 		(game.players).should.include(p1);
 	});
 	it('should register a player on connection and send them a color (network version)');
-	it('should start a game with 4 players');
+	it.skip('should start a game with 4 players', function() {
+		let game = new Game();
+		let p1 = new MFirstPlayer();
+		let p2 = new MFirstPlayer();
+		let p3 = new MFirstPlayer();
+		let p4 = new MFirstPlayer();
+		game.register(p1);
+		game.register(p2);
+		game.register(p3);
+		game.register(p4);
+		game.start();
+	});
 		// (p1.color).should.equal(Color.blue);
 
 		// need states:

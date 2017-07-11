@@ -19,7 +19,7 @@ export class MoveMain implements Move {
 
 	move(board: Board): { 'board': Board, 'bonus': number } {
 		let nboard = cloneDeep(board);
-		let currSpace = cloneDeep(this.start);
+		let currSpace = this.start;
 		let bonus = 0;
 
 		if (!isEqual(currSpace, nboard.getSpaceForPawn(this.pawn))) {

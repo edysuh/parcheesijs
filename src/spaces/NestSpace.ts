@@ -1,4 +1,4 @@
-import { Color, StartMap } from '../definitions';
+import { Color, StartMap, PAWN_DISTANCE } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';
 import { ColoredSafeSpace } from './ColoredSafeSpace';
@@ -19,7 +19,10 @@ export class NestSpace extends Space {
 		return null;
 	}
 	
-	getNextSpace(pcolor?: Color): Space {
+	getNextSpace(pawnColor?: Color): Space {
+		// should not be able to go to next space so easily
+		// return null; 
+		// -> TypeError: Class extends value undefined is not a constructor or null
 		return new ColoredSafeSpace(StartMap.get(this.color), this.color);
 	}
 	
@@ -29,5 +32,9 @@ export class NestSpace extends Space {
 	
 	equals(space: Space): boolean {
 		return (space instanceof NestSpace && this.color == space.color);
+	}
+	
+	distanceFromHome(pawnColor: Color): number {
+		return PAWN_DISTANCE;
 	}
 }

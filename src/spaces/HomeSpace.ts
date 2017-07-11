@@ -17,7 +17,7 @@ export class HomeSpace extends Space {
 		return null;
 	}
 
-	getNextSpace(pcolor?: Color): Space {
+	getNextSpace(pawnColor?: Color): Space {
 		throw new Error("no next space");
 	}
 	
@@ -27,5 +27,9 @@ export class HomeSpace extends Space {
 
 	equals(space: Space): boolean {
 		return (space instanceof HomeSpace && this.color == space.color);
+	}
+	
+	distanceFromHome(pawnColor?: Color): number {
+		return 0;
 	}
 }

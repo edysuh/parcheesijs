@@ -19,4 +19,11 @@ describe('HomeRowSpace', function() {
 		
 		(next).should.deep.equal(new HomeSpace(Color.yellow));
 	});
+	
+	it('should calculate the remaining distance', function() {
+		((new HomeRowSpace(0, Color.green)).distanceFromHome(Color.green)).should.equal(7);
+		((new HomeRowSpace(3, Color.green)).distanceFromHome(Color.green)).should.equal(4);
+		((new HomeRowSpace(5, Color.green)).distanceFromHome(Color.green)).should.equal(2);
+		((new HomeRowSpace(6, Color.green)).distanceFromHome(Color.green)).should.equal(1);
+	});
 });

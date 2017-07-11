@@ -6,7 +6,7 @@ export const NUM_HOME_ROW_SPACES: number = 7;
 export const NUM_MAIN_SPACES: number = 68;
 export const NUM_PAWNS: number = 4;
 export const NUM_SPACES: number = 95;
-export const PAWN_DISTANCE: number = 71;
+export const PAWN_DISTANCE: number = 72;
 
 export const Safeties: number[] = [0, 12, 17, 29, 34, 46, 51, 63];
 

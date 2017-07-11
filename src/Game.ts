@@ -33,25 +33,25 @@ export class Game {
 		}
 
 		let board = new Board();
+		let die = new Die();
 		let i = 0;
 		
-		while (!this.gameOver(board)) {
+		while (board.gameOver() == null) {
 			let currPlayer = players[i];
 			let currBoard = cloneDeep(board);
-			let rolls = [(new Die()).roll(), (new Die()).roll()];
+			let rolls = [die.roll(), die.roll()];
 			
 			let moves = currPlayer.doMove(currBoard, rolls);
 			
-			try{
+			try {
 				let ret = moves[i].move(currBoard);
 				board = ret.board;
-			} catch(e) { }
+			} catch (e) {
+
+			}
+			console.log('board', board);
 
 			i = (i == 3) ? 0 : i+1;
 		}
-	}
-	
-	gameOver(board: Board): boolean {
-		return true;
 	}
 }

@@ -4,7 +4,7 @@ import { Pawn } from '../Pawn';
 import { SafeSpace } from './SafeSpace';
 
 export class ColoredSafeSpace extends SafeSpace {
-	color: Color;
+	readonly color: Color;
 	
 	constructor(index: number, color: Color) {
 		super(index);

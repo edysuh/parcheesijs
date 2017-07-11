@@ -6,7 +6,7 @@ import { MoveMain } from '../moves/MoveMain';
 
 // should be abstract or interface
 export abstract class Player {
-	color: Color;
+	protected color: Color;
 	
 	startGame(color: Color): void {
 		this.color = color;

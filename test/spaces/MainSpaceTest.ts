@@ -51,4 +51,20 @@ describe('MainSpace', function() {
 		
 		(next).should.deep.equal(new ColoredSafeSpace(5, Color.green));
 	});
+	
+	it('should calculate the remaining distance', function() {
+		((new MainSpace(5)).distanceFromHome(Color.green)).should.equal(71);
+		((new MainSpace(0)).distanceFromHome(Color.green)).should.equal(8);
+		((new MainSpace(22)).distanceFromHome(Color.red)).should.equal(71);
+		((new MainSpace(17)).distanceFromHome(Color.red)).should.equal(8);
+		((new MainSpace(39)).distanceFromHome(Color.blue)).should.equal(71);
+		((new MainSpace(34)).distanceFromHome(Color.blue)).should.equal(8);
+		((new MainSpace(56)).distanceFromHome(Color.yellow)).should.equal(71);
+		((new MainSpace(51)).distanceFromHome(Color.yellow)).should.equal(8);
+		
+		((new MainSpace(56)).distanceFromHome(Color.green)).should.equal(20);
+		((new MainSpace(5)).distanceFromHome(Color.red)).should.equal(20);
+		((new MainSpace(22)).distanceFromHome(Color.blue)).should.equal(20);
+		((new MainSpace(39)).distanceFromHome(Color.yellow)).should.equal(20);
+	});
 });

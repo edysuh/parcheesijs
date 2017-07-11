@@ -1,4 +1,10 @@
-import { Color, EnterHomeRowMap, NUM_MAIN_SPACES, Safeties, ColoredSafeties } from '../definitions';
+import { Color, 
+				 EnterHomeRowMap, 
+				 NUM_MAIN_SPACES,
+				 PAWN_DISTANCE,
+				 Safeties, 
+				 ColoredSafeties, 
+				 StartMap } from '../definitions';
 import { Bop } from '../Bop';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';
@@ -17,9 +23,9 @@ export class MainSpace extends Space {
 		this.index = index;
 	}
 
-	getNextSpace(pcolor: Color): Space {
-		if (this.index === EnterHomeRowMap.get(pcolor)) {
-			return new HomeRowSpace(0, pcolor);
+	getNextSpace(pawnColor: Color): Space {
+		if (this.index === EnterHomeRowMap.get(pawnColor)) {
+			return new HomeRowSpace(0, pawnColor);
 		}
 
 		if (Safeties.includes(this.index + 1)) {
@@ -33,5 +39,13 @@ export class MainSpace extends Space {
 	
 	equals(space: Space): boolean {
 		return (space instanceof MainSpace && this.index == space.index);
+	}
+	
+	distanceFromHome(pawnColor: Color): number {
+		if (this.index >= StartMap.get(pawnColor)) {
+			return PAWN_DISTANCE - (this.index - StartMap.get(pawnColor) + 1);
+		} else {
+			return PAWN_DISTANCE - (NUM_MAIN_SPACES - StartMap.get(pawnColor) + 1 + this.index);
+		}
 	}
 }
