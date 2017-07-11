@@ -22,4 +22,10 @@ export class HomeRowSpace extends Space {
 		}
 		return new HomeRowSpace(this.index + 1, this.color);
 	}
+	
+	equals(space: Space): boolean {
+		return (space instanceof HomeRowSpace && 
+						this.index == space.index && 
+						this.color == space.color);
+	}
 }

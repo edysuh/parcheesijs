@@ -34,13 +34,14 @@ export class MoveMain implements Move {
 		}
 
 		// this currSpace is a new space, not one on the board
-		currSpace.setPawn(this.pawn);
-		nboard.setPawnOnSpace(this.pawn, currSpace);
-		
+		// either write a method to grab the space from the Board
+		// or integrate the bonus into setPawnOnSpace
 		if (currSpace.isBop(this.pawn)) {
 			bonus = 10;
 		}
 
+		nboard.setPawnOnSpace(this.pawn, currSpace);
+		
 		// might be better to have like a Board::calculateAllBlockades function
 		if (board.isBlockade(this.start)) { nboard.removeBlockade(this.start); }
 

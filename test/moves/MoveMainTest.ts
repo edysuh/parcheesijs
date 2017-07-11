@@ -23,11 +23,8 @@ describe('MoveMain', function() {
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
 		
-		let landspace = new MainSpace(31);
-		landspace.setPawn(pawn);
-
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
+		(ret.board.getSpaceForPawn(pawn).equals(new MainSpace(31))).should.be.true;
 	});
 
 	it('should move into homerow', function() {
@@ -39,11 +36,9 @@ describe('MoveMain', function() {
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
 		
-		let landspace = new HomeRowSpace(1, Color.blue);
-		landspace.setPawn(pawn);
-
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
+		(ret.board.getSpaceForPawn(pawn).equals(new HomeRowSpace(1, Color.blue)))
+			.should.be.true;
 	});
 
 	it('should move inside of homerow', function() {
@@ -54,12 +49,10 @@ describe('MoveMain', function() {
 
 		let board = new Board();
 		board.setPawnOnSpace(pawn, space);
-		
-		let landspace = new HomeRowSpace(6, Color.blue);
-		landspace.setPawn(pawn);
 
 		let ret = mm.move(board);
-		(ret.board.getSpaceForPawn(pawn)).should.deep.equal(landspace);
+		(ret.board.getSpaceForPawn(pawn).equals(new HomeRowSpace(6, Color.blue)))
+			.should.be.true;
 	});
 
 	it('should have the specified pawn on the specified space', function() {
@@ -78,17 +71,14 @@ describe('MoveMain', function() {
 	it('should bop if theres a different color pawn on the space ' +
 				'and receive bonus of 10', function() {
 		let bluepawn = new Pawn(0, Color.blue);
-		let greenpawn = new Pawn(0, Color.yellow);
+		let greenpawn = new Pawn(0, Color.green);
 		let space = new MainSpace(20);
-		let landspace = new MainSpace(25);
 		let dist = 5;
 		let mm = new MoveMain(bluepawn, space, dist);
 
 		let board = new Board();
-		space.setPawn(bluepawn);
 		board.setPawnOnSpace(bluepawn, space);
-		landspace.setPawn(greenpawn);
-		board.setPawnOnSpace(greenpawn, landspace);
+		board.setPawnOnSpace(greenpawn, new MainSpace(25));
 
 		let ret = mm.move(board);
 		(ret.bonus).should.equal(10);
@@ -106,7 +96,7 @@ describe('MoveMain', function() {
 		board.setPawnOnSpace(bluepawn, space);
 		board.setPawnOnSpace(greenpawn, safespace);
 
-		(() => mm.move(board)).should.throw('cannot bop on a safety');
+		(() => mm.move(board)).should.throw('invalid attempt to bop on a SafeSpace');
 	});
 
 	it('shold not be able to pass an opponents blockade', function() {

@@ -14,16 +14,16 @@ export class ColoredSafeSpace extends SafeSpace {
 	// invariant: a pawn can only ever be on a ColoredSafeSpace immediately
 	//		after coming out of the Nest
 	setPawn(pawn: Pawn): void {
-		if (this.pawns.length == 2) {
+		if (this._pawns.length == 2) {
 			throw new Error("invalid attempt to set pawn on blockade");
 		} else if (this.isBop(pawn)) {
 			if (this.color == pawn.color) {
-				this.pawns = [pawn];
+				this._pawns = [pawn];
 			} else {
 				throw new Error("invalid attempt to bop on a SafeSpace");
 			}
 		} else {
-			this.pawns.push(pawn);
+			this._pawns.push(pawn);
 		}
 	}
 }

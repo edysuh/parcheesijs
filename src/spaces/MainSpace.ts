@@ -30,4 +30,8 @@ export class MainSpace extends Space {
 
 		return new MainSpace((this.index + 1) % NUM_MAIN_SPACES);
 	}
+	
+	equals(space: Space): boolean {
+		return (space instanceof MainSpace && this.index == space.index);
+	}
 }
