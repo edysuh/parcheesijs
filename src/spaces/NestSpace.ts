@@ -23,6 +23,10 @@ export class NestSpace extends Space {
 		return new ColoredSafeSpace(StartMap.get(this.color), this.color);
 	}
 	
+	isBlockade(): boolean {
+		return false;
+	}
+	
 	equals(space: Space): boolean {
 		return (space instanceof NestSpace && this.color == space.color);
 	}

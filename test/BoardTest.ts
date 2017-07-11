@@ -1,7 +1,7 @@
 import { should } from 'chai';
 should();
 
-import { Board, Blockade } from '../src/Board';
+import { Board } from '../src/Board';
 import { Bop } from '../src/Bop'
 import { Color } from '../src/definitions';
 import { Pawn } from '../src/Pawn';
@@ -41,8 +41,7 @@ describe('Board', function() {
 		board.setPawnOnSpace(pawn0, space);
 		board.setPawnOnSpace(pawn1, space);
 
-		(board.blockades).should
-			.deep.include(<Blockade>{ 'space': space, 'color': Color.blue });
+		(space.isBlockade()).should.be.true;
 	});
 
 	it('should bop the existing pawn if it is a different color', function() {
@@ -58,26 +57,5 @@ describe('Board', function() {
 
 		(space.pawns).should.include(pawn);
 		(space.pawns).should.not.include(boppedpawn);
-	});
-
-	it('should map Spaces to the blockade color', function() {
-		let board = new Board();
-		let space = new MainSpace(20);
-		board.setPawnOnSpace(new Pawn(0, Color.green), space);
-		board.setPawnOnSpace(new Pawn(1, Color.green), space);
-
-		(board.blockades).should
-			.deep.include(<Blockade>{ 'space': new MainSpace(20), 'color': Color.blue });
-	});
-
-	it('should remove a blockade', function() {
-		let board = new Board();
-		let space = new MainSpace(10);
-		board.setPawnOnSpace(new Pawn(0, Color.blue), space);
-		board.setPawnOnSpace(new Pawn(1, Color.blue), space);
-		board.removeBlockade(new MainSpace(30));
-
-		/* jshint expr:true */
-		(board.blockades).should.be.empty;
 	});
 });

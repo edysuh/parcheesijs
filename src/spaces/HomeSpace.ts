@@ -20,6 +20,10 @@ export class HomeSpace extends Space {
 	getNextSpace(pcolor?: Color): Space {
 		throw new Error("no next space");
 	}
+	
+	isBlockade(): boolean {
+		return false;
+	}
 
 	equals(space: Space): boolean {
 		return (space instanceof HomeSpace && this.color == space.color);
