@@ -147,10 +147,4 @@ describe('MoveMain', function() {
 		let ret = mm.move(board);
 		(ret.board.isBlockade(space)).should.be.false;
 	});
-
-	it('should be able to make a bonus move upon receiving it');
-	it('should not be able to move a blockade together');
-	it('should not be able to move a blockade together with bonuses of 20');
-	it('should not be able to move a blockade together with bonuses of 10');
-	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
 });

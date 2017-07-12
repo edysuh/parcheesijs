@@ -18,8 +18,8 @@ describe("Game", function() {
 		let game = new Game();
 		let p1 = new MFirstPlayer();
 		let p2 = new MFirstPlayer();
-		let p3 = new MFirstPlayer();
-		let p4 = new MFirstPlayer();
+		let p3 = new MLastPlayer();
+		let p4 = new MLastPlayer();
 		game.register(p1);
 		game.register(p2);
 		game.register(p3);
@@ -46,4 +46,10 @@ describe("Game", function() {
 	it('should be able to move home, but dont take bonus of 10');
 	it('should be able to move just one die, to not move a blockade together');
 	it('should move the furthest along pawn back to home on doublesPenalty');
+
+	it('should be able to make a bonus move upon receiving it');
+	it('should not be able to move a blockade together');
+	it('should not be able to move a blockade together with bonuses of 20');
+	it('should not be able to move a blockade together with bonuses of 10');
+	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
 });

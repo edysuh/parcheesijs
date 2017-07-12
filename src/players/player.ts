@@ -6,10 +6,14 @@ import { MoveMain } from '../moves/MoveMain';
 
 // should be abstract or interface
 export abstract class Player {
-	protected color: Color;
+	protected _color: Color;
 	
 	startGame(color: Color): void {
-		this.color = color;
+		this._color = color;
+	}
+	
+	get color() {
+		return this._color;
 	}
 	
 	abstract doMove(board: Board, rolls: number[]): Move[];

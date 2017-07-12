@@ -6,23 +6,27 @@ import { Player } from './players/Player';
 import { MFirstPlayer } from './players/MPlayer';
 
 export class Game {
-	players: Player[];
+	private _players: Player[];
 
 	constructor() {
-		this.players = [];
+		this._players = [];
+	}
+	
+	get players() {
+		return this._players;
 	}
 
 	register(player: Player): void {
-		this.players.push(player);
+		this._players.push(player);
 	}
 
 	start() {
-		for (let i = this.players.length % 4; i < Colors.length; i++) {
-			this.players.push(new MFirstPlayer());
+		for (let i = this._players.length % 4; i < Colors.length; i++) {
+			this._players.push(new MFirstPlayer());
 		}
 
-		while (this.players) {
-			let players = this.players.splice(0, 4);
+		while (this._players) {
+			let players = this._players.splice(0, 4);
 			this.play(players);
 		}
 	}
@@ -38,8 +42,10 @@ export class Game {
 		
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
+			console.log('currPlayer', currPlayer);
 			let currBoard = cloneDeep(board);
 			let rolls = [die.roll(), die.roll()];
+			console.log('rolls', rolls);
 			
 			let moves = currPlayer.doMove(currBoard, rolls);
 			
@@ -49,7 +55,7 @@ export class Game {
 			} catch (e) {
 
 			}
-			console.log('board', board);
+			console.log('board', board.spaces);
 
 			i = (i == 3) ? 0 : i+1;
 		}
