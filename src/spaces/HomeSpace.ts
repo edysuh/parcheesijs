@@ -18,7 +18,7 @@ export class HomeSpace extends Space {
 	}
 
 	getNextSpace(pawnColor?: Color): Space {
-		throw new Error("no next space");
+		throw new Error("no next space; move likely overshot home");
 	}
 	
 	isBlockade(): boolean {

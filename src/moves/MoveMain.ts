@@ -22,11 +22,11 @@ export class MoveMain implements Move {
 		let newBoard = cloneDeep(board);
 		let currSpace = this.start;
 		let bonus = 0;
-		
+
 		if (currSpace instanceof NestSpace) {
 			throw new Error("MoveMain cannot move pawns in the Nest");
 		}
-		
+
 		if (!currSpace.equals(newBoard.getSpaceForPawn(this.pawn))) {
 			throw new Error("specified pawn is not on the specified space");
 		}
@@ -41,11 +41,11 @@ export class MoveMain implements Move {
 		if (currSpace instanceof HomeSpace) {
 			throw new Error("MoveMain cannot move pawns into Home");
 		}
-		
+
 		if (newBoard.isBop(this.pawn, currSpace)) {
 			bonus = 20;
 		}
-		
+
 		newBoard.setPawnOnSpace(this.pawn, currSpace);
 
 		return { 'board': newBoard, 'bonus': bonus };

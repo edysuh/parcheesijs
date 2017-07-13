@@ -116,7 +116,7 @@ describe('MoveMain', function() {
 		(() => mm.move(board)).should.throw("tried to make a move past a blockade");
 	});
 
-	it('shold not be able to pass your own blockade', function() {
+	it('should not be able to pass your own blockade', function() {
 		let pawn0 = new Pawn(0, Color.blue);
 		let pawn1 = new Pawn(1, Color.blue);
 		let pawn2 = new Pawn(2, Color.blue);
@@ -146,5 +146,25 @@ describe('MoveMain', function() {
 
 		let moveresult = mm.move(board);
 		(moveresult.board.isBlockade(space)).should.be.false;
+	});
+	
+	it('should not move a pawn from the nest', function() {
+		let board = new Board();
+		let pawn = new Pawn(1, Color.red);
+		let space = new NestSpace(Color.red);
+		board.setPawnOnSpace(pawn, space);
+
+		let mm = new MoveMain(pawn, space, 5);
+		(() => mm.move(board)).should.throw("MoveMain cannot move pawns in the Nest");
+	});
+	
+	it('should not move a pawn into home', function() {
+		let board = new Board();
+		let pawn = new Pawn(1, Color.red);
+		let space = new HomeRowSpace(1, Color.red);
+		board.setPawnOnSpace(pawn, space);
+
+		let mm = new MoveMain(pawn, space, 6);
+		(() => mm.move(board)).should.throw("MoveMain cannot move pawns into Home");
 	});
 });
