@@ -5,7 +5,6 @@ import { Color,
 				 Safeties, 
 				 ColoredSafeties, 
 				 StartMap } from '../definitions';
-import { Bop } from '../Bop';
 import { Pawn } from '../Pawn';
 import { Space } from './Space';
 import { ColoredSafeSpace } from './ColoredSafeSpace';

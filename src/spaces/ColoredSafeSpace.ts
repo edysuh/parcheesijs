@@ -1,4 +1,3 @@
-import { Bop } from '../Bop';
 import { Color } from '../definitions';
 import { Pawn } from '../Pawn';
 import { SafeSpace } from './SafeSpace';

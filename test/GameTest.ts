@@ -13,7 +13,9 @@ describe("Game", function() {
 		
 		(game.players).should.include(p1);
 	});
+	
 	it('should register a player on connection and send them a color (network version)');
+	
 	it.skip('should start a game with 4 players', function() {
 		let game = new Game();
 		let p1 = new MFirstPlayer();
@@ -31,12 +33,13 @@ describe("Game", function() {
 		// need states:
 		// enum game.state { START, DOMOVE, DOUBLEPENALTY }
 		// (game.state).should.equal(state.START);
+		
 	it('should start multiple games if there are more than 4 players');
 	it('should fill with MPlayers if there are not enough players');
 	
-	// it('should enforce contracts between the game rules and the player');
-	// it('should uphold behavioral contracts');
-	// it('should adher to sequencial contracts');
+	it('should enforce contracts between the game rules and the player');
+	it('should uphold behavioral contracts');
+	it('should adher to sequencial contracts');
 	
 	it('should not be able to ignore a die roll');
 	it('should allow for no move, due to a blockade');
@@ -52,4 +55,6 @@ describe("Game", function() {
 	it('should not be able to move a blockade together with bonuses of 20');
 	it('should not be able to move a blockade together with bonuses of 10');
 	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
+	
+  it('enterpiece should only be called on a 5 roll');
 });

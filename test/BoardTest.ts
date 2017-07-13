@@ -2,7 +2,6 @@ import { should } from 'chai';
 should();
 
 import { Board } from '../src/Board';
-import { Bop } from '../src/Bop'
 import { Color } from '../src/definitions';
 import { Pawn } from '../src/Pawn';
 import { Space } from '../src/spaces/Space';

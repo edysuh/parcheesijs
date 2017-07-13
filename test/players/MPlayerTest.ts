@@ -12,7 +12,7 @@ import { HomeRowSpace } from '../../src/spaces/HomeRowSpace';
 import { HomeSpace } from '../../src/spaces/HomeSpace';
 
 describe('MPlayer', function() {
-	it('should sort pawns by closest to home', function() {
+	it('should sort pawns by closest to home, except HomeSpace', function() {
 		let board = new Board();
 		let pawn0 = new Pawn(0, Color.yellow);
 		let pawn1 = new Pawn(1, Color.yellow);
@@ -29,7 +29,7 @@ describe('MPlayer', function() {
 		board.setPawnOnSpace(pawn3, space3);
 
 		(getPawnsInFirstOrder(board, Color.yellow).map(el => el.pawn))
-			.should.deep.equal([ pawn3, pawn2, pawn1, pawn0 ]);
+			.should.deep.equal([ pawn2, pawn1, pawn0 ]);
 	});
 
 	it('should sort pawns by closest to home', function() {

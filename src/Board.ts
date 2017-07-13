@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 
-import { Bop } from './Bop';
 import { Color, Colors, NUM_PAWNS } from './definitions';
 import { Space } from './spaces/Space';
 import { NestSpace } from './spaces/NestSpace';
@@ -62,17 +61,17 @@ export class Board {
 	}
 	
 	isBop(pawn: Pawn, space: Space): boolean {
-		let ret = this._spaces.filter(sp => space.equals(sp))[0];
-		if (ret) {
-			return ret.isBop(pawn);
+		let sp = this._spaces.filter(sp => space.equals(sp))[0];
+		if (sp) {
+			return sp.isBop(pawn);
 		}
 		return false;
 	}
 	
 	isBlockade(space: Space): boolean {
-		let ret = this._spaces.filter(sp => space.equals(sp))[0];
-		if (ret) {
-			return ret.isBlockade();
+		let sp = this._spaces.filter(sp => space.equals(sp))[0];
+		if (sp) {
+			return sp.isBlockade();
 		}
 		return false;
 	}

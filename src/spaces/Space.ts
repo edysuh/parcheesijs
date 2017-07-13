@@ -1,5 +1,4 @@
 import { Color } from '../definitions';
-import { Bop } from '../Bop';
 import { Pawn } from '../Pawn';
 import { isEqual } from 'lodash';
 

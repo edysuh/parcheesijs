@@ -11,7 +11,7 @@ export class Game {
 	constructor() {
 		this._players = [];
 	}
-	
+
 	get players() {
 		return this._players;
 	}
@@ -39,19 +39,19 @@ export class Game {
 		let board = new Board();
 		let die = new Die();
 		let i = 0;
-		
+
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
 			console.log('currPlayer', currPlayer);
 			let currBoard = cloneDeep(board);
 			let rolls = [die.roll(), die.roll()];
-			console.log('rolls', rolls);
-			
+
 			let moves = currPlayer.doMove(currBoard, rolls);
-			
+			console.log('moves', moves);
+
 			try {
-				let ret = moves[i].move(currBoard);
-				board = ret.board;
+				let moveresult = moves[i].move(currBoard);
+				board = moveresult.board;
 			} catch (e) {
 
 			}
