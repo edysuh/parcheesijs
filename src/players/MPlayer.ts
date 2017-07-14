@@ -1,59 +1,61 @@
+import { cloneDeep } from 'lodash';
+
 import { Board } from '../Board';
 import { Color, NUM_PAWNS } from '../definitions';
-import { Move } from '../moves/Move';
-import { MoveMain } from '../moves/MoveMain';
 import { Pawn } from '../Pawn';
 import { Player } from '../players/Player';
-import { cloneDeep } from 'lodash';
 import { Space } from '../spaces/Space';
 import { HomeSpace } from '../spaces/HomeSpace';
+import { NestSpace } from '../spaces/NestSpace';
+import { Move } from '../moves/Move';
+import { MoveMain } from '../moves/MoveMain';
+import { MoveHome } from '../moves/MoveHome';
+import { EnterPiece } from '../moves/EnterPiece';
 
-export abstract class MPlayer extends Player { }
+export abstract class MPlayer extends Player {
+	tryPawns(board: Board,
+										rolls: number[],
+										callback: (b: Board, c: Color) =>
+															 { 'pawn': Pawn, 'space': Space }[]): Move[] {
+		let moves = [];
+		let currBoard = cloneDeep(board);
+		let pairs = callback(currBoard, this.color);
+
+		for (let i = 0; i < rolls.length; i++) {
+			for (let j = 0; j < pairs.length; j++) {
+				let saveBoard = cloneDeep(currBoard);
+				let move = chooseMove(pairs[j].pawn, pairs[j].space, rolls[i]);
+				try {
+					let moveresult = move.move(currBoard);
+					currBoard = moveresult.board;
+					// bonus?
+					moves.push(move);
+					pairs = callback(currBoard, this.color);
+					break;
+				} catch (e) {
+					currBoard = cloneDeep(saveBoard);
+					// console.log(e);
+				}
+				// no moves are possible?
+			}
+		}
+		// pairs.map(p => console.log(p.space, p.space.distanceFromHome(this.color)));
+		return moves;
+	}
+}
 
 export class MFirstPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		return tryPawns(board, rolls, this.color, getPawnsInFirstOrder);
+		return this.tryPawns(board, rolls, getPawnsInFirstOrder);
 	}
 }
 
 export class MLastPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		return tryPawns(board, rolls, this.color, getPawnsInLastOrder);
+		return this.tryPawns(board, rolls, getPawnsInLastOrder);
 	}
 }
 
-function tryPawns(board: Board,
-									rolls: number[],
-									color: Color,
-									callback: (b: Board, c: Color) =>
-														 { 'pawn': Pawn, 'space': Space }[]): Move[] {
-	let moves = [];
-	let currBoard = cloneDeep(board);
-	let pairs = callback(currBoard, color);
-
-	for (let i = 0; i < rolls.length; i++) {
-		for (let j = 0; j < pairs.length; j++) {
-			// add enterpiece and movehome
-			let saveBoard = cloneDeep(currBoard);
-			let mm = new MoveMain(pairs[j].pawn, pairs[j].space, rolls[i]);
-			try {
-				let moveresult = mm.move(currBoard);
-				currBoard = moveresult.board;
-				// bonus?
-				moves.push(mm);
-				pairs = callback(currBoard, color);
-				// start again from pairs[0]?
-				break;
-			} catch (e) {
-				currBoard = cloneDeep(saveBoard);
-				// console.log(e);
-			}
-			// no moves are possible?
-		}
-	}
-	// pairs.map(p => console.log(p.space, p.space.distanceFromHome(color)));
-	return moves;
-}
 
 export function getPawnsInFirstOrder(board: Board, color: Color) {
 	let pawnSpacePairs = [];
@@ -71,6 +73,18 @@ export function getPawnsInFirstOrder(board: Board, color: Color) {
 	return pawnSpacePairs;
 }
 
-function getPawnsInLastOrder(board: Board, color: Color) {
+export function getPawnsInLastOrder(board: Board, color: Color) {
 	return getPawnsInFirstOrder(board, color).reverse();
+}
+
+export function chooseMove(pawn: Pawn, space: Space, roll: number): Move {
+	if (space instanceof NestSpace) {
+		return new EnterPiece(pawn);
+	} else if (space.distanceFromHome(pawn.color) == roll) {
+		return new MoveHome(pawn, space, roll);
+	// } else if (space.distanceFromHome(pawn.color) < roll) {
+	// 	return null;
+	} else {
+		return new MoveMain(pawn, space, roll);
+	}
 }

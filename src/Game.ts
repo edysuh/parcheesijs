@@ -37,14 +37,14 @@ export class Game {
 		}
 
 		let board = new Board();
-		let die = new Die();
+		let dice = new Die();
 		let i = 0;
 
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
 			console.log('currPlayer', currPlayer);
 			let currBoard = cloneDeep(board);
-			let rolls = [die.roll(), die.roll()];
+			let rolls = [dice.roll(), dice.roll()];
 
 			let moves = currPlayer.doMove(currBoard, rolls);
 			console.log('moves', moves);
