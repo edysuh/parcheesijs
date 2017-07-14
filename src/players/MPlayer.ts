@@ -28,7 +28,7 @@ export abstract class MPlayer extends Player {
 				try {
 					let moveresult = move.move(currBoard);
 					currBoard = moveresult.board;
-					// bonus?
+					if (moveresult.bonus) { rolls.push(moveresult.bonus); }
 					moves.push(move);
 					pairs = callback(currBoard, this.color);
 					break;
@@ -36,7 +36,6 @@ export abstract class MPlayer extends Player {
 					currBoard = cloneDeep(saveBoard);
 					// console.log(e);
 				}
-				// no moves are possible?
 			}
 		}
 		return moves;
@@ -77,6 +76,7 @@ export function getPawnsInLastOrder(board: Board, color: Color) {
 }
 
 export function chooseMove(pawn: Pawn, space: Space, roll: number): Move {
+	// need to consume a roll of 5, or a sum of rolls to 5
 	if (space instanceof NestSpace) {
 		return new EnterPiece(pawn);
 	} else if (space.distanceFromHome(pawn.color) == roll) {

@@ -34,8 +34,8 @@ describe("Game", function() {
 		// enum game.state { START, DOMOVE, DOUBLEPENALTY }
 		// (game.state).should.equal(state.START);
 		
-	it('should start multiple games if there are more than 4 players');
-	it('should fill with MPlayers if there are not enough players');
+	// it('should start multiple games if there are more than 4 players');
+	// it('should fill with MPlayers if there are not enough players');
 	
 	it('should enforce contracts between the game rules and the player');
 	it('should uphold behavioral contracts');

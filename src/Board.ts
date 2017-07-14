@@ -43,9 +43,9 @@ export class Board {
 		if (old.pawns.length == 0) { this._spaces.splice(this._spaces.indexOf(old), 1); }
 
 		if (setSpace.isBop(pawn)) {
-			// why does this work when pawns is protected?
 			let bopped = setSpace.pawns[0];
 			let nest = this.getSpaceOnBoard(new NestSpace(bopped.color));
+			// why does this work when pawns is protected?
 			nest.pawns.push(bopped);
 		}
 

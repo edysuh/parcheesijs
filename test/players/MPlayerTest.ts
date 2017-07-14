@@ -165,7 +165,7 @@ describe('MPlayer', function() {
 															 new MoveMain(pawn0, tmpspace0, 6)]);
 	});
 
-	it('should try pawns in order of closest to home, except HomeSpace', function() {
+	it('should try pawns in order of closest to home and execute a bonus', function() {
 		let board = new Board();
 		let mfplayer = new MFirstPlayer();
 		mfplayer.startGame(Color.yellow);
@@ -191,8 +191,13 @@ describe('MPlayer', function() {
 		// but movemain with 1 vs movehome with 4
 		// (moves).should.deep.equal([new MoveMain(pawn1, space1, 1),
 		// 													 new MoveHome(pawn2, space2, 4)]);
+
+		let tmpspace1 = new MainSpace(24);
+		tmpspace1.setPawn(pawn1);
+
 		(moves).should.deep.equal([new MoveHome(pawn2, space2, 4),
-															 new MoveHome(pawn1, space1, 1)]);
+															 new MoveMain(pawn1, space1, 1),
+															 new MoveMain(pawn1, tmpspace1, 10)]);
 	});
 
 

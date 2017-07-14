@@ -1,6 +1,7 @@
+import { isEqual } from 'lodash';
+
 import { Color } from '../definitions';
 import { Pawn } from '../Pawn';
-import { isEqual } from 'lodash';
 
 export abstract class Space {
 	protected _pawns: Pawn[];
