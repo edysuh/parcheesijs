@@ -20,7 +20,7 @@ export class Board {
 			}
 		}
 	}
-	
+
 	get spaces() {
 		return this._spaces;
 	}
@@ -31,7 +31,9 @@ export class Board {
 			setSpace = space;
 			this._spaces.push(setSpace);
 		}
-		this.removePawn(pawn);
+		let old = this.getSpaceForPawn(pawn);
+		old.removePawn(pawn);
+		if (old.pawns.length == 0) { this._spaces.splice(this._spaces.indexOf(old), 1); }
 		setSpace.setPawn(pawn);
 	}
 
@@ -46,20 +48,6 @@ export class Board {
 		throw new Error("given pawn is not on a space");
 	}
 	
-	removePawn(pawn: Pawn): void {
-		let c = 0;
-		for (let i = 0; i < this._spaces.length; i++) {
-			for (let j = 0; j < this._spaces[i].pawns.length; j++) {
-				if (isEqual(pawn, this._spaces[i].pawns[j])) {
-					this._spaces[i].removePawn(pawn);
-					if (this._spaces[i].pawns.length == 0) { this._spaces.splice(i, 1); }
-					c++;
-				}
-			}
-		}
-		if (c != 1) { throw new Error("pawn to be removed doesnt exist on the board"); }
-	}
-	
 	isBop(pawn: Pawn, space: Space): boolean {
 		let sp = this._spaces.filter(sp => space.equals(sp))[0];
 		if (sp) {
@@ -67,7 +55,7 @@ export class Board {
 		}
 		return false;
 	}
-	
+
 	isBlockade(space: Space): boolean {
 		let sp = this._spaces.filter(sp => space.equals(sp))[0];
 		if (sp) {
@@ -75,7 +63,7 @@ export class Board {
 		}
 		return false;
 	}
-	
+
 	gameOver(): Color | null {
 		for (let i = 0; i < this._spaces.length; i++) {
 			if (this._spaces[i] instanceof HomeSpace) {
