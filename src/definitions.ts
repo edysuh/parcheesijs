@@ -1,4 +1,4 @@
-export enum Color { green="green", red="red", blue="blue", yellow="yellow"  };
+export enum Color { green='green', red='red', blue='blue', yellow='yellow'  };
 export const Colors: Color[] = [Color.blue, Color.yellow, Color.green, Color.red];
 
 export const NUM_COLORS: number = 4;

@@ -42,33 +42,30 @@ export class Game {
 		let saveBoard = cloneDeep(board);
 		let dice = new Die();
 		let i = 0;
-		let turns = 0;
 
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
-			turns++;
-			console.log(Math.floor(turns/4));
-			console.log('currPlayer', currPlayer);
-			console.log('////////////////');
+			// console.log(Math.floor(turns/4));
+			// console.log('currPlayer', currPlayer);
+			// console.log('////////////////');
 			let saveBoard = cloneDeep(board);
 			let rolls = [dice.roll(), dice.roll()];
 
 			let moves = currPlayer.doMove(board, rolls);
-			console.log('moves', moves);
-			console.log('...................');
+			// console.log('moves', moves);
+			// console.log('...................');
 
 			for (let j = 0; j < moves.length; j++) {
 				try {
 					let moveresult = moves[j].move(board);
-					// board = moveresult.board;
 					board = moveresult.board;
 				} catch (e) {
 					board = cloneDeep(saveBoard);
 					console.log(e)
 				}
 			}
-			board.display();
-			console.log('----------------------------------------------\n');
+			// board.display();
+			// console.log('----------------------------------------------\n');
 
 			i = (i == 3 ? 0 : i+1);
 		}
