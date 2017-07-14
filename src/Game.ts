@@ -37,27 +37,35 @@ export class Game {
 		}
 
 		let board = new Board();
+		let saveBoard = cloneDeep(board);
 		let dice = new Die();
 		let i = 0;
 
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
 			console.log('currPlayer', currPlayer);
-			let currBoard = cloneDeep(board);
+			console.log('////////////////');
+			let currBoard = cloneDeep(saveBoard);
 			let rolls = [dice.roll(), dice.roll()];
 
 			let moves = currPlayer.doMove(currBoard, rolls);
 			console.log('moves', moves);
+			console.log('...................');
 
-			try {
-				let moveresult = moves[i].move(currBoard);
-				board = moveresult.board;
-			} catch (e) {
-
+			for (let j = 0; j < moves.length; j++) {
+				try {
+					let moveresult = moves[j].move(currBoard);
+					// board = moveresult.board;
+					currBoard = moveresult.board;
+					saveBoard = moveresult.board;
+				} catch (e) {
+					console.log(e)
+				}
 			}
-			console.log('board', board.spaces);
+			board.display();
+			console.log('----------------------------------------------\n');
 
-			i = (i == 3) ? 0 : i+1;
+			i = (i == 3 ? 0 : i+1);
 		}
 	}
 }

@@ -25,15 +25,30 @@ export class Board {
 		return this._spaces;
 	}
 
+	display(): void {
+		for (let i = 0; i < this._spaces.length; i++) {
+			console.log(this._spaces[i]);
+		}
+	}
+
 	setPawnOnSpace(pawn: Pawn, space: Space): void {
-		let setSpace = this._spaces.filter(sp => space.equals(sp))[0];
+		let setSpace = this.getSpaceOnBoard(space);
 		if (!setSpace) {
 			setSpace = space;
 			this._spaces.push(setSpace);
 		}
+
 		let old = this.getSpaceForPawn(pawn);
 		old.removePawn(pawn);
 		if (old.pawns.length == 0) { this._spaces.splice(this._spaces.indexOf(old), 1); }
+
+		if (setSpace.isBop(pawn)) {
+			// why does this work when pawns is protected?
+			let bopped = setSpace.pawns[0];
+			let nest = this.getSpaceOnBoard(new NestSpace(bopped.color));
+			nest.pawns.push(bopped);
+		}
+
 		setSpace.setPawn(pawn);
 	}
 
@@ -47,9 +62,13 @@ export class Board {
 		}
 		throw new Error("given pawn is not on a space");
 	}
-	
+
+	getSpaceOnBoard(space: Space): Space {
+		return this._spaces.filter(sp => space.equals(sp))[0];
+	}
+
 	isBop(pawn: Pawn, space: Space): boolean {
-		let sp = this._spaces.filter(sp => space.equals(sp))[0];
+		let sp = this.getSpaceOnBoard(space);
 		if (sp) {
 			return sp.isBop(pawn);
 		}
@@ -57,7 +76,7 @@ export class Board {
 	}
 
 	isBlockade(space: Space): boolean {
-		let sp = this._spaces.filter(sp => space.equals(sp))[0];
+		let sp = this.getSpaceOnBoard(space);
 		if (sp) {
 			return sp.isBlockade();
 		}

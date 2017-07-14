@@ -1,4 +1,4 @@
-export enum Color { blue, yellow, green, red };
+export enum Color { green="green", red="red", blue="blue", yellow="yellow"  };
 export const Colors: Color[] = [Color.blue, Color.yellow, Color.green, Color.red];
 
 export const NUM_COLORS: number = 4;
@@ -10,7 +10,7 @@ export const PAWN_DISTANCE: number = 72;
 
 export const Safeties: number[] = [0, 12, 17, 29, 34, 46, 51, 63];
 
-export const ColoredSafeties: Map<Color, number> = new Map([
+export const ColoredSafeties: Map<number, Color> = new Map([
 	[39, Color.blue],
 	[56, Color.yellow],
 	[5, Color.green],

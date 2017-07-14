@@ -13,6 +13,7 @@ export abstract class Space {
 		return this._pawns;
 	}
 
+	// postcondition: replace bopped pawn on nest
 	setPawn(pawn: Pawn): void {
 		if (this._pawns.length == 2) {
 			throw new Error("invalid attempt to set pawn on blockade");
