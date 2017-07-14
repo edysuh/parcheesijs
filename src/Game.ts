@@ -25,13 +25,15 @@ export class Game {
 			this._players.push(new MFirstPlayer());
 		}
 
-		while (this._players) {
+		let winner;
+		while (this._players.length > 0) {
 			let players = this._players.splice(0, 4);
-			this.play(players);
+			winner = this.play(players);
 		}
+		console.log(winner, "is the WINNER!");
 	}
 
-	play(players: Player[]) {
+	play(players: Player[]): Color {
 		for (let i = 0; i < players.length; i++) {
 			players[i].startGame(Colors[i]);
 		}
@@ -40,25 +42,28 @@ export class Game {
 		let saveBoard = cloneDeep(board);
 		let dice = new Die();
 		let i = 0;
+		let turns = 0;
 
 		while (board.gameOver() == null) {
 			let currPlayer = players[i];
+			turns++;
+			console.log(Math.floor(turns/4));
 			console.log('currPlayer', currPlayer);
 			console.log('////////////////');
-			let currBoard = cloneDeep(saveBoard);
+			let saveBoard = cloneDeep(board);
 			let rolls = [dice.roll(), dice.roll()];
 
-			let moves = currPlayer.doMove(currBoard, rolls);
+			let moves = currPlayer.doMove(board, rolls);
 			console.log('moves', moves);
 			console.log('...................');
 
 			for (let j = 0; j < moves.length; j++) {
 				try {
-					let moveresult = moves[j].move(currBoard);
+					let moveresult = moves[j].move(board);
 					// board = moveresult.board;
-					currBoard = moveresult.board;
-					saveBoard = moveresult.board;
+					board = moveresult.board;
 				} catch (e) {
+					board = cloneDeep(saveBoard);
 					console.log(e)
 				}
 			}
@@ -67,5 +72,7 @@ export class Game {
 
 			i = (i == 3 ? 0 : i+1);
 		}
+
+		return board.gameOver();
 	}
 }

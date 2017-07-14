@@ -26,11 +26,9 @@ describe("EnterPiece", function() {
 		let board = new Board();
 		let pawn = new Pawn(3, Color.red);
 		board.setPawnOnSpace(new Pawn(2, Color.blue), new ColoredSafeSpace(22, Color.red));
-		board.display()
 
 		let ep = new EnterPiece(pawn);
 		let moveresult = ep.move(board);
-		moveresult.board.display();
 
 		(moveresult.board.getSpaceForPawn(pawn).equals(new ColoredSafeSpace(22, Color.red)))
 			.should.be.true;

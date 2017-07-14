@@ -16,7 +16,7 @@ describe("Game", function() {
 	
 	it('should register a player on connection and send them a color (network version)');
 	
-	it.skip('should start a game with 4 players', function() {
+	it('should start a game with 4 players', function() {
 		let game = new Game();
 		let p1 = new MFirstPlayer();
 		let p2 = new MFirstPlayer();

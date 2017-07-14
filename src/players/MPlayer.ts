@@ -39,7 +39,6 @@ export abstract class MPlayer extends Player {
 				// no moves are possible?
 			}
 		}
-		// pairs.map(p => console.log(p.space, p.space.distanceFromHome(this.color)));
 		return moves;
 	}
 }
