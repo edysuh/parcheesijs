@@ -158,11 +158,11 @@ describe('MPlayer', function() {
 
 		let moves = mlplayer.doMove(board, [2, 6]);
 
-		let tmpspace0 = new ColoredSafeSpace(56, Color.yellow);
-		tmpspace0.setPawn(pawn0);
+		let tmpspace1 = new MainSpace(25);
+		tmpspace1.setPawn(pawn1);
 
-		(moves).should.deep.equal([new EnterPiece(pawn0),
-															 new MoveMain(pawn0, tmpspace0, 6)]);
+		(moves).should.deep.equal([new MoveMain(pawn1, space1, 2),
+															 new MoveMain(pawn1, tmpspace1, 6)]);
 	});
 
 	it('should try pawns in order of closest to home and execute a bonus', function() {

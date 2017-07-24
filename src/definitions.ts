@@ -1,3 +1,7 @@
+import { Board } from './Board';
+import { Pawn } from './Pawn';
+import { Space } from './spaces/Space';
+
 export enum Color { green =	 'green',
 										red =		 'red',
 										blue =	 'blue',
@@ -32,3 +36,13 @@ export const StartMap: Map<Color, number> = new Map([
 	[Color.green,  5],
 	[Color.red,		 22]
 ]);
+
+export interface MoveResult {
+	board: Board;
+	bonus: number;
+}
+
+export interface Pair {
+	pawn: Pawn;
+	space: Space;
+}

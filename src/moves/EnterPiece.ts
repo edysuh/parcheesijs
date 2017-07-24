@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 
 import { Board } from '../Board';
+import { MoveResult } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Move } from './Move';
 import { Space } from '../spaces/Space';
@@ -13,7 +14,7 @@ export class EnterPiece implements Move {
 		this.pawn = pawn;
 	}
 	
-	move(board: Board): { 'board': Board, 'bonus': number } {
+	move(board: Board): MoveResult {
 		let newBoard = cloneDeep(board);
 		let currSpace = <Space>(new NestSpace(this.pawn.color));
 		let bonus = 0; 

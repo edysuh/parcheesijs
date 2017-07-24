@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 
-import { Color, Colors, NUM_PAWNS } from './definitions';
+import { Color, Colors, NUM_PAWNS, Pair } from './definitions';
 import { Space } from './spaces/Space';
 import { NestSpace } from './spaces/NestSpace';
 import { HomeSpace } from './spaces/HomeSpace';
@@ -29,6 +29,7 @@ export class Board {
 		for (let i = 0; i < this._spaces.length; i++) {
 			console.log(this._spaces[i]);
 		}
+		console.log('--------------------------------------------\n');
 	}
 
 	setPawnOnSpace(pawn: Pawn, space: Space): void {
@@ -40,7 +41,9 @@ export class Board {
 
 		let old = this.getSpaceForPawn(pawn);
 		old.removePawn(pawn);
-		if (old.pawns.length == 0) { this._spaces.splice(this._spaces.indexOf(old), 1); }
+		if (old.pawns.length == 0) {
+			this._spaces.splice(this._spaces.indexOf(old), 1);
+		}
 
 		if (setSpace.isBop(pawn)) {
 			let bopped = setSpace.pawns[0];
@@ -61,6 +64,16 @@ export class Board {
 			}
 		}
 		throw new Error("given pawn is not on a space");
+	}
+
+	getPlayerPawns(color: Color): Pair[] {
+		let pairs = [];
+		for (let i = 0; i < NUM_PAWNS; i++) {
+			let pawn = new Pawn(i, color);
+			let space = this.getSpaceForPawn(pawn);
+			pairs.push({ 'pawn': pawn, 'space': space });
+		}
+		return pairs;
 	}
 
 	getSpaceOnBoard(space: Space): Space {
