@@ -22,12 +22,17 @@ export abstract class MPlayer extends Player {
 
 		for (let i = 0; i < pairs.length; i++) {
 			if (canEnterWithSum && pairs[i].space instanceof NestSpace) {
-				return [new EnterPiece(pairs[i].pawn)];
+				try {
+					let ep = new EnterPiece(pairs[i].pawn);
+					ep.move(board);
+					return [ep];
+				} catch (e) { }
 			}
 
 			for (let j = 0; j < rolls.length; j++) {
-				let saveBoard = cloneDeep(board);
-				let move = chooseMove(pairs[i].pawn, pairs[i].space, rolls[j]);
+				// this might be necessary later to prevent blockades moving together
+				// let saveBoard = cloneDeep(board);
+				let move = chooseMove(pairs[i], rolls[j]);
 
 				try {
 					let moveresult = move.move(board);
@@ -43,7 +48,7 @@ export abstract class MPlayer extends Player {
 					i = -1;
 					break;
 				} catch (e) {
-					board = cloneDeep(saveBoard);
+					// board = cloneDeep(saveBoard);
 					// console.log(e);
 				}
 			}
@@ -88,12 +93,12 @@ export function getPawnsInLastOrder(board: Board, color: Color): Pair[] {
 }
 
 // precondition: only call this in try...catch block to catch illegal moves
-export function chooseMove(pawn: Pawn, space: Space, roll: number): Move {
-	if (space instanceof NestSpace && roll == 5) {
-		return new EnterPiece(pawn);
-	} else if (space.distanceFromHome(pawn.color) == roll) {
-		return new MoveHome(pawn, space, roll);
+export function chooseMove(pair: Pair, roll: number): Move {
+	if (pair.space instanceof NestSpace && roll == 5) {
+		return new EnterPiece(pair.pawn);
+	} else if (pair.space.distanceFromHome(pair.pawn.color) == roll) {
+		return new MoveHome(pair.pawn, pair.space, roll);
 	} else {
-		return new MoveMain(pawn, space, roll);
+		return new MoveMain(pair.pawn, pair.space, roll);
 	}
 }

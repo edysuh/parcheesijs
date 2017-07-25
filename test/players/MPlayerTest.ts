@@ -200,14 +200,12 @@ describe('MPlayer', function() {
 															 new MoveMain(pawn1, tmpspace1, 10)]);
 	});
 
-
 	it('should choose an EnterPiece if the given space is the nest', function() {
 		let pawn = new Pawn(1, Color.blue);
 		let space = new NestSpace(Color.blue);
-		// ??
 		let roll = 5;
 
-		(chooseMove(pawn, space, roll)).should.deep.equal(new EnterPiece(pawn));
+		(chooseMove({ pawn, space }, roll)).should.deep.equal(new EnterPiece(pawn));
 	});
 
 	it('should choose a MoveHome if the roll equals the distance remaining', function() {
@@ -215,7 +213,7 @@ describe('MPlayer', function() {
 		let space = new HomeRowSpace(2, Color.blue);
 		let roll = 5;
 
-		(chooseMove(pawn, space, roll)).should.deep.equal(new MoveHome(pawn, space, roll));
+		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveHome(pawn, space, roll));
 	});
 
 	// it('should choose no move if the distance remaining is less than the roll', function() {
@@ -231,6 +229,6 @@ describe('MPlayer', function() {
 		let space = new HomeRowSpace(1, Color.blue);
 		let roll = 2;
 
-		(chooseMove(pawn, space, roll)).should.deep.equal(new MoveMain(pawn, space, roll));
+		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveMain(pawn, space, roll));
 	});
 });

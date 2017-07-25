@@ -7,6 +7,8 @@ import { Player } from './players/Player';
 import { MFirstPlayer, MLastPlayer, chooseMove } from './players/MPlayer';
 import { Move } from './moves/Move';
 import { EnterPiece } from './moves/EnterPiece';
+import { MoveMain } from './moves/MoveMain';
+import { MoveHome } from './moves/MoveHome';
 
 export class Game {
 	private _players: Player[];
@@ -112,25 +114,48 @@ export class Game {
 	}
 
 	allRollsConsumed(board: Board, color: Color, moves: Move[], rolls: number[]): boolean {
+		if (moves[0] instanceof EnterPiece && 
+				rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {
+			return true;
+		}
+
 		for (let i = 0; i < moves.length; i++) {
-			if (moves[i] instanceof EnterPiece &&
-					rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {
-				return true;
-			}
 			for (let j = 0; j < rolls.length; j++) {
-				;
+				if (moves[i] instanceof EnterPiece) {
+					if (rolls[j] == 5) {
+						rolls.splice(j, 1);
+						break;
+					}
+				} else if (moves[i] instanceof MoveMain) {
+					if (rolls[j] == (<MoveMain>moves[i]).dist) {
+						rolls.splice(j, 1);
+						break;
+					}
+				} else if (moves[i] instanceof MoveHome) {
+					if (rolls[j] == (<MoveHome>moves[i]).dist) {
+						rolls.splice(j, 1);
+						break;
+					}
+				}
 			}
 		}
+
+		if (rolls.length == 0) { return true; }
 
 		let pairs = board.getPlayerPawns(color);
 
 		for (let i = 0; i < rolls.length; i++) {
 			for (let j = 0; j < pairs.length; j++) {
-				let move = chooseMove(pairs[j].pawn, pairs[j].space, rolls[i]);
+				let move = chooseMove(pairs[j], rolls[i]);
+				let errorThrown = false;
 				try {
 					let moveresult = move.move(board);
 				} catch (e) {
-
+					// console.log(e);
+					errorThrown = true;
+				}
+				if (!errorThrown) {
+					return false;
 				}
 			}
 		}
