@@ -22,6 +22,7 @@ export class Turn {
 		let miniturn = true;
 
 		while (miniturn) {
+			let initial = cloneDeep(board);
 			let rolls = [dice.roll(), dice.roll()];
 			miniturn = false;
 
@@ -55,8 +56,12 @@ export class Turn {
 				}
 			}
 
-			if (!this.allRollsConsumed(board, moves, rolls)) {
-					console.log(this.player.color, 'player cheated. youre out.\n');
+			try {
+				this.allRollsConsumed(board, moves, rolls)
+				this.checkBlockadeMoves(initial, board);
+			} catch (e) {
+				board = initial;
+				console.log(e, '\n', this.player.color, 'player cheated. youre out.\n');
 			}
 		}
 
@@ -66,15 +71,25 @@ export class Turn {
 	// The helper function accepts the original board, the final board, and the moves.
 	// It checks to see if any blockades were moved together
 	// and that all of the die rolls were used.
-	checkBoardAfterMoves(board: Board, moves: Move[], rolls: number[]): boolean {
+	checkBlockadeMoves(initial: Board, post: Board): void {
+		let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade());
+		let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade());
 
-		return true;
+		for (let i = 0; i < initBlockSpaces.length; i++) {
+			let pawns = initBlockSpaces[i].pawns;
+			for (let j = 0; j < postBlockSpaces.length; j++) {
+				if (postBlockSpaces[j].pawns.includes(pawns[0]) &&
+						postBlockSpaces[j].pawns.includes(pawns[1])) {
+					throw new Error('blockade has been moved together');
+				}
+			}
+		}
 	}
 
-	allRollsConsumed(board: Board, moves: Move[], rolls: number[]): boolean {
+	allRollsConsumed(board: Board, moves: Move[], rolls: number[]): void {
 		if (moves[0] instanceof EnterPiece && 
 				rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {
-			return true;
+			return;
 		}
 
 		for (let i = 0; i < moves.length; i++) {
@@ -98,7 +113,7 @@ export class Turn {
 			}
 		}
 
-		if (rolls.length == 0) { return true; }
+		if (rolls.length == 0) { return; }
 
 		let pairs = board.getPlayerPawns(this.player.color);
 
@@ -112,11 +127,9 @@ export class Turn {
 					errorThrown = true;
 				}
 				if (!errorThrown) {
-					return false;
+					throw new Error('all rolls have not been consumed');
 				}
 			}
 		}
-
-		return true;
 	}
 }

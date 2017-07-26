@@ -29,7 +29,7 @@ describe("Turn", function() {
 								 new MoveHome(pawn, space, 4)];
 		let rolls = [2, 5, 4];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
 	it('should not be able to ignore a die roll', function() {
@@ -46,7 +46,8 @@ describe("Turn", function() {
 								 new MoveMain(pawn, space, 4)];
 		let rolls = [2, 5, 6, 4];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.false;
+		(() => turn.allRollsConsumed(board, moves, rolls))
+			.should.throw('all rolls have not been consumed');
 	});
 
 	it('should allow for no move, due to a blockade', function() {
@@ -68,7 +69,7 @@ describe("Turn", function() {
 		let moves: Move[] = [];
 		let rolls = [6, 6, 10, 20];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
 	it('should allow for just first die, due to a blockade', function() {
@@ -90,7 +91,7 @@ describe("Turn", function() {
 		let moves = [new MoveMain(pawn, space, 2)];
 		let rolls = [2, 6];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
 	it('should allow for just second die, due to a blockade', function() {
@@ -112,7 +113,7 @@ describe("Turn", function() {
 		let moves = [new MoveMain(pawn, space, 2)];
 		let rolls = [6, 2];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
 	it('should be able to bop, but dont take bonus of 20', function() {
@@ -141,7 +142,7 @@ describe("Turn", function() {
 		let moves = [new MoveMain(pawn, space, 1), new MoveMain(pawn, tmpspace, 3)];
 		let rolls = [1, 3, 20];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
 	it('should be able to move home, but dont take bonus of 10', function() {
@@ -157,17 +158,73 @@ describe("Turn", function() {
 		let moves = [new MoveHome(pawn, space, 5)];
 		let rolls = [5, 10];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
-	it('should be able to move just one die, to not move a blockade together');
-	it('should move the furthest along pawn back to home on doublesPenalty');
+	it.skip('should be able to move just one die, to not move a blockade together', function() {
+		let player = new MFirstPlayer();
+		player.startGame(Color.yellow);
+		let turn = new Turn(player);
 
+		let board = new Board();
+		let p1 = new Pawn(1, Color.yellow);
+		let p2 = new Pawn(2, Color.yellow);
+		let s1 = new MainSpace(30);
+		let s2 = new MainSpace(34);
+		board.setPawnOnSpace(p1, s1);
+		board.setPawnOnSpace(p2, s1);
+
+		let moves = [new MoveMain(p1, s1, 4)];
+		let rolls = [4, 4];
+
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
+	});
+
+	it('should move the furthest along pawn back to home on doublesPenalty');
 	it('should be able to make a bonus move upon receiving it');
-	it('should not be able to move a blockade together');
+
+	it('should not be able to move a blockade together', function() {
+		let player = new MFirstPlayer();
+		let turn = new Turn(player);
+		let init = new Board();
+		let post = new Board();
+		let p1 = new Pawn(1, Color.yellow);
+		let p2 = new Pawn(2, Color.yellow);
+		let s1 = new MainSpace(30);
+		let s2 = new MainSpace(34);
+		init.setPawnOnSpace(p1, s1);
+		init.setPawnOnSpace(p2, s1);
+		post.setPawnOnSpace(p1, s2);
+		post.setPawnOnSpace(p2, s2);
+
+		(() => turn.checkBlockadeMoves(init, post))
+			.should.throw('blockade has been moved together');
+	});
+
 	it('should not be able to move a blockade together with bonuses of 20');
 	it('should not be able to move a blockade together with bonuses of 10');
 	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
+
+	it('should be able to remake a blockade with' +
+		 'a roll of 1 and 2 in a triangle of pawns', function() {
+		let player = new MFirstPlayer();
+		let turn = new Turn(player);
+		let init = new Board();
+		let post = new Board();
+		let p1 = new Pawn(1, Color.yellow);
+		let p2 = new Pawn(2, Color.yellow);
+		let p3 = new Pawn(3, Color.yellow);
+		let s0 = new MainSpace(30);
+		let s1 = new MainSpace(31);
+		let s4 = new MainSpace(34);
+		init.setPawnOnSpace(p1, s0);
+		init.setPawnOnSpace(p2, s0);
+		init.setPawnOnSpace(p3, s1);
+		post.setPawnOnSpace(p1, s4);
+		post.setPawnOnSpace(p3, s4);
+
+		(() => turn.checkBlockadeMoves(init, post)).should.not.throw();
+	});
 	
   it('should only be call enterpiece on a 5 roll', function() {
 		let player = new MFirstPlayer();
@@ -180,6 +237,6 @@ describe("Turn", function() {
 		let moves = [new EnterPiece(pawn)];
 		let rolls = [2, 3];
 
-		(turn.allRollsConsumed(board, moves, rolls)).should.be.true;
+		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 });
