@@ -4,6 +4,7 @@ import { Board } from './Board';
 import { Die } from './Die';
 import { Player } from './players/Player';
 import { chooseMove } from './players/MPlayer';
+import { NestSpace } from './spaces/NestSpace';
 import { Move } from './moves/Move';
 import { EnterPiece } from './moves/EnterPiece';
 import { MoveMain } from './moves/MoveMain';
@@ -29,8 +30,9 @@ export class Turn {
 			if (rolls[0] == rolls[1]) {
 				doubles--;
 				if (doubles == 0) {
-					// implement moving farthest pawn back
 					this.player.doublesPenalty();
+					let farthest = this.getFarthestPawn(board);
+					board.setPawnOnSpace(farthest, new NestSpace(farthest.color));
 					break;
 				} else {
 					miniturn = true;
@@ -68,6 +70,13 @@ export class Turn {
 		return board;
 	}
 
+	getFarthestPawn(board: Board) {
+		return board.getPlayerPawns(this.player.color).reduce((far, curr) => 
+			far.space.distanceFromHome(this.player.color) < 
+				curr.space.distanceFromHome(this.player.color) ? 
+					far : curr).pawn;
+	}
+
 	// The helper function accepts the original board, the final board, and the moves.
 	// It checks to see if any blockades were moved together
 	// and that all of the die rolls were used.
@@ -86,6 +95,7 @@ export class Turn {
 		}
 	}
 
+	// TODO: some edge case that causes cheating or mplayer is actually cheating
 	allRollsConsumed(board: Board, moves: Move[], rolls: number[]): void {
 		if (moves[0] instanceof EnterPiece && 
 				rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {

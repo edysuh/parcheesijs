@@ -14,7 +14,7 @@ import { MoveHome } from '../src/moves/MoveHome';
 import { MFirstPlayer } from '../src/players/MPlayer';
 
 describe("Turn", function() {
-	it('should not be able to move another players pawns');
+	// it('should not be able to move another players pawns');
 
 	it('should not be able to ignore a die roll', function() {
 		let player = new MFirstPlayer();
@@ -180,8 +180,7 @@ describe("Turn", function() {
 		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
-	it('should move the furthest along pawn back to home on doublesPenalty');
-	it('should be able to make a bonus move upon receiving it');
+	// it('should be able to make a bonus move upon receiving it');
 
 	it('should not be able to move a blockade together', function() {
 		let player = new MFirstPlayer();
@@ -201,9 +200,9 @@ describe("Turn", function() {
 			.should.throw('blockade has been moved together');
 	});
 
-	it('should not be able to move a blockade together with bonuses of 20');
-	it('should not be able to move a blockade together with bonuses of 10');
-	it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
+	// it('should not be able to move a blockade together with bonuses of 20');
+	// it('should not be able to move a blockade together with bonuses of 10');
+	// it('should not be able to move a blockade together with doubles (two 3s and two 4s)');
 
 	it('should be able to remake a blockade with' +
 		 'a roll of 1 and 2 in a triangle of pawns', function() {
@@ -239,4 +238,27 @@ describe("Turn", function() {
 
 		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
+
+	it('should get the farthest pawn for doublesPenalty', function() {
+		let player = new MFirstPlayer();
+		player.startGame(Color.yellow);
+		let turn = new Turn(player);
+		let board = new Board();
+		let pawn0 = new Pawn(0, Color.yellow);
+		let pawn1 = new Pawn(1, Color.yellow);
+		let pawn2 = new Pawn(2, Color.yellow);
+		let pawn3 = new Pawn(3, Color.yellow);
+		let space0 = new MainSpace(20);
+		let space1 = new MainSpace(45);
+		let space2 = new HomeRowSpace(2, Color.yellow);
+		let space3 = new HomeRowSpace(5, Color.yellow);
+		board.setPawnOnSpace(pawn0, space0);
+		board.setPawnOnSpace(pawn1, space1);
+		board.setPawnOnSpace(pawn2, space2);
+		board.setPawnOnSpace(pawn3, space3);
+
+		(turn.getFarthestPawn(board)).should.deep.equal(pawn3);
+	});
+
+	// it('should move the furthest along pawn back to home on doublesPenalty');
 });
