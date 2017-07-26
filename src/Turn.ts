@@ -64,6 +64,7 @@ export class Turn {
 			} catch (e) {
 				board = initial;
 				console.log(e, '\n', this.player.color, 'player cheated. youre out.\n');
+				throw e;
 			}
 		}
 
@@ -77,9 +78,6 @@ export class Turn {
 					far : curr).pawn;
 	}
 
-	// The helper function accepts the original board, the final board, and the moves.
-	// It checks to see if any blockades were moved together
-	// and that all of the die rolls were used.
 	checkBlockadeMoves(initial: Board, post: Board): void {
 		let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade());
 		let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade());
@@ -95,30 +93,23 @@ export class Turn {
 		}
 	}
 
-	// TODO: some edge case that causes cheating or mplayer is actually cheating
 	allRollsConsumed(board: Board, moves: Move[], rolls: number[]): void {
-		if (moves[0] instanceof EnterPiece && 
-				rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {
-			return;
+		if (moves[0] instanceof EnterPiece && (rolls[0] + rolls[1] == 5)) {
+			if (rolls.length == 2) {
+				return;
+			} else {
+				moves.splice(0, 1);
+				rolls.splice(0, 2);
+			}
 		}
 
 		for (let i = 0; i < moves.length; i++) {
 			for (let j = 0; j < rolls.length; j++) {
-				if (moves[i] instanceof EnterPiece) {
-					if (rolls[j] == 5) {
-						rolls.splice(j, 1);
-						break;
-					}
-				} else if (moves[i] instanceof MoveMain) {
-					if (rolls[j] == (<MoveMain>moves[i]).dist) {
-						rolls.splice(j, 1);
-						break;
-					}
-				} else if (moves[i] instanceof MoveHome) {
-					if (rolls[j] == (<MoveHome>moves[i]).dist) {
-						rolls.splice(j, 1);
-						break;
-					}
+				if ((moves[i] instanceof EnterPiece) && (rolls[j] == 5) ||
+						(moves[i] instanceof MoveMain) && (rolls[j] == (<MoveMain>moves[i]).dist) ||
+						(moves[i] instanceof MoveHome) && (rolls[j] == (<MoveHome>moves[i]).dist)) {
+							rolls.splice(j, 1);
+							break;
 				}
 			}
 		}

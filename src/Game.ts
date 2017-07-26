@@ -28,9 +28,11 @@ export class Game {
 			}
 		}
 
+		let i = 0; 
 		while (this._players.length > 0) {
 			let players = this._players.splice(0, 4);
-			console.log(this.play(players), "is the WINNER!");
+			console.log(i, this.play(players), "is the WINNER!");
+			i++;
 		}
 		// console.log('no more games.');
 	}

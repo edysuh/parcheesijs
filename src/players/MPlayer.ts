@@ -13,6 +13,8 @@ import { MoveHome } from '../moves/MoveHome';
 import { EnterPiece } from '../moves/EnterPiece';
 
 export abstract class MPlayer extends Player {
+	name: string;
+
 	tryPawns(board: Board,
 					 rolls: number[],
 					 getPawnsInOrder: (b: Board, c: Color) => Pair[]): Move[] {
@@ -21,18 +23,17 @@ export abstract class MPlayer extends Player {
 		let canEnterWithSum = rolls.length == 2 && (rolls[0] + rolls[1] == 5);
 
 		for (let i = 0; i < pairs.length; i++) {
+			let saveRolls = cloneDeep(rolls);
+			let enter = false;
 			if (canEnterWithSum && pairs[i].space instanceof NestSpace) {
-				try {
-					let ep = new EnterPiece(pairs[i].pawn);
-					ep.move(board);
-					return [ep];
-				} catch (e) { }
+				enter = true;
+				rolls = [5];
 			}
 
 			for (let j = 0; j < rolls.length; j++) {
 				// this might be necessary later to prevent blockades moving together
 				// let saveBoard = cloneDeep(board);
-				let move = chooseMove(pairs[i], rolls[j]);
+				let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
 
 				try {
 					let moveresult = move.move(board);
@@ -49,8 +50,10 @@ export abstract class MPlayer extends Player {
 					break;
 				} catch (e) {
 					// board = cloneDeep(saveBoard);
-					// console.log(e);
 				}
+			}
+			if (enter && !(moves[0] instanceof EnterPiece)) {
+				rolls = saveRolls;
 			}
 			if (rolls.length == 0) { break; }
 		}

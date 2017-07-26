@@ -26,11 +26,22 @@ describe("Game", function() {
 		(Colors).should.include(game.play([p1, p2, p3, p4]));
 	});
 
+	it('should start multiple games if there are more than 4 players', function() {
+		this.timeout(10000);
+		let game = new Game();
+		
+		for (let i = 0; i < 100; i++) {
+			let p = (i % 2 == 0) ? new MFirstPlayer() : new MLastPlayer();
+			game.register(p);
+		}
+
+		game.start();
+	});
+
 		// need states:
 		// enum game.state { START, DOMOVE, DOUBLEPENALTY }
 		// (game.state).should.equal(state.START);
 
-	// it('should start multiple games if there are more than 4 players');
 	// it('should fill with MPlayers if there are not enough players');
 
 	// it('should enforce contracts between the game rules and the player');
