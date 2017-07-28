@@ -64,7 +64,6 @@ export class Turn {
 			} catch (e) {
 				board = initial;
 				console.log(e, '\n', this.player.color, 'player cheated. youre out.\n');
-				throw e;
 			}
 		}
 
@@ -79,6 +78,7 @@ export class Turn {
 	}
 
 	checkBlockadeMoves(initial: Board, post: Board): void {
+		// can limit to this.player.color pawns
 		let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade());
 		let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade());
 
@@ -124,6 +124,7 @@ export class Turn {
 				let errorThrown = false;
 				try {
 					move.move(board);
+					// cant just call this.checkBlockadeMoves b/c itll try the already moved pawn
 				} catch (e) {
 					errorThrown = true;
 				}

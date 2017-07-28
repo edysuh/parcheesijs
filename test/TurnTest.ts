@@ -166,13 +166,15 @@ describe("Turn", function() {
 		player.startGame(Color.yellow);
 		let turn = new Turn(player);
 
+		let init = new Board();
 		let board = new Board();
 		let p1 = new Pawn(1, Color.yellow);
 		let p2 = new Pawn(2, Color.yellow);
 		let s1 = new MainSpace(30);
 		let s2 = new MainSpace(34);
-		board.setPawnOnSpace(p1, s1);
-		board.setPawnOnSpace(p2, s1);
+		init.setPawnOnSpace(p1, s1);
+		init.setPawnOnSpace(p2, s1);
+		board.setPawnOnSpace(p1, s2);
 
 		let moves = [new MoveMain(p1, s1, 4)];
 		let rolls = [4, 4];

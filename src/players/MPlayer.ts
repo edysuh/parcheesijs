@@ -13,8 +13,6 @@ import { MoveHome } from '../moves/MoveHome';
 import { EnterPiece } from '../moves/EnterPiece';
 
 export abstract class MPlayer extends Player {
-	name: string;
-
 	tryPawns(board: Board,
 					 rolls: number[],
 					 getPawnsInOrder: (b: Board, c: Color) => Pair[]): Move[] {
@@ -52,6 +50,7 @@ export abstract class MPlayer extends Player {
 					// board = cloneDeep(saveBoard);
 				}
 			}
+
 			if (enter && !(moves[0] instanceof EnterPiece)) {
 				rolls = saveRolls;
 			}

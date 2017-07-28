@@ -10,11 +10,10 @@ export class HomeSpace extends Space {
 		this.color = color;
 	}
 	
-	setPawn(pawn: Pawn): null {
+	setPawn(pawn: Pawn): void {
 		if (this.color != pawn.color) { throw new Error("pawn is on wrong color home"); }
 		if (this._pawns.length >= 4) { throw new Error("max 4 pawns in home"); }
 		this._pawns.push(pawn);
-		return null;
 	}
 
 	getNextSpace(pawnColor?: Color): Space {

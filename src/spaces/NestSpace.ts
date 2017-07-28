@@ -12,22 +12,18 @@ export class NestSpace extends Space {
 		this.color = color;
 	}
 
-	setPawn(pawn: Pawn): null {
+	setPawn(pawn: Pawn): void {
 		if (this.color != pawn.color) { throw new Error("pawn is on wrong color nest"); }
 		if (this._pawns.length >= 4) { throw new Error("max 4 pawns in the nest"); }
 		this._pawns.push(pawn);
-		return null;
-	}
-	
-	getNextSpace(pawnColor?: Color): Space {
-		// should not be able to go to next space so easily
-		// return null; 
-		// -> TypeError: Class extends value undefined is not a constructor or null
-		return new ColoredSafeSpace(StartMap.get(this.color), this.color);
 	}
 	
 	isBlockade(): boolean {
 		return false;
+	}
+	
+	getNextSpace(pawnColor?: Color): Space {
+		return new ColoredSafeSpace(StartMap.get(this.color), this.color);
 	}
 	
 	equals(space: Space): boolean {
