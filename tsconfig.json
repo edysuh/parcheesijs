@@ -10,6 +10,8 @@
 		"baseUrl": "."
 	},
 	"include": [
+		"main.ts",
+		"play.ts",
 		"src/**/*",
 		"test/**/*"
 	],

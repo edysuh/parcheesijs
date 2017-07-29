@@ -1,9 +1,11 @@
+import * as net from 'net';
 import { cloneDeep } from 'lodash';
 
 import { Board } from './Board';
 import { Color, Colors } from './definitions';
 import { Turn } from './Turn';
 import { Player } from './players/Player';
+import { SPlayer } from './players/SPlayer';
 import { MFirstPlayer, MLastPlayer } from './players/MPlayer';
 
 export class Game {
@@ -21,10 +23,24 @@ export class Game {
 		this._players.push(player);
 	}
 
-	start() {
+	startServer(): void {
+		let server = net.createServer();
+
+		server.on('connection', conn => {
+			console.log('connection accepted');
+			let p = new SPlayer(conn);
+			this.register(p);
+		});
+
+		server.listen(8000, () => {
+			console.log('game server started at port 8000');
+		});
+	}
+
+	start(): void {
 		if (this._players.length % 4 != 0) {
 			for (let i = this._players.length % 4; i < Colors.length; i++) {
-				this._players.push(new MFirstPlayer());
+				this.register(new MFirstPlayer());
 			}
 		}
 
@@ -34,7 +50,6 @@ export class Game {
 			console.log(i, this.play(players), "is the WINNER!");
 			i++;
 		}
-		// console.log('no more games.');
 	}
 
 	play(players: Player[]): Color {

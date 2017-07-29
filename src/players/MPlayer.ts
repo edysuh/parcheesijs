@@ -13,66 +13,71 @@ import { MoveHome } from '../moves/MoveHome';
 import { EnterPiece } from '../moves/EnterPiece';
 
 export abstract class MPlayer extends Player {
-	tryPawns(board: Board,
-					 rolls: number[],
-					 getPawnsInOrder: (b: Board, c: Color) => Pair[]): Move[] {
-		let moves = [];
-		let pairs = getPawnsInOrder(board, this.color);
-		let canEnterWithSum = rolls.length == 2 && (rolls[0] + rolls[1] == 5);
 
-		for (let i = 0; i < pairs.length; i++) {
-			let saveRolls = cloneDeep(rolls);
-			let enter = false;
-			if (canEnterWithSum && pairs[i].space instanceof NestSpace) {
-				enter = true;
-				rolls = [5];
-			}
-
-			for (let j = 0; j < rolls.length; j++) {
-				// this might be necessary later to prevent blockades moving together
-				// let saveBoard = cloneDeep(board);
-				let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
-
-				try {
-					let moveresult = move.move(board);
-					board = moveresult.board;
-					if (moveresult.bonus) {
-						rolls.push(moveresult.bonus);
-					}
-					moves.push(move);
-
-					canEnterWithSum = false;
-					rolls.splice(j, 1);
-					pairs = getPawnsInOrder(board, this.color);
-					i = -1;
-					break;
-				} catch (e) {
-					// board = cloneDeep(saveBoard);
-				}
-			}
-
-			if (enter && !(moves[0] instanceof EnterPiece)) {
-				rolls = saveRolls;
-			}
-			if (rolls.length == 0) { break; }
-		}
-
-		return moves;
-	}
 }
 
 export class MFirstPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		return this.tryPawns(board, rolls, getPawnsInFirstOrder);
+		return tryPawns(board, rolls, this.color, getPawnsInFirstOrder);
 	}
 }
 
 export class MLastPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		return this.tryPawns(board, rolls, getPawnsInLastOrder);
+		return tryPawns(board, rolls, this.color, getPawnsInLastOrder);
 	}
 }
 
+
+// helpers 
+
+export function	tryPawns(board: Board,
+												 rolls: number[],
+												 color: Color,
+												 getPawnsInOrder: (b: Board, c: Color) => Pair[]): Move[] {
+	let moves = [];
+	let pairs = getPawnsInOrder(board, color);
+	let canEnterWithSum = rolls.length == 2 && (rolls[0] + rolls[1] == 5);
+
+	for (let i = 0; i < pairs.length; i++) {
+		let saveRolls = cloneDeep(rolls);
+		let enter = false;
+		if (canEnterWithSum && pairs[i].space instanceof NestSpace) {
+			enter = true;
+			rolls = [5];
+		}
+
+		for (let j = 0; j < rolls.length; j++) {
+			// this might be necessary later to prevent blockades moving together
+			// let saveBoard = cloneDeep(board);
+			let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
+
+			try {
+				let moveresult = move.move(board);
+				board = moveresult.board;
+				if (moveresult.bonus) {
+					rolls.push(moveresult.bonus);
+				}
+				moves.push(move);
+
+				canEnterWithSum = false;
+				rolls.splice(j, 1);
+				pairs = getPawnsInOrder(board, color);
+				i = -1;
+				break;
+			} catch (e) {
+				// board = cloneDeep(saveBoard);
+			}
+		}
+
+		if (enter && !(moves[0] instanceof EnterPiece)) {
+			rolls = saveRolls;
+		}
+		if (rolls.length == 0) { break; }
+	}
+
+	return moves;
+}
 
 export function getPawnsInFirstOrder(board: Board, color: Color): Pair[] {
 	let pairs = [];

@@ -38,12 +38,10 @@ describe("Game", function() {
 		game.start();
 	});
 
-		// need states:
-		// enum game.state { START, DOMOVE, DOUBLEPENALTY }
-		// (game.state).should.equal(state.START);
+	it('should start a game server');
+
 
 	// it('should fill with MPlayers if there are not enough players');
-
 	// it('should enforce contracts between the game rules and the player');
 	// it('should uphold behavioral contracts');
 	// it('should adher to sequencial contracts');
