@@ -8,23 +8,41 @@ import { Color } from '../../src/definitions';
 
 describe('build', function() {
 	it('should build an xml string from an object', function() {
-		let obj = 
-			{ 'start-game': {
-				'color': { 
-					_text: 'yellow' 
-				} 
-			}
-		};
-		(build(obj)).should.equal('<start-game><color>yellow</color></start-game>');
+		(build('start-game', Color.yellow)).should.equal('<start-game><color>yellow</color></start-game>');
 	});
 
-	it('should build an xml string from an object', function() {
+	it('should be able to parse then build', function() {
 		let s = '<start-game><color>yellow</color></start-game>';
 		let p = parse(s);
-		console.log('p', p);
-		let o = xml2js(s, { 'compact': true });
-		console.log('o', o);
-		let b = build(o);
-		console.log('b', b);
+		let b = build(p.type, p.color);
+		(b).should.equal(s);
+	});
+
+	it('should be able to build then parse', function() {
+		let o = {type: 'start-game', color: Color.green };
+		let b = build(o.type, o.color);
+		let p = parse(b);
+		(p).should.deep.equal(o);
+	});
+
+	it('should build doubles penalty', function() {
+		let b = build('doubles-penalty');
+		(b).should.equal('<doubles-penalty></doubles-penalty>');
+	});
+
+	it('should build void', function() {
+		let b = build('void');
+		(b).should.equal('<void></void>');
+
+		let obj = { dice : {
+				die: [
+					{ _text: '1' },
+					{ _text: '2' },
+					{ _text: '3' }
+				]
+			}
+		}
+		let a = js2xml(obj, { compact: true });
+		console.log('a___________________________', a);
 	});
 });

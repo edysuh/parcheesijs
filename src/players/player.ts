@@ -26,26 +26,23 @@ export abstract class Player {
 		
 		this._conn.on('data', data => {
 			let str = data.toString();
-			console.log(str);
+			console.log('str', str);
 
-			let obj = parse(str);
+			let parsed = parse(str);
 
-			if (obj['start-game']) {
-				let name = this.startGame(obj['start-game'].color._text);
-				let robj = {
-					'name': { 
-						_text: name
-					}
-				}
-				console.log('robj', robj);
-				let b = build(robj);
-				console.log('b', b);
-				this._conn.write(b);
+			switch (parsed.type) {
+				case 'start-game':
+					let name = this.startGame(parsed.color);
+					let b = build('name', name);
+					console.log('b', b);
+					this._conn.write(b);
+					break;
 
-			} else if (obj['do-move']) {
+				case 'do-move':
+					break;
 
-			} else if (obj['doubles-penalty']) {
-
+				case 'doubles-penalty':
+					break;
 			}
 		});
 		// switch for:

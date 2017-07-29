@@ -2,45 +2,37 @@ import { xml2js } from 'xml-js';
 
 import { Color } from '../../src/definitions';
 
-// interface xmlObj {
-// 	method: string;
-// 	color?: Color;
-// }
-
 interface ParseObj {
-	'start-game'?: string;
-	'name'?: string;
-	'do-move'?: string;
-	'moves'?: string;
-	'doubles-penalty'?: string;
-	'void'?: string;
+	[key: string]: any;
+	type: string;
+	color?: Color;
+	name?: string;
 }
 
 export function parse(xml: string): ParseObj {
-	return xml2js(xml, { 'compact': true });
-}
+	let obj = xml2js(xml, { 'compact': true });
+	let parsed: ParseObj = { type: undefined };
+	
+	if (obj['start-game']) {
+		parsed['type'] = 'start-game';
+		parsed['color'] = <Color>obj['start-game'].color._text;
 
-// get the parameters for each player method in the xml message
-// export function parse(xml: string): xmlObj {
-// 	let obj = xml2js(xml, { 'compact': true });
+	} else if (obj['name']) {
+		parsed['type'] = 'name';
+		parsed['name'] = obj['name']._text;
 
-// 	if (obj['start-game']) {
-// 		return parseStartGame(obj);
-// 	} else if (obj['name']) {
-// 		;
-// 	} else if (obj['do-move']) {
-// 		;
-// 	} else if (obj['moves']) {
-// 		;
-// 	} else if (obj['doubles-penalty']) {
-// 		;
-// 	} else if (obj['void']) {
-// 		;
-// 	}
-// }
+	} else if (obj['do-move']) {
+		;
 
-function parseColor(obj: any) { }
+	} else if (obj['moves']) {
+		;
 
-function parseStartGame(obj: any): { 'method': string, 'color': Color } {
-	return { 'method': 'start-game', 'color': <Color>obj['start-game'].color._text };
+	} else if (obj['doubles-penalty']) {
+		parsed['type'] = 'doubles-penalty';
+
+	} else if (obj['void']) {
+		parsed['type'] = 'void';
+	}
+
+	return parsed;
 }

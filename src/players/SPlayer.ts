@@ -23,22 +23,14 @@ export class SPlayer extends Player {
 	}
 
 	startGame(color: Color): string {
-		// encode startGame and send over network
 		this._color = color;
 
-		let obj = 
-			{ 'start-game': {
-				'color': { 
-					_text: color
-				} 
-			}
-		};
-		// overload the function
 		let xml = build('start-game', color);
 		this._conn.write(xml);
 
 		this._conn.on('data', data => {
 			let name = parse(data.toString());
+			console.log('name', name);
 			return name;
 		});
 	}
