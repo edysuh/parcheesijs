@@ -33,6 +33,7 @@ export class SPlayer extends Player {
 			console.log('name', name);
 			return name;
 		});
+		return '';
 	}
 
 	// encode board and rolls and shoot doMove message

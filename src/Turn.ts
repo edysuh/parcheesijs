@@ -77,6 +77,7 @@ export class Turn {
 					far : curr).pawn;
 	}
 
+	// TODO: fix check if move intentionally left to prevent moving blockade together
 	checkBlockadeMoves(initial: Board, post: Board): void {
 		// can limit to this.player.color pawns
 		let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade());
