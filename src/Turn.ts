@@ -43,6 +43,7 @@ export class Turn {
 			let moves = this.player.doMove(board, rolls);
 			let saveBoard = cloneDeep(board);
 
+			// TODO: if error push to end of moves array to try again later
 			for (let j = 0; j < moves.length; j++) {
 				try {
 					let moveresult = moves[j].move(board);

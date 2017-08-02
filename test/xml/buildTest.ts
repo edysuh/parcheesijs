@@ -61,6 +61,6 @@ describe('build', function() {
 								 new MoveMain(new Pawn(1, Color.green), new MainSpace(10), 20),
 								 new MoveHome(new Pawn(2, Color.yellow), new HomeRowSpace(2, Color.yellow), 4)];
 		
-		(build('moves', moves)).should.equal('<moves><enter-piece><pawn><color>blue</color><id>0</id></pawn></enter-piece><move-piece-main><pawn><color>green</color><id>1</id></pawn><start>10</start><dist>20</dist></move-piece-main><move-piece-home><pawn><color>yellow</color><id>2</id></pawn><start>2</start><dist>4</dist></move-piece-home></moves>')
+		(build('moves', moves)).should.equal('<moves><enter-piece><pawn><color>blue</color><id>0</id></pawn></enter-piece><move-piece-main><pawn><color>green</color><id>1</id></pawn><start>10</start><distance>20</distance></move-piece-main><move-piece-home><pawn><color>yellow</color><id>2</id></pawn><start>2</start><distance>4</distance></move-piece-home></moves>')
 	});
 });

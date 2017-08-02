@@ -5,7 +5,7 @@ import { MoveResult } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Move } from './Move';
 import { Space } from '../spaces/Space';
-import { NestSpace } from '../spaces/NestSpace';
+import { MainSpace } from '../spaces/MainSpace';
 import { HomeSpace } from '../spaces/HomeSpace';
 
 export class MoveMain implements Move {
@@ -24,8 +24,8 @@ export class MoveMain implements Move {
 		let currSpace = this.start;
 		let bonus = 0;
 
-		if (currSpace instanceof NestSpace) {
-			throw new Error("MoveMain cannot move pawns in the Nest");
+		if (!(currSpace instanceof MainSpace)) {
+			throw new Error("MoveMain cannot move pawns not on the main ring");
 		}
 
 		if (!currSpace.equals(newBoard.getSpaceForPawn(this.pawn))) {
@@ -39,12 +39,12 @@ export class MoveMain implements Move {
 			}
 		}
 
-		if (currSpace instanceof HomeSpace) {
-			throw new Error("MoveMain cannot move pawns into Home");
-		}
-
 		if (newBoard.isBop(this.pawn, currSpace)) {
 			bonus = 20;
+		}
+
+		if (currSpace instanceof HomeSpace) {
+			bonus = 10;
 		}
 
 		newBoard.setPawnOnSpace(this.pawn, currSpace);

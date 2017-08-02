@@ -5,7 +5,7 @@ import { MoveResult } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Move } from './Move';
 import { Space } from '../spaces/Space';
-import { NestSpace } from '../spaces/NestSpace';
+import { HomeRowSpace } from '../spaces/HomeRowSpace';
 import { HomeSpace } from '../spaces/HomeSpace';
 
 export class MoveHome implements Move {
@@ -22,10 +22,10 @@ export class MoveHome implements Move {
 	move(board: Board): MoveResult {
 		let newBoard = cloneDeep(board);
 		let currSpace = this.start;
-		let bonus = 10;
+		let bonus = 0;
 
-		if (currSpace instanceof NestSpace) {
-			throw new Error("MoveHome cannot move pawns in the Nest");
+		if (!(currSpace instanceof HomeRowSpace)) {
+			throw new Error("MoveHome cannot move pawns not on a home row");
 		}
 
 		if (!currSpace.equals(newBoard.getSpaceForPawn(this.pawn))) {
@@ -39,8 +39,8 @@ export class MoveHome implements Move {
 			}
 		}
 
-		if (!(currSpace instanceof HomeSpace)) {
-			throw new Error("MoveHome did not move pawn into Home");
+		if (currSpace instanceof HomeSpace) {
+			bonus = 10;
 		}
 
 		newBoard.setPawnOnSpace(this.pawn, currSpace);

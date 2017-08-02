@@ -41,18 +41,18 @@ describe('MoveMain', function() {
 			.should.be.true;
 	});
 
-	it('should move inside of homerow', function() {
-		let pawn = new Pawn(0, Color.blue);
-		let space = new HomeRowSpace(1, Color.blue);
-		let dist = 5;
-		let mm = new MoveMain(pawn, space, dist);
-
+  it('should be able to move from the main ring directly home', function() {
 		let board = new Board();
+		let pawn = new Pawn(1, Color.yellow);
+		let space = new MainSpace(49);
 		board.setPawnOnSpace(pawn, space);
-
+		
+		let mm = new MoveMain(pawn, space, 10);
 		let moveresult = mm.move(board);
-		(moveresult.board.getSpaceForPawn(pawn).equals(new HomeRowSpace(6, Color.blue)))
+		
+		(moveresult.board.getSpaceForPawn(pawn).equals(new HomeSpace(Color.yellow)))
 			.should.be.true;
+		(moveresult.bonus).should.equal(10);
 	});
 
 	it('should have the specified pawn on the specified space', function() {
@@ -148,23 +148,23 @@ describe('MoveMain', function() {
 		(moveresult.board.isBlockade(space)).should.be.false;
 	});
 	
-	it('should not move a pawn from the nest', function() {
+	it('should not move a pawn in the nest', function() {
 		let board = new Board();
 		let pawn = new Pawn(1, Color.red);
 		let space = new NestSpace(Color.red);
 		board.setPawnOnSpace(pawn, space);
 
 		let mm = new MoveMain(pawn, space, 5);
-		(() => mm.move(board)).should.throw("MoveMain cannot move pawns in the Nest");
+		(() => mm.move(board)).should.throw("MoveMain cannot move pawns not on the main ring");
 	});
 	
-	it('should not move a pawn into home', function() {
+	it('should not move a pawn in home', function() {
 		let board = new Board();
 		let pawn = new Pawn(1, Color.red);
-		let space = new HomeRowSpace(1, Color.red);
+		let space = new HomeSpace(Color.red);
 		board.setPawnOnSpace(pawn, space);
 
 		let mm = new MoveMain(pawn, space, 6);
-		(() => mm.move(board)).should.throw("MoveMain cannot move pawns into Home");
+		(() => mm.move(board)).should.throw("MoveMain cannot move pawns not on the main ring");
 	});
 });

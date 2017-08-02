@@ -5,8 +5,10 @@ import { Color, NUM_PAWNS, Pair } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Player } from '../players/Player';
 import { Space } from '../spaces/Space';
-import { HomeSpace } from '../spaces/HomeSpace';
 import { NestSpace } from '../spaces/NestSpace';
+import { MainSpace } from '../spaces/MainSpace';
+import { HomeRowSpace } from '../spaces/HomeRowSpace';
+import { HomeSpace } from '../spaces/HomeSpace';
 import { Move } from '../moves/Move';
 import { MoveMain } from '../moves/MoveMain';
 import { MoveHome } from '../moves/MoveHome';
@@ -103,9 +105,9 @@ export function getPawnsInLastOrder(board: Board, color: Color): Pair[] {
 export function chooseMove(pair: Pair, roll: number): Move {
 	if (pair.space instanceof NestSpace && roll == 5) {
 		return new EnterPiece(pair.pawn);
-	} else if (pair.space.distanceFromHome(pair.pawn.color) == roll) {
-		return new MoveHome(pair.pawn, pair.space, roll);
-	} else {
+	} else if (pair.space instanceof MainSpace) {
 		return new MoveMain(pair.pawn, pair.space, roll);
+	} else if (pair.space instanceof HomeRowSpace) {
+		return new MoveHome(pair.pawn, pair.space, roll);
 	}
 }

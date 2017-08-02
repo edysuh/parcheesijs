@@ -24,28 +24,14 @@ describe("MoveHome", function() {
 		(moveresult.bonus).should.equal(10);
 	});
 
-	it('should throw an error if it doesnt move a pawn into home', function() {
-		let board = new Board();
-		let pawn = new Pawn(1, Color.yellow);
-		let space = new HomeRowSpace(3, Color.yellow);
-		board.setPawnOnSpace(pawn, space);
+	// it('should throw an error if it doesnt move a pawn into home', function() {
+	// 	let board = new Board();
+	// 	let pawn = new Pawn(1, Color.yellow);
+	// 	let space = new HomeRowSpace(3, Color.yellow);
+	// 	board.setPawnOnSpace(pawn, space);
 		
-		let mh = new MoveHome(pawn, space, 3);
+	// 	let mh = new MoveHome(pawn, space, 3);
 		
-		(() => mh.move(board)).should.throw("MoveHome did not move pawn into Home");
-	});
-
-  it('should be able to move from the main ring directly home', function() {
-		let board = new Board();
-		let pawn = new Pawn(1, Color.yellow);
-		let space = new MainSpace(49);
-		board.setPawnOnSpace(pawn, space);
-		
-		let mh = new MoveHome(pawn, space, 10);
-		let moveresult = mh.move(board);
-		
-		(moveresult.board.getSpaceForPawn(pawn).equals(new HomeSpace(Color.yellow)))
-			.should.be.true;
-		(moveresult.bonus).should.equal(10);
-	});
+	// 	(() => mh.move(board)).should.throw("MoveHome did not move pawn into Home");
+	// });
 });

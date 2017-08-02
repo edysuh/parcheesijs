@@ -1,6 +1,6 @@
 import { xml2js } from 'xml-js';
 
-import { BoardObj } from './build';
+import { BoardObj, MovesObj, MoveObj } from './build';
 
 import { Board } from '../Board';
 import { Pawn } from '../Pawn';
@@ -29,28 +29,27 @@ export function parse(xml: string): ParseObj {
 	let parsed: ParseObj = { type: undefined };
 	
 	if (obj['start-game']) {
-		parsed['type'] = 'start-game';
-		parsed['color'] = <Color>obj['start-game'].color._text;
+		parsed.type = 'start-game';
+		parsed.color = <Color>obj['start-game'].color._text;
 
 	} else if (obj['name']) {
-		parsed['type'] = 'name';
-		parsed['name'] = obj['name']._text;
+		parsed.type = 'name';
+		parsed.name = obj['name']._text;
 
 	} else if (obj['do-move']) {
-		parsed['type'] = 'do-move';
-		parsed['board'] = parseBoard(obj['do-move'].board);
-		parsed['dice'] = obj['do-move'].dice.die.map((el: {_text: string}) => parseInt(el._text));
-	} else if (obj['moves']) {
-		console.log(obj['moves']);
+		parsed.type = 'do-move';
+		parsed.board = parseBoard(obj['do-move'].board);
+		parsed.dice = obj['do-move'].dice.die.map((el: {_text: string}) => parseInt(el._text));
 
-		parsed['type'] = 'moves';
-		parsed['moves'] = parseMoves(obj['moves']);
+	} else if (obj['moves']) {
+		parsed.type = 'moves';
+		parsed.moves = parseMoves(obj['moves']);
 
 	} else if (obj['doubles-penalty']) {
-		parsed['type'] = 'doubles-penalty';
+		parsed.type = 'doubles-penalty';
 
 	} else if (obj['void']) {
-		parsed['type'] = 'void';
+		parsed.type = 'void';
 	}
 
 	return parsed;
@@ -87,23 +86,59 @@ function parseBoard(bobj: BoardObj) {
 	return board;
 }
 
-function parseMoves(mobj: object): Move[] {
+function parseMoves(mobj: MovesObj): Move[] {
 	let moves: Move[] = [];
 
-	// if (mobj['enter-piece']) {
-	// 	let makeEP = (o) => {
-	// 		let p = new Pawn(parseInt(o.pawn.id._text), <Color>o.pawn.color._text);
-	// 		moves.push(new EnterPiece(p));
-	// 	}
-	// 	if (mobj['enter-piece'] instanceof Array) {
-	// 		for (let i = 0; i < mobj['enter-piece'].length; i++) {
-	// 			makeEP(mobj['enter-piece'][i]);
-	// 		}
-	// 	} else {
-	// 		makeEP(mobj['enter-piece']);
-	// 	}
-	// }
+	if (mobj['enter-piece']) {
+		let makeEP = (o: MoveObj) => {
+			let p = new Pawn(parseInt(o.pawn.id._text), <Color>o.pawn.color._text);
+			moves.push(new EnterPiece(p));
+		}
 
-	console.log('moves', moves);
+		if (mobj['enter-piece'] instanceof Array) {
+			let ep = <MoveObj[]>mobj['enter-piece'];
+			for (let i = 0; i < ep.length; i++) {
+				makeEP(ep[i]);
+			}
+		} else {
+			makeEP(<MoveObj>mobj['enter-piece']);
+		}
+	}
+
+	if (mobj['move-piece-main']) {
+		let makeMM = (o: MoveObj) => {
+			let p = new Pawn(parseInt(o.pawn.id._text), <Color>o.pawn.color._text);
+			let s = new MainSpace(parseInt(o.start._text));
+			moves.push(new MoveMain(p, s, parseInt(o.distance._text)));
+		}
+
+		if (mobj['move-piece-main'] instanceof Array) {
+			let mm = <MoveObj[]>mobj['move-piece-main'];
+			for (let i = 0; i < mm.length; i++) {
+				makeMM(mm[i]);
+			}
+		} else {
+			makeMM(<MoveObj>mobj['move-piece-main']);
+		}
+	}
+
+	if (mobj['move-piece-home']) {
+		let makeMH = (o: MoveObj) => {
+			let p = new Pawn(parseInt(o.pawn.id._text), <Color>o.pawn.color._text);
+			let s = new HomeRowSpace(parseInt(o.start._text), <Color>o.pawn.color._text);
+			moves.push(new MoveHome(p, s, parseInt(o.distance._text)));
+		}
+
+		if (mobj['move-piece-home'] instanceof Array) {
+			let mh = <MoveObj[]>mobj['move-piece-home'];
+			for (let i = 0; i < mh.length; i++) {
+				makeMH(mh[i]);
+			}
+		} else {
+			makeMH(<MoveObj>mobj['move-piece-home']);
+		}
+	}
+
 	return moves;
 }
+

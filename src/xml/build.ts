@@ -16,7 +16,7 @@ export interface XMLObj {
 	'start-game'?: ColorObj;
 	name?: TextObj;
 	'do-move'?: { board: BoardObj, dice: DiceObj };
-	moves?: MoveObj[];
+	moves?: MovesObj[];
 	'doubles-penalty'?: object;
 	void?: object;
 }
@@ -44,28 +44,17 @@ interface HomeObj {
 	pawn: PawnObj[];
 }
 
-interface MoveObj { }
-
-interface EnterPieceObj extends MoveObj {
-	'enter-piece': {
-		pawn: PawnObj;
-	};
+// TODO: modify buildMoves to build an array if more than one
+export interface MovesObj {
+	'enter-piece'?: MoveObj | MoveObj[];
+	'move-piece-main'?: MoveObj | MoveObj[];
+	'move-piece-home'?: MoveObj | MoveObj[];
 }
 
-interface MoveMainObj extends MoveObj {
-	'move-main': {
-		pawn: PawnObj;
-		start: TextObj;
-		dist: TextObj;
-	}
-}
-
-interface MoveHomeObj extends MoveObj {
-	'move-home': {
-		pawn: PawnObj;
-		start: TextObj;
-		dist: TextObj;
-	}
+export interface MoveObj {
+	pawn: PawnObj;
+	start?: TextObj;
+	distance?: TextObj;
 }
 
 interface PawnObj {
@@ -148,7 +137,7 @@ function buildBoard(board: Board): BoardObj {
 
 		} else if (sp instanceof MainSpace) {
 			for (let j = 0; j < sp.pawns.length; j++) {
-				main['piece-loc'].push({ 
+				main['piece-loc'].push({
 					pawn: buildPawn(sp.pawns[j]),
 					loc: { _text: String((<MainSpace>sp).index) }
 				});
@@ -175,7 +164,7 @@ function buildPawn(pawn: Pawn): PawnObj {
 	return { color: { _text: String(pawn.color) }, id: { _text: String(pawn.id) } };
 }
 
-function buildMoves(moves: Move[]): MoveObj[] {
+function buildMoves(moves: Move[]): MovesObj[] {
 	let mobj = [];
 	for (let i = 0; i < moves.length; i++) {
 		let m = moves[i];
@@ -189,7 +178,7 @@ function buildMoves(moves: Move[]): MoveObj[] {
 				'move-piece-main': {
 					pawn: buildPawn(m.pawn),
 					start: { _text: String((<MainSpace>(m.start)).index) },
-					dist: { _text: String(m.dist) }
+					distance: { _text: String(m.dist) }
 				}
 			});
 
@@ -197,8 +186,8 @@ function buildMoves(moves: Move[]): MoveObj[] {
 			mobj.push({
 				'move-piece-home': {
 					pawn: buildPawn(m.pawn),
-					start: { _text: String((<MainSpace>(m.start)).index) },
-					dist: { _text: String(m.dist) }
+					start: { _text: String((<HomeRowSpace>(m.start)).index) },
+					distance: { _text: String(m.dist) }
 				}
 			});
 		}

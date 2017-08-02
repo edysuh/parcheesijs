@@ -10,6 +10,9 @@ import { NestSpace } from '../../src/spaces/NestSpace';
 import { MainSpace } from '../../src/spaces/MainSpace';
 import { HomeRowSpace } from '../../src/spaces/HomeRowSpace';
 import { HomeSpace } from '../../src/spaces/HomeSpace';
+import { EnterPiece } from '../../src/moves/EnterPiece';
+import { MoveMain } from '../../src/moves/MoveMain';
+import { MoveHome } from '../../src/moves/MoveHome';
 
 describe('parse', function() {
 	it('should parse start game', function() {
@@ -49,8 +52,14 @@ describe('parse', function() {
 	});
 
 	it('should parse moves', function() {
-		let xml = '<moves><enter-piece><pawn><color>blue</color><id>0</id></pawn></enter-piece><enter-piece><pawn><color>blue</color><id>1</id></pawn></enter-piece><move-piece-main><pawn><color>green</color><id>1</id></pawn><start>10</start><dist>20</dist></move-piece-main><move-piece-home><pawn><color>yellow</color><id>2</id></pawn><start>2</start><dist>4</dist></move-piece-home></moves>';
+		let xml = '<moves><enter-piece><pawn><color>blue</color><id>0</id></pawn></enter-piece><enter-piece><pawn><color>blue</color><id>1</id></pawn></enter-piece><move-piece-main><pawn><color>green</color><id>1</id></pawn><start>10</start><distance>20</distance></move-piece-main><move-piece-home><pawn><color>yellow</color><id>2</id></pawn><start>2</start><distance>4</distance></move-piece-home></moves>';
 
 		let p = parse(xml);
+
+		let moves = [new EnterPiece(new Pawn(0, Color.blue)),
+								 new EnterPiece(new Pawn(1, Color.blue)),
+								 new MoveMain(new Pawn(1, Color.green), new MainSpace(10), 20),
+								 new MoveHome(new Pawn(2, Color.yellow), new HomeRowSpace(2, Color.yellow), 4)];
+		(p).should.deep.equal({ type: 'moves', moves: moves });
 	});
 });

@@ -208,9 +208,17 @@ describe('MPlayer', function() {
 		(chooseMove({ pawn, space }, roll)).should.deep.equal(new EnterPiece(pawn));
 	});
 
-	it('should choose a MoveHome if the roll equals the distance remaining', function() {
+	it('should choose a MoveMain if pawn is on the main ring', function() {
 		let pawn = new Pawn(1, Color.blue);
-		let space = new HomeRowSpace(2, Color.blue);
+		let space = new MainSpace(10);
+		let roll = 2;
+
+		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveMain(pawn, space, roll));
+	});
+
+	it('should choose a MoveHome if pawn in on the home row', function() {
+		let pawn = new Pawn(1, Color.blue);
+		let space = new HomeRowSpace(1, Color.blue);
 		let roll = 5;
 
 		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveHome(pawn, space, roll));
@@ -223,12 +231,4 @@ describe('MPlayer', function() {
 
 	// 	(chooseMove(pawn, space, roll) === null).should.be.true;
 	// });
-
-	it('should choose a MoveMain in all other situations', function() {
-		let pawn = new Pawn(1, Color.blue);
-		let space = new HomeRowSpace(1, Color.blue);
-		let roll = 2;
-
-		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveMain(pawn, space, roll));
-	});
 });
