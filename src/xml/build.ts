@@ -21,7 +21,7 @@ export interface XMLObj {
 	void?: object;
 }
 
-interface BoardObj {
+export interface BoardObj {
 	start: StartObj;
 	main: MainObj;
 	'home-rows': HomeRowObj;
@@ -44,11 +44,7 @@ interface HomeObj {
 	pawn: PawnObj[];
 }
 
-interface MoveObj {
-	// pawn: PawnObj;
-	// start?: TextObj;
-	// dist?: TextObj;
-}
+interface MoveObj { }
 
 interface EnterPieceObj extends MoveObj {
 	'enter-piece': {

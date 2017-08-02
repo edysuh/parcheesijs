@@ -14,7 +14,7 @@ describe("Game", function() {
 		(game.players).should.include(p1);
 	});
 
-	it('should register a player on connection and send them a color (network version)');
+	// it('should register a player on connection and send them a color (network version)');
 
 	it('should play a game with 4 players', function() {
 		let game = new Game();
@@ -38,7 +38,7 @@ describe("Game", function() {
 		game.start();
 	});
 
-	it('should start a game server');
+	// it('should start a game server');
 
 
 	// it('should fill with MPlayers if there are not enough players');
