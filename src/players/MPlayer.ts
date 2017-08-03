@@ -50,7 +50,7 @@ export function	tryPawns(board: Board,
 		}
 
 		for (let j = 0; j < rolls.length; j++) {
-			// this might be necessary later to prevent blockades moving together
+			// TODO: this will be necessary later to prevent blockades moving together
 			// let saveBoard = cloneDeep(board);
 			let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
 

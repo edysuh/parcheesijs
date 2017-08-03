@@ -28,11 +28,14 @@ export class SPlayer extends Player {
 		let xml = build('start-game', color);
 		this._conn.write(xml);
 
+		// this need to happen within a callback
 		this._conn.on('data', data => {
 			let name = parse(data.toString());
-			console.log('name', name);
+			// console.log('name', name);
 			return name;
 		});
+
+		// remove eventually
 		return '';
 	}
 

@@ -26,7 +26,7 @@ export abstract class Player {
 		
 		this._conn.on('data', data => {
 			let str = data.toString();
-			console.log('str', str);
+			// console.log('str', str);
 
 			let parsed = parse(str);
 
@@ -34,7 +34,7 @@ export abstract class Player {
 				case 'start-game':
 					let name = this.startGame(parsed.color);
 					let b = build('name', name);
-					console.log('b', b);
+					// console.log('b', b);
 					this._conn.write(b);
 					break;
 
@@ -45,10 +45,6 @@ export abstract class Player {
 					break;
 			}
 		});
-		// switch for:
-		// - startGame
-		// - doMove
-		// - doublesPenalty
 	}
 	
 	startGame(color: Color): string {

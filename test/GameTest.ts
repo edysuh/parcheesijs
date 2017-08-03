@@ -26,11 +26,12 @@ describe("Game", function() {
 		(Colors).should.include(game.play([p1, p2, p3, p4]));
 	});
 
-	it.skip('should start multiple games if there are more than 4 players', function() {
+	it('should start multiple games if there are more than 4 players', function() {
 		this.timeout(10000);
 		let game = new Game();
 		
-		for (let i = 0; i < 100; i++) {
+		let numPlayers = 4;
+		for (let i = 0; i < numPlayers; i++) {
 			let p = (i % 2 == 0) ? new MLastPlayer() : new MLastPlayer();
 			game.register(p);
 		}

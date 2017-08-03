@@ -13,8 +13,11 @@ describe('SPlayer', function() {
 		let splayer: SPlayer;
 		server.on('connection', conn => {
 			splayer = new SPlayer(conn);
+
 			let xml = splayer.startGame(Color.red);
-			console.log('xml', xml);
+			// this is not working as intended
+			// (xml).should.equal('');
+			// console.log('xml', xml);
 			(xml).should.equal('<name>red player</name>');
 		});
 

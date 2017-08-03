@@ -30,6 +30,10 @@ export class Game {
 			console.log('connection accepted');
 			let p = new SPlayer(conn);
 			this.register(p);
+
+			// tmp: for testing async
+			let r = p.startGame(Color.blue);
+			// console.log('r', r);
 		});
 
 		server.listen(8000, () => {

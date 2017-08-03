@@ -25,6 +25,7 @@ export class Board {
 		return this._spaces;
 	}
 
+	// for debugging
 	display(): void {
 		for (let i = 0; i < this._spaces.length; i++) {
 			console.log(this._spaces[i]);
@@ -78,7 +79,7 @@ export class Board {
 
 	// matches arbitrarily given space with a space on Board, by index (and sometimes color),
 	// in order to have access to the stored pawns
-	// TODO: can be bad to be calling this when given space doesnt have any pawns
+	// can be bad to be calling this when given space doesnt have any pawns?
 	getSpaceOnBoard(space: Space): Space {
 		return this._spaces.filter(sp => space.equals(sp))[0];
 	}
