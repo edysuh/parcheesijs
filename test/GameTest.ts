@@ -16,7 +16,7 @@ describe("Game", function() {
 
 	// it('should register a player on connection and send them a color (network version)');
 
-	it('should play a game with 4 players', function() {
+	it.skip('should play a game with 4 players', function() {
 		let game = new Game();
 		let p1 = new MFirstPlayer();
 		let p2 = new MFirstPlayer();
@@ -26,7 +26,7 @@ describe("Game", function() {
 		(Colors).should.include(game.play([p1, p2, p3, p4]));
 	});
 
-	it('should start multiple games if there are more than 4 players', function() {
+	it.skip('should start multiple games if there are more than 4 players', function() {
 		this.timeout(10000);
 		let game = new Game();
 		

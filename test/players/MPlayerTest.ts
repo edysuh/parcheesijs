@@ -224,6 +224,30 @@ describe('MPlayer', function() {
 		(chooseMove({ pawn, space }, roll)).should.deep.equal(new MoveHome(pawn, space, roll));
 	});
 
+	it('should not move a blockade together', function() {
+		let board = new Board();
+		let mlplayer = new MLastPlayer();
+		mlplayer.startGame(Color.yellow);
+
+		let pawn0 = new Pawn(0, Color.yellow);
+		let pawn1 = new Pawn(1, Color.yellow);
+		let pawn2 = new Pawn(2, Color.yellow);
+		let pawn3 = new Pawn(3, Color.yellow);
+		let space0 = new NestSpace(Color.yellow);
+		let space1 = new MainSpace(23);
+		let space2 = new MainSpace(23);
+		let space3 = new HomeSpace(Color.yellow);
+
+		board.setPawnOnSpace(pawn0, space0);
+		board.setPawnOnSpace(pawn1, space1);
+		board.setPawnOnSpace(pawn2, space2);
+		board.setPawnOnSpace(pawn3, space3);
+
+		let moves = mlplayer.doMove(board, [6, 6]);
+
+		(moves).should.deep.equal([new MoveMain(pawn2, space1, 6)]);
+	});
+
 	// it('should choose no move if the distance remaining is less than the roll', function() {
 	// 	let pawn = new Pawn(1, Color.blue);
 	// 	let space = new HomeRowSpace(5, Color.blue);

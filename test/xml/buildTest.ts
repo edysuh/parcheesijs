@@ -16,11 +16,11 @@ import { MoveHome } from '../../src/moves/MoveHome';
 
 describe('build', function() {
 	it('should build a start game', function() {
-		(build('start-game', Color.yellow)).should.equal('<start-game><color>yellow</color></start-game>');
+		(build('start-game', Color.yellow)).should.equal('<start-game>yellow</start-game>');
 	});
 
 	it('should be able to parse then build', function() {
-		let s = '<start-game><color>yellow</color></start-game>';
+		let s = '<start-game>yellow</start-game>';
 		let p = parse(s);
 		let b = build(p.type, p.color);
 		(b).should.equal(s);

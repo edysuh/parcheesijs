@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 
 import { Board } from '../Board';
 import { Color, NUM_PAWNS, Pair } from '../definitions';
@@ -56,6 +56,13 @@ export function	tryPawns(board: Board,
 
 			try {
 				let moveresult = move.move(board);
+				// for (let i = 0; i < moves.length; i++) {
+				// 	if ((<MoveMain>move).start.equals((<MoveMain>move[i]).start) &&
+				// 		  (<MoveMain>move).dist == (<MoveMain>moves[i]).dist) {
+				// 		console.log('move and moves', move, moves[i]);
+				// 		throw new Error("tried to move a blockade together");
+				// 	}
+				// }
 				board = moveresult.board;
 				if (moveresult.bonus) {
 					rolls.push(moveresult.bonus);
@@ -68,6 +75,7 @@ export function	tryPawns(board: Board,
 				i = -1;
 				break;
 			} catch (e) {
+				// console.log('e', e);
 				// board = cloneDeep(saveBoard);
 			}
 		}

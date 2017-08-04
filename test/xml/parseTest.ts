@@ -16,7 +16,7 @@ import { MoveHome } from '../../src/moves/MoveHome';
 
 describe('parse', function() {
 	it('should parse start game', function() {
-		let x = "<start-game><color>green</color></start-game>";
+		let x = "<start-game>green</start-game>";
 		(parse(x)).should.deep.equal({type: 'start-game', color: Color.green });
 	});
 

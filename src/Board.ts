@@ -27,6 +27,7 @@ export class Board {
 
 	// for debugging
 	display(): void {
+		console.log('\n--------------------------------------------');
 		for (let i = 0; i < this._spaces.length; i++) {
 			console.log(this._spaces[i]);
 		}

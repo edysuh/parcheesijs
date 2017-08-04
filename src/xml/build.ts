@@ -13,7 +13,7 @@ import { MoveMain } from '../moves/MoveMain';
 import { MoveHome } from '../moves/MoveHome';
 
 export interface XMLObj {
-	'start-game'?: ColorObj;
+	'start-game'?: TextObj;
 	name?: TextObj;
 	'do-move'?: { board: BoardObj, dice: DiceObj };
 	moves?: MovesObj[];
@@ -66,10 +66,6 @@ interface DiceObj {
 	die: TextObj[];
 }
 
-interface ColorObj {
-	color: TextObj;
-}
-
 interface TextObj {
 	_text: string;
 }
@@ -86,7 +82,7 @@ export function build(type: string,
 	let build: XMLObj = { };
 	switch (type) {
 		case 'start-game':
-			build['start-game'] = { color: { _text: <string>input } };
+			build['start-game'] = { _text: <string>input };
 			break;
 
 		case 'name':
