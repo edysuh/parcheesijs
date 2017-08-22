@@ -1,7 +1,7 @@
 import { isEqual, cloneDeep } from 'lodash';
 
 import { Board } from '../Board';
-import { Color, NUM_PAWNS, Pair } from '../definitions';
+import { Color, NUM_PAWNS, Pair, MoveResult } from '../definitions';
 import { Pawn } from '../Pawn';
 import { Player } from '../players/Player';
 import { Space } from '../spaces/Space';
@@ -31,6 +31,14 @@ export class MLastPlayer extends MPlayer {
 }
 
 
+/* get pawns in order
+ *
+ * at each iteration
+ *		- rolls * pawns_available = total_possible_moves_this_iter
+ *		- rolls = rolls
+ *
+ */
+
 // helpers 
 
 export function	tryPawns(board: Board,
@@ -49,36 +57,37 @@ export function	tryPawns(board: Board,
 			rolls = [5];
 		}
 
-		for (let j = 0; j < rolls.length; j++) {
-			// TODO: this will be necessary later to prevent blockades moving together
-			// let saveBoard = cloneDeep(board);
-			let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
-
-			try {
-				let moveresult = move.move(board);
-				// for (let i = 0; i < moves.length; i++) {
-				// 	if ((<MoveMain>move).start.equals((<MoveMain>move[i]).start) &&
-				// 		  (<MoveMain>move).dist == (<MoveMain>moves[i]).dist) {
-				// 		console.log('move and moves', move, moves[i]);
-				// 		throw new Error("tried to move a blockade together");
-				// 	}
-				// }
-				board = moveresult.board;
-				if (moveresult.bonus) {
-					rolls.push(moveresult.bonus);
+		rollsLoop:
+			for (let j = 0; j < rolls.length; j++) {
+				let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
+				
+				// check for blockade moves
+				if (move != undefined) {
+					for (let i = 0; i < moves.length; i++) {
+						if (moves[i].hasOwnProperty('start') && move.hasOwnProperty('start') ) {
+							if ((<MoveMain>moves[i]).start.equals((<MoveMain>move).start) &&
+									(<MoveMain>moves[i]).dist == rolls[j]) {
+								break rollsLoop;
+							}
+						}
+					}
 				}
-				moves.push(move);
 
-				canEnterWithSum = false;
-				rolls.splice(j, 1);
-				pairs = getPawnsInOrder(board, color);
-				i = -1;
-				break;
-			} catch (e) {
-				// console.log('e', e);
-				// board = cloneDeep(saveBoard);
+				try {
+					let moveresult = move.move(board);
+					board = moveresult.board;
+					if (moveresult.bonus) {
+						rolls.push(moveresult.bonus);
+					}
+					moves.push(move);
+
+					canEnterWithSum = false;
+					rolls.splice(j, 1);
+					pairs = getPawnsInOrder(board, color);
+					i = -1;
+					break;
+				} catch (e) { }
 			}
-		}
 
 		if (enter && !(moves[0] instanceof EnterPiece)) {
 			rolls = saveRolls;
