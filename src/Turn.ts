@@ -1,5 +1,6 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
+import { Color } from './definitions';
 import { Board } from './Board';
 import { Die } from './Die';
 import { Player } from './players/Player';
@@ -60,7 +61,7 @@ export class Turn {
 
 			try {
 				this.allRollsConsumed(board, moves, rolls)
-				this.checkBlockadeMoves(initial, board);
+				checkBlockadeMoves(initial, board, this.player.color);
 			} catch (e) {
 				board = initial;
 				console.log(e, '\n', this.player.color, 'player cheated. youre out.\n');
@@ -77,23 +78,7 @@ export class Turn {
 					far : curr).pawn;
 	}
 
-	// TODO: fix check if move intentionally left to prevent moving blockade together
-	checkBlockadeMoves(initial: Board, post: Board): void {
-		// can limit to this.player.color pawns
-		let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade());
-		let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade());
-
-		for (let i = 0; i < initBlockSpaces.length; i++) {
-			let pawns = initBlockSpaces[i].pawns;
-			for (let j = 0; j < postBlockSpaces.length; j++) {
-				if (postBlockSpaces[j].pawns.includes(pawns[0]) &&
-						postBlockSpaces[j].pawns.includes(pawns[1])) {
-					throw new Error('blockade has been moved together');
-				}
-			}
-		}
-	}
-
+// TODO: fix check if move intentionally left to prevent moving blockade together
 	allRollsConsumed(board: Board, moves: Move[], rolls: number[]): void {
 		if (moves[0] instanceof EnterPiece && (rolls[0] + rolls[1] == 5)) {
 			if (rolls.length == 2) {
@@ -132,6 +117,26 @@ export class Turn {
 				if (!errorThrown) {
 					throw new Error('all rolls have not been consumed');
 				}
+			}
+		}
+	}
+}
+
+export function checkBlockadeMoves(initial: Board, post: Board, color: Color): void {
+	let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade() &&
+																							sp.pawns[0].color == color);
+	let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade() &&
+																					 sp.pawns[0].color == color);
+
+	for (let i = 0; i < initBlockSpaces.length; i++) {
+		let ip = initBlockSpaces[i].pawns.sort((p, c) => p.id - c.id);
+		for (let j = 0; j < postBlockSpaces.length; j++) {
+			if (!initBlockSpaces[i] || !postBlockSpaces[j]) {
+				return;
+			}
+			let pp = postBlockSpaces[j].pawns.sort((p, c) => p.id - c.id);
+			if (isEqual(ip[0], pp[0]) && isEqual(ip[1], pp[1])) {
+				throw new Error('blockade has been moved together');
 			}
 		}
 	}

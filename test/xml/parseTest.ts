@@ -51,6 +51,17 @@ describe('parse', function() {
 		(p).should.deep.equal({ type: 'do-move', board: board, dice: [3, 4] });
 	});
 
+	it('should parse do-move', function() {
+		let xml = '<do-move><board><start><pawn><color>yellow</color><id>3</id></pawn><pawn><color>yellow</color><id>2</id></pawn><pawn><color>yellow</color><id>1</id></pawn><pawn><color>yellow</color><id>0</id></pawn><pawn><color>red</color><id>3</id></pawn><pawn><color>red</color><id>2</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>red</color><id>0</id></pawn><pawn><color>green</color><id>2</id></pawn><pawn><color>green</color><id>1</id></pawn><pawn><color>green</color><id>0</id></pawn><pawn><color>blue</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn><pawn><color>blue</color><id>0</id></pawn></start><main><piece-loc><pawn><color>green</color><id>3</id></pawn><loc>6</loc></piece-loc></main><home-rows></home-rows><home></home></board><dice><die>6</die><die>6</die></dice></do-move>';
+
+		let p = parse(xml);
+
+		let board = new Board();
+		board.setPawnOnSpace(new Pawn(3, Color.green), new MainSpace(6));
+
+		(p).should.deep.equal({ type: 'do-move', board: board, dice: [6, 6] });
+	});
+
 	it('should parse moves', function() {
 		let xml = '<moves><enter-piece><pawn><color>blue</color><id>0</id></pawn></enter-piece><enter-piece><pawn><color>blue</color><id>1</id></pawn></enter-piece><move-piece-main><pawn><color>green</color><id>1</id></pawn><start>10</start><distance>20</distance></move-piece-main><move-piece-home><pawn><color>yellow</color><id>2</id></pawn><start>2</start><distance>4</distance></move-piece-home></moves>';
 

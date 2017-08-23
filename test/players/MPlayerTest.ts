@@ -277,4 +277,27 @@ describe('MPlayer', function() {
 
 		(moves).should.deep.equal([new MoveMain(pawn2, space1, 6)]);
 	});
+
+	it('should not be able to move a blockade together', function() {
+		let board = new Board();
+		let mlplayer = new MLastPlayer();
+		mlplayer.startGame(Color.green);
+
+		let p0 = new Pawn(0, Color.green);
+		let p1 = new Pawn(1, Color.green);
+		let p2 = new Pawn(2, Color.green);
+		let p3 = new Pawn(3, Color.green);
+		let s3 = new MainSpace(53);
+		let s2 = new MainSpace(52);
+		board.setPawnOnSpace(p2, s3);
+		board.setPawnOnSpace(p1, s3);
+		board.setPawnOnSpace(p3, s2);
+		board.setPawnOnSpace(p0, s2);
+
+		let moves = mlplayer.doMove(board, [1, 6]);
+		console.log('moves', moves);
+
+		(moves).should.deep.equal([new MoveMain(p1, s3, 1), new MoveMain(p0, s2, 6)]);
+	});
+
 });

@@ -1,4 +1,4 @@
-import { isEqual, cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 import { Board } from '../Board';
 import { Color, NUM_PAWNS, Pair, MoveResult } from '../definitions';
@@ -13,6 +13,7 @@ import { Move } from '../moves/Move';
 import { MoveMain } from '../moves/MoveMain';
 import { MoveHome } from '../moves/MoveHome';
 import { EnterPiece } from '../moves/EnterPiece';
+import { checkBlockadeMoves } from '../Turn';
 
 export abstract class MPlayer extends Player {
 
@@ -31,20 +32,13 @@ export class MLastPlayer extends MPlayer {
 }
 
 
-/* get pawns in order
- *
- * at each iteration
- *		- rolls * pawns_available = total_possible_moves_this_iter
- *		- rolls = rolls
- *
- */
-
 // helpers 
 
 export function	tryPawns(board: Board,
 												 rolls: number[],
 												 color: Color,
 												 getPawnsInOrder: (b: Board, c: Color) => Pair[]): Move[] {
+	let saveBoard = cloneDeep(board);
 	let moves = [];
 	let pairs = getPawnsInOrder(board, color);
 	let canEnterWithSum = rolls.length == 2 && (rolls[0] + rolls[1] == 5);
@@ -57,37 +51,28 @@ export function	tryPawns(board: Board,
 			rolls = [5];
 		}
 
-		rollsLoop:
-			for (let j = 0; j < rolls.length; j++) {
-				let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
-				
-				// check for blockade moves
-				if (move != undefined) {
-					for (let i = 0; i < moves.length; i++) {
-						if (moves[i].hasOwnProperty('start') && move.hasOwnProperty('start') ) {
-							if ((<MoveMain>moves[i]).start.equals((<MoveMain>move).start) &&
-									(<MoveMain>moves[i]).dist == rolls[j]) {
-								break rollsLoop;
-							}
-						}
-					}
+		for (let j = 0; j < rolls.length; j++) {
+			let move = enter ? new EnterPiece(pairs[i].pawn) : chooseMove(pairs[i], rolls[j]);
+
+			try {
+				let moveresult = move.move(board);
+				checkBlockadeMoves(saveBoard, moveresult.board, color);
+
+				board = moveresult.board;
+				if (moveresult.bonus) {
+					rolls.push(moveresult.bonus);
 				}
+				moves.push(move);
 
-				try {
-					let moveresult = move.move(board);
-					board = moveresult.board;
-					if (moveresult.bonus) {
-						rolls.push(moveresult.bonus);
-					}
-					moves.push(move);
-
-					canEnterWithSum = false;
-					rolls.splice(j, 1);
-					pairs = getPawnsInOrder(board, color);
-					i = -1;
-					break;
-				} catch (e) { }
+				canEnterWithSum = false;
+				rolls.splice(j, 1);
+				pairs = getPawnsInOrder(board, color);
+				i = -1;
+				break;
+			} catch (e) {
+				// console.log('e', e);
 			}
+		}
 
 		if (enter && !(moves[0] instanceof EnterPiece)) {
 			rolls = saveRolls;

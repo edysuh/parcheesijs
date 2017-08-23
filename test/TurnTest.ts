@@ -4,7 +4,7 @@ should();
 import { Color } from '../src/definitions';
 import { Board } from '../src/Board';
 import { Pawn } from '../src/Pawn';
-import { Turn } from '../src/Turn';
+import { Turn, checkBlockadeMoves } from '../src/Turn';
 import { MainSpace } from '../src/spaces/MainSpace';
 import { HomeRowSpace } from '../src/spaces/HomeRowSpace';
 import { Move } from '../src/moves/Move';
@@ -185,8 +185,6 @@ describe("Turn", function() {
 	// it('should be able to make a bonus move upon receiving it');
 
 	it('should not be able to move a blockade together', function() {
-		let player = new MFirstPlayer();
-		let turn = new Turn(player);
 		let init = new Board();
 		let post = new Board();
 		let p1 = new Pawn(1, Color.yellow);
@@ -198,7 +196,7 @@ describe("Turn", function() {
 		post.setPawnOnSpace(p1, s2);
 		post.setPawnOnSpace(p2, s2);
 
-		(() => turn.checkBlockadeMoves(init, post))
+		(() => checkBlockadeMoves(init, post, Color.yellow))
 			.should.throw('blockade has been moved together');
 	});
 
@@ -208,8 +206,6 @@ describe("Turn", function() {
 
 	it('should be able to remake a blockade with' +
 		 'a roll of 1 and 2 in a triangle of pawns', function() {
-		let player = new MFirstPlayer();
-		let turn = new Turn(player);
 		let init = new Board();
 		let post = new Board();
 		let p1 = new Pawn(1, Color.yellow);
@@ -224,7 +220,7 @@ describe("Turn", function() {
 		post.setPawnOnSpace(p1, s4);
 		post.setPawnOnSpace(p3, s4);
 
-		(() => turn.checkBlockadeMoves(init, post)).should.not.throw();
+		(() => checkBlockadeMoves(init, post, Color.yellow)).should.not.throw();
 	});
 	
   it('should only be call enterpiece on a 5 roll', function() {

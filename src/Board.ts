@@ -50,8 +50,11 @@ export class Board {
 		if (setSpace.isBop(pawn)) {
 			let bopped = setSpace.pawns[0];
 			let nest = this.getSpaceOnBoard(new NestSpace(bopped.color));
-			// why does this work when pawns is protected?
-			nest.pawns.push(bopped);
+			if (!nest) {
+				nest = new NestSpace(bopped.color);
+				this._spaces.push(nest);
+			}
+			nest.setPawn(bopped);
 		}
 
 		setSpace.setPawn(pawn);

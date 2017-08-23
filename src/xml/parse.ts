@@ -59,12 +59,11 @@ export function parse(xml: string): ParseObj {
 
 function parseBoard(bobj: BoardObj) {
 	let board = new Board();
-
+	
 	if (bobj.main['piece-loc']) {
-		for (let i = 0; i < bobj.main['piece-loc'].length; i++) {
-			let pli = bobj.main['piece-loc'][i];
-			let index = parseInt(pli.loc._text);
-			let pawn = new Pawn(parseInt(pli.pawn.id._text), <Color>(pli.pawn.color._text));
+		let setP = (pl: any) => {
+			let index = parseInt(pl.loc._text);
+			let pawn = new Pawn(parseInt(pl.pawn.id._text), <Color>(pl.pawn.color._text));
 			let space = new MainSpace(index);
 
 			if (Safeties.includes(index)) {
@@ -75,22 +74,44 @@ function parseBoard(bobj: BoardObj) {
 
 			board.setPawnOnSpace(pawn, space);
 		}
+
+		if (bobj.main['piece-loc'] instanceof Array) {
+			for (let i = 0; i < bobj.main['piece-loc'].length; i++) {
+				setP(bobj.main['piece-loc'][i]);
+			}
+		} else {
+			setP(bobj.main['piece-loc']);
+		}
 	}
 
 	if (bobj['home-rows']['piece-loc']) {
-		for (let i = 0; i < bobj['home-rows']['piece-loc'].length; i++) {
-			let pli = bobj['home-rows']['piece-loc'][i];
-			let pawn = new Pawn(parseInt(pli.pawn.id._text), <Color>(pli.pawn.color._text));
-			board.setPawnOnSpace(pawn, new HomeRowSpace(parseInt(pli.loc._text), 
-																									<Color>pli.pawn.color._text));
+		let setP = (pl: any) => {
+			let pawn = new Pawn(parseInt(pl.pawn.id._text), <Color>(pl.pawn.color._text));
+			board.setPawnOnSpace(pawn, new HomeRowSpace(parseInt(pl.loc._text), 
+																									<Color>pl.pawn.color._text));
+		}
+
+		if (bobj['home-rows']['piece-loc'] instanceof Array) {
+			for (let i = 0; i < bobj['home-rows']['piece-loc'].length; i++) {
+				setP(bobj['home-rows']['piece-loc'][i]);
+			}
+		} else {
+			setP(bobj['home-rows']['piece-loc']);
 		}
 	}
 
 	if (bobj.home.pawn) {
-		for (let i = 0; i < bobj.home.pawn.length; i++) {
-			let pi = bobj.home.pawn[i];
-			let pawn = new Pawn(parseInt(pi.id._text), <Color>pi.color._text);
+		let setP = (p: any) => {
+			let pawn = new Pawn(parseInt(p.id._text), <Color>p.color._text);
 			board.setPawnOnSpace(pawn, new HomeSpace(pawn.color));
+		}
+
+		if (bobj.home.pawn instanceof Array) {
+			for (let i = 0; i < bobj.home.pawn.length; i++) {
+				setP(bobj.home.pawn[i]);
+			}
+		} else {
+			setP(bobj.home.pawn);
 		}
 	}
 
