@@ -291,13 +291,12 @@ describe('MPlayer', function() {
 		let s2 = new MainSpace(52);
 		board.setPawnOnSpace(p2, s3);
 		board.setPawnOnSpace(p1, s3);
-		board.setPawnOnSpace(p3, s2);
 		board.setPawnOnSpace(p0, s2);
+		board.setPawnOnSpace(p3, s2);
 
 		let moves = mlplayer.doMove(board, [1, 6]);
-		console.log('moves', moves);
 
-		(moves).should.deep.equal([new MoveMain(p1, s3, 1), new MoveMain(p0, s2, 6)]);
+		(moves).should.deep.equal([new MoveMain(p2, s3, 1), new MoveMain(p3, s2, 6)]);
 	});
 
 });

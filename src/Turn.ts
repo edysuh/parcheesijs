@@ -134,6 +134,11 @@ export function checkBlockadeMoves(initial: Board, post: Board, color: Color): v
 			if (!initBlockSpaces[i] || !postBlockSpaces[j]) {
 				return;
 			}
+
+			if (initBlockSpaces[i].equals(postBlockSpaces[j])) {
+				continue;
+			}
+
 			let pp = postBlockSpaces[j].pawns.sort((p, c) => p.id - c.id);
 			if (isEqual(ip[0], pp[0]) && isEqual(ip[1], pp[1])) {
 				throw new Error('blockade has been moved together');
