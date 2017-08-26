@@ -52,10 +52,8 @@ export class Turn {
 						rolls.push(moveresult.bonus);
 					}
 				} catch (e) {
-					// clean board of their pawns?
-					board = saveBoard;
+					// board = saveBoard;
 					console.log(e, '\n', this.player.color, 'player cheated. youre out.\n');
-					// players.splice(i, 1);
 				}
 			}
 
@@ -124,21 +122,16 @@ export class Turn {
 
 export function checkBlockadeMoves(initial: Board, post: Board, color: Color): void {
 	let initBlockSpaces = initial.spaces.filter(sp => sp.isBlockade() &&
-																							sp.pawns[0].color == color);
+																										sp.pawns[0].color == color);
 	let postBlockSpaces = post.spaces.filter(sp => sp.isBlockade() &&
-																					 sp.pawns[0].color == color);
+																								 sp.pawns[0].color == color);
 
 	for (let i = 0; i < initBlockSpaces.length; i++) {
 		let ip = initBlockSpaces[i].pawns.sort((p, c) => p.id - c.id);
 		for (let j = 0; j < postBlockSpaces.length; j++) {
-			if (!initBlockSpaces[i] || !postBlockSpaces[j]) {
-				return;
-			}
-
 			if (initBlockSpaces[i].equals(postBlockSpaces[j])) {
 				continue;
 			}
-
 			let pp = postBlockSpaces[j].pawns.sort((p, c) => p.id - c.id);
 			if (isEqual(ip[0], pp[0]) && isEqual(ip[1], pp[1])) {
 				throw new Error('blockade has been moved together');

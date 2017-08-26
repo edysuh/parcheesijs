@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { Board } from '../Board';
 import { Color, NUM_PAWNS, Pair, MoveResult } from '../definitions';
@@ -44,7 +44,7 @@ export function	tryPawns(board: Board,
 	let canEnterWithSum = rolls.length == 2 && (rolls[0] + rolls[1] == 5);
 
 	for (let i = 0; i < pairs.length; i++) {
-		let saveRolls = cloneDeep(rolls);
+		let saveRolls = [...rolls];
 		let enter = false;
 		if (canEnterWithSum && pairs[i].space instanceof NestSpace) {
 			enter = true;
@@ -58,12 +58,14 @@ export function	tryPawns(board: Board,
 				let moveresult = move.move(board);
 				checkBlockadeMoves(saveBoard, moveresult.board, color);
 
+				// no errors: accept the move; change the board and take any bonuses
 				board = moveresult.board;
 				if (moveresult.bonus) {
 					rolls.push(moveresult.bonus);
 				}
 				moves.push(move);
 
+				// consume a roll and reset the outer loop to iterate through the new board
 				canEnterWithSum = false;
 				rolls.splice(j, 1);
 				pairs = getPawnsInOrder(board, color);
@@ -74,6 +76,7 @@ export function	tryPawns(board: Board,
 			}
 		}
 
+		// tried an enter piece with a sum, but no available moves: reset rolls
 		if (enter && !(moves[0] instanceof EnterPiece)) {
 			rolls = saveRolls;
 		}
@@ -84,19 +87,10 @@ export function	tryPawns(board: Board,
 }
 
 export function getPawnsInFirstOrder(board: Board, color: Color): Pair[] {
-	let pairs = [];
-
-	for (let i = 0; i < NUM_PAWNS; i++) {
-		let pawn = new Pawn(i, color);
-		let space = board.getSpaceForPawn(pawn);
-		if (!(space instanceof HomeSpace)) {
-			pairs.push({ 'pawn': pawn, 'space': space });
-		}
-	}
-
-	pairs.sort((prev, curr) =>
-		prev.space.distanceFromHome(color) - curr.space.distanceFromHome(color));
-	return pairs;
+	return board.getPlayerPawns(color)
+					.filter(pair => !(pair.space instanceof HomeSpace))
+					.sort((prev, curr) => prev.space.distanceFromHome(color) -
+																curr.space.distanceFromHome(color));
 }
 
 export function getPawnsInLastOrder(board: Board, color: Color): Pair[] {

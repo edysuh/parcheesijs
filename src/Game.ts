@@ -66,6 +66,7 @@ export class Game {
 
 		while (board.gameOver() == null) {
 			let turn = new Turn(players[i]);
+			// try... catch to handle cheating: remove the player
 			board = turn.takeTurn(board);
 
 			i = (i == players.length - 1 ? 0 : i + 1);
