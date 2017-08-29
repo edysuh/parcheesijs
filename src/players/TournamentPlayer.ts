@@ -16,13 +16,13 @@ import { checkBlockadeMoves } from '../Turn';
 
 interface MoveRemRolls {
 	move: Move;
-	rolls: number[];
+	rem: number[];
 }
 
 interface legalResult {
 	board: Board;
 	move: Move;
-	rolls: number[];
+	rem: number[];
 }
 
 interface MoveList {
@@ -32,29 +32,43 @@ interface MoveList {
 
 export class TournamentPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		return;
+		let movelists = buildMoveLists({ board: board, moves: []}, rolls, this.color, []);
+
+		for (let i = 0; i < movelists.length; i++) {
+			if (rolls.length == 2 && rolls[0] + rolls[1] == 5) {
+				if (movelists[i].moves[0] instanceof EnterPiece) {
+					console.log('\n -----> movelists[i].moves', movelists[i].moves);
+					return movelists[i].moves;
+				}
+			}
+			if (movelists[i].moves.length == rolls.length) {
+				console.log('\n -----> movelists[i].moves', movelists[i].moves);
+				return movelists[i].moves;
+			}
+		}
+
+		return [];
 	}
 }
 
-export function buildMoveLists(board: Board, 
+export function buildMoveLists(currlist: MoveList,
 															 rolls: number[],
 															 color: Color,
 															 movelists: MoveList[]): MoveList[] {
-	
-	console.log('movelists', rolls, movelists);
-	if (!rolls) {
-		return movelists;
-	}
-
-	let initMoves = getPossibleMovesList(rolls, board.getPlayerPawns(color));
-	let legal = tryMoves(board, initMoves, color);
+	let initMoves = getPossibleMovesList(rolls, currlist.board.getPlayerPawns(color));
+	let legal = tryMoves(currlist.board, initMoves, color);
 
 	for (let i = 0; i < legal.length; i++) {
-		let ml = buildMoveLists(legal[i].board, legal[i].rolls, color, movelists);
-		console.log('ml', ml);
-		movelists.push(...ml);
-	}
+		let nextmoves = [...currlist.moves];
+		nextmoves.push(legal[i].move);
+		let nextlist = { board: legal[i].board, moves: nextmoves };
 
+		if (legal[i].rem.length == 0) {
+			movelists.push(nextlist);
+		}
+
+		buildMoveLists(nextlist, legal[i].rem, color, movelists);
+	}
 	return movelists;
 }
 
@@ -71,16 +85,16 @@ export function tryMoves(board: Board,
 			// need to pass around the original board (or one level up)
 			checkBlockadeMoves(board, moveresult.board, color);
 
-			// let nextRolls = [...possibleMoves[i].rolls];
-			let nextRolls = possibleMoves[i].rolls;
+			// let nextRolls = [...possibleMoves[i].rem];
+			let nextRolls = possibleMoves[i].rem;
 			if (moveresult.bonus) {
 				nextRolls.push(moveresult.bonus);
 			}
 
-			legalMoves.push({ 
+			legalMoves.push({
 				board: moveresult.board,
 				move: possibleMoves[i].move,
-				rolls: nextRolls
+				rem: nextRolls
 			});
 		} catch (e) { }
 	}
@@ -94,7 +108,7 @@ export function getPossibleMovesList(rolls: number[], pairs: Pair[]): MoveRemRol
 	for (let i = 0; i < pairs.length; i++) {
 		if (pairs[i].space instanceof NestSpace &&
 				rolls.length == 2 && (rolls[0] + rolls[1] == 5)) {
-			list.push({ move: new EnterPiece(pairs[i].pawn), rolls: [] });
+			list.push({ move: new EnterPiece(pairs[i].pawn), rem: [] });
 			continue;
 		}
 
@@ -103,7 +117,7 @@ export function getPossibleMovesList(rolls: number[], pairs: Pair[]): MoveRemRol
 			if (move) {
 				let remRolls = [...rolls];
 				remRolls.splice(j, 1);
-				list.push({ move: move, rolls: remRolls });
+				list.push({ move: move, rem: remRolls });
 			}
 		}
 	}
@@ -111,29 +125,23 @@ export function getPossibleMovesList(rolls: number[], pairs: Pair[]): MoveRemRol
 	return list;
 }
 
-
-// export function buildMoveLists(board: Board, 
+// export function buildMoveLists(board: Board,
 // 															 rolls: number[],
 // 															 color: Color,
-// 															 moves: Move[]): MoveList {
+// 															 movelists: MoveList[]): MoveList[] {
+
+// 	console.log('movelists', rolls, movelists);
 // 	if (!rolls) {
-// 		return { board, moves };
+// 		return movelists;
 // 	}
 
 // 	let initMoves = getPossibleMovesList(rolls, board.getPlayerPawns(color));
 // 	let legal = tryMoves(board, initMoves, color);
 
 // 	for (let i = 0; i < legal.length; i++) {
-// 		// buildMoveLists(legal[i].board, legal[i].rolls, color);
-
-// 		moves.push([legal[i]]);
-
-// 		let next = getPossibleMovesList(legal[i].rolls, legal[i].board.getPlayerPawns(color));
-// 		let nextLegal = tryMoves(legal[i].board, next, color);
-
-// 		moves[i].push();
+// 		let ml = buildMoveLists(legal[i].board, legal[i].rolls, color, movelists);
 // 	}
 
-// 	return;
+// 	return movelists;
 // }
 

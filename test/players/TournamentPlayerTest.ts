@@ -1,7 +1,6 @@
 import { should } from 'chai';
 should();
 
-import { cloneDeep } from 'lodash';
 import { TournamentPlayer,
 				 getPossibleMovesList,
 				 tryMoves,
@@ -32,12 +31,12 @@ describe('TournamentPlayer', function() {
 																					{ pawn: p2, space: s2},
 																					{ pawn: p3, space: s3}]);
 
-		(g).should.deep.equal([ { move: new MoveMain(p1, s1, 2), rolls: [6] },
-														{ move: new MoveMain(p1, s1, 6), rolls: [2] },
-														{ move: new MoveMain(p2, s2, 2), rolls: [6] },
-														{ move: new MoveMain(p2, s2, 6), rolls: [2] },
-														{ move: new MoveMain(p3, s3, 2), rolls: [6] },
-														{ move: new MoveMain(p3, s3, 6), rolls: [2] }]);
+		(g).should.deep.equal([ { move: new MoveMain(p1, s1, 2), rem: [6] },
+														{ move: new MoveMain(p1, s1, 6), rem: [2] },
+														{ move: new MoveMain(p2, s2, 2), rem: [6] },
+														{ move: new MoveMain(p2, s2, 6), rem: [2] },
+														{ move: new MoveMain(p3, s3, 2), rem: [6] },
+														{ move: new MoveMain(p3, s3, 6), rem: [2] }]);
 	});
 
 
@@ -56,15 +55,15 @@ describe('TournamentPlayer', function() {
 																					{ pawn: p2, space: s2},
 																					{ pawn: p3, space: s3}]);
 
-		(g).should.deep.equal([ { move: new EnterPiece(p0), rolls: [] },
-														{ move: new EnterPiece(p1), rolls: [] },
-														{ move: new MoveMain(p2, s2, 2), rolls: [3] },
-														{ move: new MoveMain(p2, s2, 3), rolls: [2] },
-														{ move: new MoveMain(p3, s3, 2), rolls: [3] },
-														{ move: new MoveMain(p3, s3, 3), rolls: [2] }]);
+		(g).should.deep.equal([ { move: new EnterPiece(p0), rem: [] },
+														{ move: new EnterPiece(p1), rem: [] },
+														{ move: new MoveMain(p2, s2, 2), rem: [3] },
+														{ move: new MoveMain(p2, s2, 3), rem: [2] },
+														{ move: new MoveMain(p3, s3, 2), rem: [3] },
+														{ move: new MoveMain(p3, s3, 3), rem: [2] }]);
 	});
 
-	it.skip('should try each possible move', function() {
+	it('should try each possible move', function() {
 		let board = new Board();
 		let p0 = new Pawn(0, Color.green);
 		let p1 = new Pawn(1, Color.green);
@@ -85,15 +84,24 @@ describe('TournamentPlayer', function() {
 		let pairs = board.getPlayerPawns(Color.green);
 		let poss = getPossibleMovesList(rolls, pairs);
 
+		let m0 = new EnterPiece(p0);
+		let m1 = new EnterPiece(p1);
+		let m2 = new MoveMain(p2, s2, 2);
+		let m3 = new MoveMain(p2, s2, 5);
+		let b0 = m0.move(board).board;
+		let b1 = m1.move(board).board;
+		let b2 = m2.move(board).board;
+		let b3 = m3.move(board).board;
+
 		(tryMoves(board, poss, Color.green)).should.deep.equal([
-			{ move: new EnterPiece(p0), rolls: [2] },
-			{ move: new EnterPiece(p1), rolls: [2] },
-			{ move: new MoveMain(p2, s2, 2), rolls: [5] },
-			{ move: new MoveMain(p2, s2, 5), rolls: [2] },
+			{ board: b0, move: m0, rem: [2] },
+			{ board: b1, move: m1, rem: [2] },
+			{ board: b2, move: m2, rem: [5] },
+			{ board: b3, move: m3, rem: [2] },
 		]);
 	});
 
-	it.skip('should get a bonus if after trying move', function() {
+	it('should get a bonus if after trying move', function() {
 		let board = new Board();
 		let p0 = new Pawn(0, Color.green);
 		let p1 = new Pawn(1, Color.green);
@@ -114,13 +122,26 @@ describe('TournamentPlayer', function() {
 		let pairs = board.getPlayerPawns(Color.green);
 		let poss = getPossibleMovesList(rolls, pairs);
 
+		let m0 = new EnterPiece(p0);
+		let m1 = new EnterPiece(p1);
+		let m2 = new MoveMain(p2, s2, 2);
+		let m3 = new MoveMain(p2, s2, 5);
+		let m4 = new MoveMain(p3, s3, 2);
+		let m5 = new MoveMain(p3, s3, 5);
+		let b0 = m0.move(board).board;
+		let b1 = m1.move(board).board;
+		let b2 = m2.move(board).board;
+		let b3 = m3.move(board).board;
+		let b4 = m4.move(board).board;
+		let b5 = m5.move(board).board;
+
 		(tryMoves(board, poss, Color.green)).should.deep.equal([
-			{ move: new EnterPiece(p0), rolls: [2] },
-			{ move: new EnterPiece(p1), rolls: [2] },
-			{ move: new MoveMain(p2, s2, 2), rolls: [5, 20] },
-			{ move: new MoveMain(p2, s2, 5), rolls: [2] },
-			{ move: new MoveMain(p3, s3, 2), rolls: [5] },
-			{ move: new MoveMain(p3, s3, 5), rolls: [2, 20] },
+			{ board: b0, move: m0, rem: [2] },
+			{ board: b1, move: m1, rem: [2] },
+			{ board: b2, move: m2, rem: [5, 20] },
+			{ board: b3, move: m3, rem: [2] },
+			{ board: b4, move: m4, rem: [5] },
+			{ board: b5, move: m5, rem: [2, 20] },
 		]);
 	});
 
@@ -137,7 +158,7 @@ describe('TournamentPlayer', function() {
 		let poss = getPossibleMovesList(rolls, pairs);
 
 		(tryMoves(board, poss, Color.red)).should.deep.equal([
-			{ move: new MoveMain(p0, sp, 4), rolls: [4] },
+			{ move: new MoveMain(p0, sp, 4), rem: [4] },
 		]);
 	});
 
@@ -145,21 +166,43 @@ describe('TournamentPlayer', function() {
 	it('should build all possible move lists', function() {
 		let board = new Board();
 		let p0 = new Pawn(0, Color.yellow);
-		let p1 = new Pawn(1, Color.yellow);
-		let s0 = new MainSpace(50);
-		let s1 = new MainSpace(60);
+		// let p1 = new Pawn(1, Color.yellow);
+		let s0 = new MainSpace(20);
+		// let s1 = new MainSpace(30);
 		board.setPawnOnSpace(p0, s0);
-		board.setPawnOnSpace(p1, s1);
+		// board.setPawnOnSpace(p1, s1);
 
 		let rolls = [3, 4];
+		let build = buildMoveLists({ board: board, moves: []}, rolls, Color.yellow, []);
 
-		let b = buildMoveLists(board, rolls, Color.yellow, []);
+		let t3 = new MainSpace(23);
+		t3.setPawn(p0);
+		let t4 = new MainSpace(24);
+		t4.setPawn(p0);
+		let m03 = new MoveMain(p0, s0, 3);
+		let m04 = new MoveMain(p0, t3, 4);
+		let m14 = new MoveMain(p0, s0, 4);
+		let m13 = new MoveMain(p0, t4, 3);
+		let tmpb34 = m03.move(board).board;
+		let board34 = m04.move(tmpb34).board;
+		let tmpb43 = m14.move(board).board;
+		let board43 = m13.move(tmpb43).board;
 
-		console.log(b);
-
-		// (tryMoves(board, poss, Color.red)).should.deep.equal([
-		// 	{ move: new MoveMain(p0, s0, 4), rolls: [4] },
-		// ]);
+		(build).should.deep.equal([
+			{ board: board34, moves: [m03, m04]},
+			{ board: board43, moves: [m14, m13]}
+		]);
 	});
 
+	it('should doMove', function() {
+		let tp = new TournamentPlayer();
+		tp.startGame(Color.blue);
+		let board = new Board();
+		let p0 = new Pawn(0, Color.blue);
+		let sp = new MainSpace(10);
+		board.setPawnOnSpace(p0, sp);
+		
+		let m = tp.doMove(board, [2, 6]);
+		console.log('m', m);
+	});
 });
