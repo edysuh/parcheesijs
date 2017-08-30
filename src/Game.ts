@@ -32,8 +32,7 @@ export class Game {
 			this.register(p);
 
 			// tmp: for testing async
-			let r = p.startGame(Color.blue);
-			// console.log('r', r);
+			// let r = p.startGame(Color.blue);
 		});
 
 		server.listen(8000, () => {

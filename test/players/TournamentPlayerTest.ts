@@ -156,8 +156,9 @@ describe('TournamentPlayer', function() {
 		let rolls = [4, 4];
 		let pairs = board.getPlayerPawns(Color.red);
 		let poss = getPossibleMovesList(rolls, pairs);
+		let t = tryMoves(board, poss, Color.red);
 
-		(tryMoves(board, poss, Color.red)).should.deep.equal([
+		(t).should.deep.equal([
 			{ move: new MoveMain(p0, sp, 4), rem: [4] },
 		]);
 	});
@@ -202,7 +203,8 @@ describe('TournamentPlayer', function() {
 		let sp = new MainSpace(10);
 		board.setPawnOnSpace(p0, sp);
 		
-		let m = tp.doMove(board, [2, 6]);
-		console.log('m', m);
+		// let m = tp.doMove(board, [2, 6]);
+		// (m).should.equal();
 	});
 });
+

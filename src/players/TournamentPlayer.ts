@@ -33,18 +33,22 @@ interface MoveList {
 export class TournamentPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
 		let movelists = buildMoveLists({ board: board, moves: []}, rolls, this.color, []);
+		let rollsConsumed = rolls.length;
 
-		for (let i = 0; i < movelists.length; i++) {
-			if (rolls.length == 2 && rolls[0] + rolls[1] == 5) {
-				if (movelists[i].moves[0] instanceof EnterPiece) {
-					console.log('\n -----> movelists[i].moves', movelists[i].moves);
+		while (rollsConsumed > 0) {
+			for (let i = 0; i < movelists.length; i++) {
+
+				if (rolls.length == 2 && rolls[0] + rolls[1] == 5) {
+					if (movelists[i].moves[0] instanceof EnterPiece) {
+						return movelists[i].moves;
+					}
+				}
+
+				if (movelists[i].moves.length >= rollsConsumed) {
 					return movelists[i].moves;
 				}
 			}
-			if (movelists[i].moves.length == rolls.length) {
-				console.log('\n -----> movelists[i].moves', movelists[i].moves);
-				return movelists[i].moves;
-			}
+			rollsConsumed--;
 		}
 
 		return [];
@@ -58,17 +62,22 @@ export function buildMoveLists(currlist: MoveList,
 	let initMoves = getPossibleMovesList(rolls, currlist.board.getPlayerPawns(color));
 	let legal = tryMoves(currlist.board, initMoves, color);
 
+	if (legal.length == 0) {
+		movelists.push(currlist);
+	}
+
 	for (let i = 0; i < legal.length; i++) {
 		let nextmoves = [...currlist.moves];
 		nextmoves.push(legal[i].move);
 		let nextlist = { board: legal[i].board, moves: nextmoves };
 
-		if (legal[i].rem.length == 0) {
-			movelists.push(nextlist);
-		}
+		// if (legal[i].rem.length == 0) {
+		// 	movelists.push(nextlist);
+		// }
 
 		buildMoveLists(nextlist, legal[i].rem, color, movelists);
 	}
+
 	return movelists;
 }
 
@@ -130,7 +139,6 @@ export function getPossibleMovesList(rolls: number[], pairs: Pair[]): MoveRemRol
 // 															 color: Color,
 // 															 movelists: MoveList[]): MoveList[] {
 
-// 	console.log('movelists', rolls, movelists);
 // 	if (!rolls) {
 // 		return movelists;
 // 	}

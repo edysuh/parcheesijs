@@ -30,11 +30,6 @@ export abstract class Player {
 		
 		this._conn.on('data', data => {
 			let xml = data.toString();
-			// console.log('\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
-			// console.log('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n');
-			// console.log('xml', xml);
-			// console.log('color ', this.color);
-
 			let parsed = parse(xml);
 			let built;
 
@@ -47,10 +42,7 @@ export abstract class Player {
 
 				case 'do-move':
 					let moves = this.doMove(parsed.board, parsed.dice);
-					parsed.board.display();
-					console.log('remaining rolls: ', parsed.dice);
 					built = build('moves', moves);
-					console.log('moves', moves);
 					this._conn.write(built);
 					break;
 
@@ -59,7 +51,6 @@ export abstract class Player {
 					this._conn.write(built);
 					break;
 			}
-			// console.log('built', built);
 		});
 	}
 	
