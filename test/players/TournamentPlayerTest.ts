@@ -1,6 +1,7 @@
 import { should } from 'chai';
 should();
 
+import { cloneDeep } from 'lodash';
 import { TournamentPlayer,
 				 getPossibleMovesList,
 				 tryMoves,
@@ -93,7 +94,7 @@ describe('TournamentPlayer', function() {
 		let b2 = m2.move(board).board;
 		let b3 = m3.move(board).board;
 
-		(tryMoves(board, poss, Color.green)).should.deep.equal([
+		(tryMoves(board, board, poss, Color.green)).should.deep.equal([
 			{ board: b0, move: m0, rem: [2] },
 			{ board: b1, move: m1, rem: [2] },
 			{ board: b2, move: m2, rem: [5] },
@@ -135,7 +136,7 @@ describe('TournamentPlayer', function() {
 		let b4 = m4.move(board).board;
 		let b5 = m5.move(board).board;
 
-		(tryMoves(board, poss, Color.green)).should.deep.equal([
+		(tryMoves(board, board, poss, Color.green)).should.deep.equal([
 			{ board: b0, move: m0, rem: [2] },
 			{ board: b1, move: m1, rem: [2] },
 			{ board: b2, move: m2, rem: [5, 20] },
@@ -145,7 +146,7 @@ describe('TournamentPlayer', function() {
 		]);
 	});
 
-	it.skip('should not move a blockade together', function() {
+	it('should not move a blockade together', function() {
 		let board = new Board();
 		let p0 = new Pawn(0, Color.red);
 		let p1 = new Pawn(1, Color.red);
@@ -153,13 +154,20 @@ describe('TournamentPlayer', function() {
 		board.setPawnOnSpace(p0, sp);
 		board.setPawnOnSpace(p1, sp);
 
-		let rolls = [4, 4];
-		let pairs = board.getPlayerPawns(Color.red);
+		let tmpboard = cloneDeep(board);
+		let tmpsp = new MainSpace(49);
+		tmpboard.setPawnOnSpace(p0, tmpsp);
+
+		let rolls = [4];
+		let pairs = tmpboard.getPlayerPawns(Color.red);
 		let poss = getPossibleMovesList(rolls, pairs);
-		let t = tryMoves(board, poss, Color.red);
+		let t = tryMoves(board, tmpboard, poss, Color.red);
+
+		let finalboard = cloneDeep(tmpboard);
+		finalboard.setPawnOnSpace(p0, new MainSpace(53));
 
 		(t).should.deep.equal([
-			{ move: new MoveMain(p0, sp, 4), rem: [4] },
+			{ board: finalboard, move: new MoveMain(p0, tmpsp, 4), rem: [] }
 		]);
 	});
 
@@ -167,14 +175,11 @@ describe('TournamentPlayer', function() {
 	it('should build all possible move lists', function() {
 		let board = new Board();
 		let p0 = new Pawn(0, Color.yellow);
-		// let p1 = new Pawn(1, Color.yellow);
 		let s0 = new MainSpace(20);
-		// let s1 = new MainSpace(30);
 		board.setPawnOnSpace(p0, s0);
-		// board.setPawnOnSpace(p1, s1);
 
 		let rolls = [3, 4];
-		let build = buildMoveLists({ board: board, moves: []}, rolls, Color.yellow, []);
+		let build = buildMoveLists(board, { board: board, moves: []}, rolls, Color.yellow, []);
 
 		let t3 = new MainSpace(23);
 		t3.setPawn(p0);

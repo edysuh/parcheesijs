@@ -32,7 +32,7 @@ interface MoveList {
 
 export class TournamentPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		let movelists = buildMoveLists({ board: board, moves: []}, rolls, this.color, []);
+		let movelists = buildMoveLists(board, { board: board, moves: []}, rolls, this.color, []);
 		let rollsConsumed = rolls.length;
 
 		while (rollsConsumed > 0) {
@@ -55,12 +55,13 @@ export class TournamentPlayer extends MPlayer {
 	}
 }
 
-export function buildMoveLists(currlist: MoveList,
+export function buildMoveLists(original: Board,
+															 currlist: MoveList,
 															 rolls: number[],
 															 color: Color,
 															 movelists: MoveList[]): MoveList[] {
 	let initMoves = getPossibleMovesList(rolls, currlist.board.getPlayerPawns(color));
-	let legal = tryMoves(currlist.board, initMoves, color);
+	let legal = tryMoves(original, currlist.board, initMoves, color);
 
 	if (legal.length == 0) {
 		movelists.push(currlist);
@@ -71,19 +72,14 @@ export function buildMoveLists(currlist: MoveList,
 		nextmoves.push(legal[i].move);
 		let nextlist = { board: legal[i].board, moves: nextmoves };
 
-		// if (legal[i].rem.length == 0) {
-		// 	movelists.push(nextlist);
-		// }
-
-		buildMoveLists(nextlist, legal[i].rem, color, movelists);
+		buildMoveLists(original, nextlist, legal[i].rem, color, movelists);
 	}
 
 	return movelists;
 }
 
-// pass through the move list, and arrive at a final board state at the end of recursion
-// move list should be an array of arrays that hold that branch of moves/board state
-export function tryMoves(board: Board,
+export function tryMoves(original: Board,
+												 board: Board,
 												 possibleMoves: MoveRemRolls[],
 												 color: Color): legalResult[] {
 	let legalMoves = [];
@@ -91,10 +87,8 @@ export function tryMoves(board: Board,
 	for (let i = 0; i < possibleMoves.length; i++) {
 		try {
 			let moveresult = possibleMoves[i].move.move(board);
-			// need to pass around the original board (or one level up)
-			checkBlockadeMoves(board, moveresult.board, color);
+			checkBlockadeMoves(original, moveresult.board, color);
 
-			// let nextRolls = [...possibleMoves[i].rem];
 			let nextRolls = possibleMoves[i].rem;
 			if (moveresult.bonus) {
 				nextRolls.push(moveresult.bonus);
@@ -133,23 +127,3 @@ export function getPossibleMovesList(rolls: number[], pairs: Pair[]): MoveRemRol
 
 	return list;
 }
-
-// export function buildMoveLists(board: Board,
-// 															 rolls: number[],
-// 															 color: Color,
-// 															 movelists: MoveList[]): MoveList[] {
-
-// 	if (!rolls) {
-// 		return movelists;
-// 	}
-
-// 	let initMoves = getPossibleMovesList(rolls, board.getPlayerPawns(color));
-// 	let legal = tryMoves(board, initMoves, color);
-
-// 	for (let i = 0; i < legal.length; i++) {
-// 		let ml = buildMoveLists(legal[i].board, legal[i].rolls, color, movelists);
-// 	}
-
-// 	return movelists;
-// }
-
