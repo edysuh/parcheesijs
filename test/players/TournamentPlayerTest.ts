@@ -15,6 +15,8 @@ import { NestSpace } from '../../src/spaces/NestSpace';
 import { MainSpace } from '../../src/spaces/MainSpace';
 import { HomeRowSpace } from '../../src/spaces/HomeRowSpace';
 import { HomeSpace } from '../../src/spaces/HomeSpace';
+import { parse } from '../../src/xml/parse';
+import { build } from '../../src/xml/build';
 
 describe('TournamentPlayer', function() {
 	it('should get all possible move lists given rolls and pawn/space pairs', function() {
@@ -211,5 +213,34 @@ describe('TournamentPlayer', function() {
 		// let m = tp.doMove(board, [2, 6]);
 		// (m).should.equal();
 	});
-});
 
+	it('should handle a unique board state', function() {
+		let xml = '<do-move><board><start></start><main><piece-loc><pawn><color>yellow</color><id>3</id></pawn><loc>63</loc></piece-loc><piece-loc><pawn><color>red</color><id>3</id></pawn><loc>60</loc></piece-loc><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>58</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>56</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>55</loc></piece-loc><piece-loc><pawn><color>red</color><id>1</id></pawn><loc>54</loc></piece-loc><piece-loc><pawn><color>blue</color><id>2</id></pawn><loc>53</loc></piece-loc><piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>53</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>43</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>0</id></pawn><loc>38</loc></piece-loc><piece-loc><pawn><color>green</color><id>3</id></pawn><loc>25</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>14</loc></piece-loc><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>11</loc></piece-loc><piece-loc><pawn><color>green</color><id>2</id></pawn><loc>5</loc></piece-loc></main><home-rows></home-rows><home><pawn><color>yellow</color><id>2</id></pawn><pawn><color>blue</color><id>0</id></pawn></home></board><dice><die>2</die><die>2</die><die>5</die><die>5</die></dice></do-move>';
+
+		let tp = new TournamentPlayer();
+		tp.startGame(Color.green);
+		
+		let parsed = parse(xml);
+		let moves = tp.doMove(parsed.board, parsed.dice);
+
+		/* */ parsed.board.display();
+		console.log('moves', moves);
+
+		(moves.length).should.equal(4);
+	});
+
+	it('should handle a unique board state', function() {
+		let xml = '<do-move><board><start><pawn><color>red</color><id>3</id></pawn></start><main><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>59</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>0</id></pawn><loc>57</loc></piece-loc><piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>55</loc></piece-loc><piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>55</loc></piece-loc><piece-loc><pawn><color>blue</color><id>2</id></pawn><loc>54</loc></piece-loc><piece-loc><pawn><color>red</color><id>1</id></pawn><loc>52</loc></piece-loc><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>51</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>49</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>42</loc></piece-loc><piece-loc><pawn><color>green</color><id>3</id></pawn><loc>24</loc></piece-loc><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>19</loc></piece-loc><piece-loc><pawn><color>green</color><id>2</id></pawn><loc>8</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>6</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>3</id></pawn><loc>3</loc></piece-loc></main><home-rows></home-rows><home><pawn><color>yellow</color><id>1</id></pawn></home></board><dice><die>5</die><die>5</die><die>2</die><die>2</die></dice></do-move>';
+
+		let tp = new TournamentPlayer();
+		tp.startGame(Color.green);
+		
+		 let parsed = parse(xml);
+		let moves = tp.doMove(parsed.board, parsed.dice);
+
+		/* */ parsed.board.display();
+		console.log('moves', moves);
+
+		(moves.length).should.equal(4);
+	});
+});

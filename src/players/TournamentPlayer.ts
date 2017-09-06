@@ -32,12 +32,11 @@ interface MoveList {
 
 export class TournamentPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
-		let movelists = buildMoveLists(board, { board: board, moves: []}, rolls, this.color, []);
+		let movelists = buildMoveLists(board, { board: board, moves: [] }, rolls, this.color, []);
 		let rollsConsumed = rolls.length;
 
 		while (rollsConsumed > 0) {
 			for (let i = 0; i < movelists.length; i++) {
-
 				if (rolls.length == 2 && rolls[0] + rolls[1] == 5) {
 					if (movelists[i].moves[0] instanceof EnterPiece) {
 						return movelists[i].moves;
