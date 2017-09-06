@@ -14,6 +14,8 @@ import { MoveHome } from '../moves/MoveHome';
 import { EnterPiece } from '../moves/EnterPiece';
 import { checkBlockadeMoves } from '../Turn';
 
+const MAX_MOVELISTS_LENGTH = 500;
+
 interface MoveRemRolls {
 	move: Move;
 	rem: number[];
@@ -33,6 +35,7 @@ interface MoveList {
 export class TournamentPlayer extends MPlayer {
 	doMove(board: Board, rolls: number[]): Move[] {
 		let movelists = buildMoveLists(board, { board: board, moves: [] }, rolls, this.color, []);
+		console.log('movelists', movelists.length);
 		let rollsConsumed = rolls.length;
 
 		while (rollsConsumed > 0) {
@@ -59,6 +62,10 @@ export function buildMoveLists(original: Board,
 															 rolls: number[],
 															 color: Color,
 															 movelists: MoveList[]): MoveList[] {
+	if (movelists.length >= MAX_MOVELISTS_LENGTH) {
+		return;
+	}
+
 	let initMoves = getPossibleMovesList(rolls, currlist.board.getPlayerPawns(color));
 	let legal = tryMoves(original, currlist.board, initMoves, color);
 

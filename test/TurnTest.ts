@@ -161,26 +161,26 @@ describe("Turn", function() {
 		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
 	});
 
-	it.skip('should be able to move just one die, to not move a blockade together', function() {
-		let player = new MFirstPlayer();
-		player.startGame(Color.yellow);
-		let turn = new Turn(player);
+	// it.skip('should be able to move just one die, to not move a blockade together', function() {
+	// 	let player = new MFirstPlayer();
+	// 	player.startGame(Color.yellow);
+	// 	let turn = new Turn(player);
 
-		let init = new Board();
-		let board = new Board();
-		let p1 = new Pawn(1, Color.yellow);
-		let p2 = new Pawn(2, Color.yellow);
-		let s1 = new MainSpace(30);
-		let s2 = new MainSpace(34);
-		init.setPawnOnSpace(p1, s1);
-		init.setPawnOnSpace(p2, s1);
-		board.setPawnOnSpace(p1, s2);
+	// 	let init = new Board();
+	// 	let board = new Board();
+	// 	let p1 = new Pawn(1, Color.yellow);
+	// 	let p2 = new Pawn(2, Color.yellow);
+	// 	let s1 = new MainSpace(30);
+	// 	let s2 = new MainSpace(34);
+	// 	init.setPawnOnSpace(p1, s1);
+	// 	init.setPawnOnSpace(p2, s1);
+	// 	board.setPawnOnSpace(p1, s2);
 
-		let moves = [new MoveMain(p1, s1, 4)];
-		let rolls = [4, 4];
+	// 	let moves = [new MoveMain(p1, s1, 4)];
+	// 	let rolls = [4, 4];
 
-		(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
-	});
+	// 	(() => turn.allRollsConsumed(board, moves, rolls)).should.not.throw();
+	// });
 
 	// it('should be able to make a bonus move upon receiving it');
 
