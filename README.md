@@ -18,4 +18,5 @@ https://www.eecs.northwestern.edu/~robby/courses/395-2017-spring/parcheesi.html
 
 ### Tournament Player
 
-run the tournament player with `npm run play`.
+1. run the parcheesi game server by running it via Racket. download it as [tar.gz](https://www.eecs.northwestern.edu/~robby/courses/395-2017-spring/parcheesi.tar.gz) or [zip](https://www.eecs.northwestern.edu/~robby/courses/395-2017-spring/parcheesi.zip).
+2. run the tournament player with `npm run play`.
